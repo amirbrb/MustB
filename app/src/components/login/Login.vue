@@ -84,7 +84,13 @@ export default {
                   window.localStorage.mb_loginType = LoginType.mail;
                 }
 
-                self.$refs.userAvater.src = self.domain + data.data.userData.imageUrl;
+                debugger;
+                if(data.data.userData.imageUrl){
+                  self.$refs.userAvater.src = self.domain + data.data.userData.imageUrl;
+                }
+                else{
+                  self.$refs.userAvater.src = self.domain + '/images/avatar.png'; 
+                }
                 setTimeout(function(){
                   self.$emit('loggedIn', data.data.userData);
                 }, 3000)
