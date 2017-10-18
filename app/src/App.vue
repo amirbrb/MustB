@@ -1,22 +1,35 @@
 <template>
   <div id="app">
-    <Login v-on:loggedIn="userAuthenticated" v-on:showRegistration="showRegistration" v-if="!userData.isLoggedIn && isLoginForm"></Login>
-    <Register v-on:registered="userAuthenticated" v-if="!userData.isLoggedIn && isRegistrationForm"></Register>
-    <div v-if="userData.isLoggedIn" :userImage="userData.avatar">aaa</div>
+    <div v-show="isLoading">loading...</div>
+    <transition name="fade">
+      <Login v-on:loggedIn="userAuthenticated" v-on:showRegistration="showRegistration" v-show="!userData.isLoggedIn && isLoginForm"></Login>
+    </transition>
+    <transition name="fade">
+      <Register v-on:registered="userAuthenticated" v-on:showLogin="showLogin" v-show="!userData.isLoggedIn && isRegistrationForm"></Register>
+    </transition>
+    <transition name="fade-long">
+      <MainView v-if="userData.isLoggedIn" v-on:userSettingsChanged="userSettingsChanged" :userData="userData"></MainView>
+    </transition>
   </div>
 
 </template>
 
 <script>
 
-import Login from './components/Login.vue';
-import Register from './components/Register.vue';
+import LoginType from './enums/loginType'
+import axios from 'axios';
+import MBBase from './MBBase.vue';
+import Login from './components/login/Login.vue';
+import Register from './components/login/Register.vue';
+import MainView from './components/misc/MainView.vue';
 
 export default {
+  extends: MBBase,
   name: 'app',
   components: {
     Login,
-    Register
+    Register,
+    MainView
   },
   data () {
     return {
@@ -24,34 +37,84 @@ export default {
         isLoggedIn: false,
         name: "",
         avatar: "",
-        id: 0
+        id: 0,
+        sosControlLocation: {
+          left: 50,
+          top: 50
+        }
       },
+      isLoading: false,
       isLoginForm: true,
       isRegistrationForm: false
     }
   },
+  created () {
+    var self = this;
+    var usernameCookie = window.localStorage.mb_usercookie;
+    if(usernameCookie){
+      var loginTypeEnum = window.localStorage.mb_loginType;
+      if(loginTypeEnum == LoginType.mail){
+        var url = self.domain + '/users/relogin';
+        var data = {
+          mail: usernameCookie
+        };
+        axios.post(url, data)        
+        .then(response => {
+          var data = response.data;
+          self.hasErrors = !data.isSuccess;
+          if(data.isSuccess){
+            self.userAuthenticated(data.data.userData);
+          }
+        });          
+      }
+    }
+  },
   methods: {
-    userAuthenticated: function(userData){
-      this.isLoginForm = false;
-      this.isRegistrationForm = false;
-      this.userData.name = userData.fullName;
-      this.userData.avatar = userData.imageUrl;
-      this.userData.id = userData.id;
-      this.userData.isLoggedIn = true;
+    userAuthenticated (userData){
+      var self = this;
+      self.userData.name = userData.fullName;
+      self.userData.avatar = userData.imageUrl;
+      self.userData.id = userData.uid;
+      self.userData.isLoggedIn = true;
+      self.userData.sosControlLocation = userData.settings.sosControlLocation;
+      self.isLoginForm = false;
+      self.isRegistrationForm = false;
     },
-    showRegistration: function(){
-      this.isLoginForm = false;
-      this.isRegistrationForm = true;
+    showRegistration (){
+      var self = this;
+      self.isLoginForm = false;
+      self.isRegistrationForm = true;
     },
-    showLogin: function(){
-      this.isLoginForm = true;
-      this.isRegistrationForm = false;
+    showLogin (){
+      var self = this;
+      self.isLoginForm = true;
+      self.isRegistrationForm = false;
+    },
+    userSettingsChanged (){
+
     }
   }
-}
+};
 
 </script>
 
 <style>
+.fade-enter-active, .fade-leave-active {
+  -webkit-transition: opacity 1.5s ease-in;
+  transition: opacity 1.5s ease-in;
+}
+
+.fade-enter, .fade-leave-to {
+  opacity: 0;
+}
+
+.fade-long-enter-active, .fade-long-leave-active {
+  -webkit-transition: width 5s ease-out;
+  transition: opacity 5s ease-out;
+}
+
+.fade-long-enter, .fade-long-leave-to {
+  opacity: 0;
+}
 
 </style>
