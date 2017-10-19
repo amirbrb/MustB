@@ -85,9 +85,9 @@ export default {
             }
           };
           axios.post(self.domain + '/sos/text', formData, config)
-          .then(response => {
-            self.hide();
-          });  
+            .then(response => {
+              self.hide();
+            });  
         }
       });
     },
