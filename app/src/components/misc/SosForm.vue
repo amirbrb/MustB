@@ -49,6 +49,14 @@ export default {
   },
   methods: {
     hide(){
+      var self = this;
+      self.help.title = '';
+      self.help.description = '';
+      self.help.images = [];
+      var container = self.$refs.imageContainer
+      while (container.firstChild) {
+          container.removeChild(container.firstChild);
+      }
       this.$emit('SosFormHidden');
     },
     callHelp(){
@@ -64,13 +72,22 @@ export default {
           });
 
           const formData = new FormData();
-          formData.append(self.help.images[0].image, self.help.images[0].file, config);
+          formData.append('userId', self.userId);  
+          formData.append('title', self.help.title);  
+          formData.append('description', self.help.description);  
+          for(var fileIndex = 0; fileIndex < self.help.images.length; fileIndex++){
+            formData.append(self.help.images[fileIndex].image, self.help.images[fileIndex].file);  
+          }
+          
           const config = {
             headers: {
               'content-type': 'multipart/form-data'
             }
           };
-          axios.post(self.domain + '/sos/text/image', formData, config);
+          axios.post(self.domain + '/sos/text', formData, config)
+          .then(response => {
+            self.hide();
+          });  
         }
       });
     },
@@ -82,7 +99,6 @@ export default {
       for (var fileIndex = 0; fileIndex < curFiles.length; fileIndex++) {
         var image = document.createElement('img');
         image.style.cssText = 'width: 50px;height: 50px;border-radius: 50px;margin-left: 5px;';
-
         var dataUri = window.URL.createObjectURL(curFiles[fileIndex]);
         image.src = dataUri;
         imageContainer.appendChild(image);
