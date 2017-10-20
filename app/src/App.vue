@@ -45,6 +45,7 @@ export default {
           }
         }
       },
+      currentLocation: {},
       isLoading: false,
       isLoginForm: true,
       isRegistrationForm: false

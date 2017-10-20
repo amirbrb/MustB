@@ -1,5 +1,5 @@
 <template>
-  <div class="sos-request col-xs-8 col-xs-offset-2">
+  <div class="sos-request col-xs-10 col-xs-offset-1">
     <span class="close" @click="hide"><i class="fa-times fa"></i></span>
     <div class="col-xs-12 text-center help-title">Need help?</div>
     <div class="form-group has-feedback">
@@ -11,6 +11,10 @@
     <div class="form-group has-feedback">
       <textarea name="description"  v-model="help.description"
         class="form-control" placeholder="description" rows="5"></textarea>
+    </div>
+    <div class="form-group has-feedback">
+      <input ref="autocomplete" class="form-control" placeholder="where sre you?" type="text">
+      <span class="glyphicon glyphicon-map-marker col-xs-offset-1 form-control-feedback"></span>
     </div>
     <div class="form-group has-feedback col-xs-12">
       <label class="file-container">
@@ -32,6 +36,7 @@ import MBBase from '../../MBBase.vue'
 import Information from './Information.vue'
 import axios from 'axios'
 
+var autocomplete;
 export default {
   extends: MBBase,
   components: {
@@ -47,6 +52,9 @@ export default {
       }
     }
   },
+  mounted(){
+    this.initAutocomplete();
+  },
   methods: {
     hide(){
       var self = this;
@@ -58,6 +66,29 @@ export default {
           container.removeChild(container.firstChild);
       }
       this.$emit('SosFormHidden');
+    },
+    initAutocomplete(){
+      autocomplete = new window.google.maps.places.Autocomplete(
+        this.$refs.autocomplete,
+        {types: ['geocode']}
+      );
+      var circle = new window.google.maps.Circle({
+        center: this.currentLocation
+      });
+      autocomplete.setBounds(circle.getBounds());
+      setTimeout(this.locateHelpLocation, 1000);
+      autocomplete.addListener('place_changed', this.helpLocationChanged);
+    },
+    locateHelpLocation(){
+      var self = this;
+      var url = 'https://maps.googleapis.com/maps/api/geocode/json?latlng=' + this.currentLocation.lat + ','+ this.currentLocation.lng + '&key=AIzaSyBSqo5kFr5ENcknN23v5QUfQy-zoWnpopA'; 
+      axios.get(url).then(response => {
+        if(response.data.results && response.data.results.length > 0){
+          self.$refs.autocomplete.value = response.data.results[0].formatted_address;
+        }
+      }).catch(response => {
+        debugger;
+      });
     },
     callHelp(){
       var self = this;
@@ -115,13 +146,13 @@ export default {
 
 <style scoped>
   .sos-request{
-    margin-top: 200px;
+    margin-top: 100px;
   }
 
   .close{
     position: absolute;
     top: -60px;
-    left: -20px;
+    left: -10px;
   }
 
   .help-title{
