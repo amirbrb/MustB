@@ -1,9 +1,9 @@
 <template>
   <div class="main-view">
-    <SosControl v-show="!isShowingHelp" :location="userData.sosControlLocation" 
+    <SosControl v-show="!isShowingHelp" :location="userData.settings.sosControlLocation" 
       v-on:sosControlLocationChanged="sosControlLocationChanged" 
       v-on:helpRequested="helpRequested"></SosControl>
-    <SosForm v-show="isShowingHelp" v-on:SosFormHidden="hideSosForm"></SosForm>
+    <SosForm :userId="userData.id" v-show="isShowingHelp" v-on:SosFormHidden="hideSosForm"></SosForm>
   </div>
 
 </template>
@@ -28,8 +28,8 @@ export default {
   methods: {
     sosControlLocationChanged (location){
       var self = this;
-      self.userData.sosControlLocation = location;
-      self.$emit('userSettingsChanged');
+      self.userData.settings.sosControlLocation = location;
+      self.$emit('userSettingsChanged', self.userData.settings);
     },
     helpRequested(){
       this.isShowingHelp = true;

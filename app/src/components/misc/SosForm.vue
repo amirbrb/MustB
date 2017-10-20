@@ -9,21 +9,19 @@
       <span v-show="errors.has('email')" class="glyphicon glyphicon-exclamation-sign form-control-feedback"></span>
     </div>
     <div class="form-group has-feedback">
-      <textarea name="description" 
+      <textarea name="description"  v-model="help.description"
         class="form-control" placeholder="description" rows="5"></textarea>
+    </div>
+    <div class="form-group has-feedback col-xs-12">
+      <label class="file-container">
+        <a class="btn btn-default file-loader">choose images</a>
+        <input ref="images" type="file" @change="imagesSelected" multiple/>
+      </label>
+      <Information :data="'provide users with images of the issue so they can help'"></Information>
+      <div ref="imageContainer" class="images-container"></div>
     </div>
     <div class="form-group text-center">
       <a class="btn btn-primary call-help-btn" v-on:click="callHelp">SOS</a>
-    </div>
-    <div class="seperator">
-      <span>
-        OR
-      </span>
-    </div>
-    <div class="form-group text-center record-help">
-      <a class="btn btn-danger record-help-btn" v-on:click="recordHelp">
-        <i class="fa fa-microphone"></i>
-      </a>
     </div>
   </div>
 </template>
@@ -31,24 +29,34 @@
 <script>
 
 import MBBase from '../../MBBase.vue'
-import audioService from '../../services/audioService'
-//import axios from 'axios'
+import Information from './Information.vue'
+import axios from 'axios'
 
 export default {
   extends: MBBase,
   components: {
-    
+    Information
   },
+  props: ['userId'],
   data () {
     return {
       help: {
         title: '',
-        description: ''
+        description: '',
+        images: []
       }
     }
   },
   methods: {
     hide(){
+      var self = this;
+      self.help.title = '';
+      self.help.description = '';
+      self.help.images = [];
+      var container = self.$refs.imageContainer
+      while (container.firstChild) {
+          container.removeChild(container.firstChild);
+      }
       this.$emit('SosFormHidden');
     },
     callHelp(){
@@ -57,12 +65,48 @@ export default {
         title: self.help.title
       }).then((result) => {
         if(result){
+          axios.post(self.domain + '/sos/text', {
+            userId: self.userId,
+            title: self.help.title,
+            description: self.help.description
+          });
 
+          const formData = new FormData();
+          formData.append('userId', self.userId);  
+          formData.append('title', self.help.title);  
+          formData.append('description', self.help.description);  
+          for(var fileIndex = 0; fileIndex < self.help.images.length; fileIndex++){
+            formData.append(self.help.images[fileIndex].image, self.help.images[fileIndex].file);  
+          }
+          
+          const config = {
+            headers: {
+              'content-type': 'multipart/form-data'
+            }
+          };
+          axios.post(self.domain + '/sos/text', formData, config)
+            .then(response => {
+              self.hide();
+            });  
         }
       });
     },
-    recordHelp(){
-      console.log(audioService.captureMediaAndGetFile());
+    imagesSelected(){
+      var self = this;
+      var imageInput = self.$refs.images;
+      var imageContainer = self.$refs.imageContainer;
+      var curFiles = imageInput.files;
+      for (var fileIndex = 0; fileIndex < curFiles.length; fileIndex++) {
+        var image = document.createElement('img');
+        image.style.cssText = 'width: 50px;height: 50px;border-radius: 50px;margin-left: 5px;';
+        var dataUri = window.URL.createObjectURL(curFiles[fileIndex]);
+        image.src = dataUri;
+        imageContainer.appendChild(image);
+        self.help.images.push({
+            image: curFiles[fileIndex].name, 
+            file: curFiles[fileIndex]
+        });
+      };
     }
   }
 }
@@ -71,7 +115,7 @@ export default {
 
 <style scoped>
   .sos-request{
-    margin-top: 90px;
+    margin-top: 200px;
   }
 
   .close{
@@ -102,5 +146,29 @@ export default {
     line-height: 100px;
     border-radius: 100px;
     font-size: 40px;
+  }
+
+  .file-container {
+    overflow: hidden;
+    position: relative;
+    width: 80%;
+  }
+
+  .file-container [type=file] {
+    cursor: inherit;
+    display: block;
+    font-size: 999px;
+    filter: alpha(opacity=0);
+    min-height: 100%;
+    min-width: 100%;
+    opacity: 0;
+    position: absolute;
+    right: 0;
+    text-align: right;
+    top: 0;
+  }
+
+  .file-loader{
+    width: 100%;
   }
 </style>

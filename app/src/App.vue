@@ -38,9 +38,11 @@ export default {
         name: "",
         avatar: "",
         id: 0,
-        sosControlLocation: {
-          left: 50,
-          top: 50
+        settings: {
+          sosControlLocation: {
+            left: 50,
+            top: 50
+          }
         }
       },
       isLoading: false,
@@ -74,9 +76,9 @@ export default {
       var self = this;
       self.userData.name = userData.fullName;
       self.userData.avatar = userData.imageUrl;
-      self.userData.id = userData.uid;
+      self.userData.id = userData.userId;
       self.userData.isLoggedIn = true;
-      self.userData.sosControlLocation = userData.settings.sosControlLocation;
+      self.userData.settings.sosControlLocation = userData.settings.sosControlLocation;
       self.isLoginForm = false;
       self.isRegistrationForm = false;
     },
@@ -90,8 +92,16 @@ export default {
       self.isLoginForm = true;
       self.isRegistrationForm = false;
     },
-    userSettingsChanged (){
-
+    userSettingsChanged (settings){
+      var self = this;
+      var url = self.domain + '/users/settings';
+        var data = {
+          settings: settings,
+          userId: self.userData.id
+        };
+        axios.post(url, data)        
+        .then(response => {
+        });   
     }
   }
 };
@@ -114,6 +124,15 @@ export default {
 }
 
 .fade-long-enter, .fade-long-leave-to {
+  opacity: 0;
+}
+
+.fade-short-enter-active, .fade-short-leave-active {
+  -webkit-transition: width 0.5s ease-out;
+  transition: opacity 0.5s ease-out;
+}
+
+.fade-short-enter, .fade-short-leave-to {
   opacity: 0;
 }
 
