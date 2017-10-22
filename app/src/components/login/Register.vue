@@ -67,7 +67,6 @@ export default {
   },
   data () {
     return {
-      domain: 'http://localhost:3000',
       hasErrors: false,
       step: 1,
       isRegistering: false,

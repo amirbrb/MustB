@@ -50,7 +50,6 @@ export default {
   },
   data () {
     return {
-      domain: 'http://localhost:3000',
       hasErrors: false,
       userDetails: {
         mail: "",

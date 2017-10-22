@@ -3,7 +3,7 @@
 export default {
   data() {
   	return {
-  			domain: 'http://localhost:3000',
+  			domain: 'https://mustb-amirbrb.c9users.io',
     		loginType: {
   				"mail":1,
     			"google": 2, 

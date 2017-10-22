@@ -31,6 +31,9 @@ export default {
       var el = self.$refs.dataElement;
       el.style.left = e.clientX - 48 + 'px';
       el.style.top = e.clientY + 15 + 'px';
+      setTimeout(function(){
+        self.isShowingData = false;
+      }, 2000);
     }
   }
 }
