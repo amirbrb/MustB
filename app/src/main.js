@@ -2,10 +2,19 @@
 // (runtime-only or standalone) has been set in webpack.base.conf with an alias.
 import Vue from 'vue'
 import App from './App'
+import VueRouter from 'vue-router'
 import VeeValidate from 'vee-validate';
 
+Vue.use(VueRouter)
 Vue.use(VeeValidate);
 Vue.config.productionTip = false;
+
+import HelpCaseView from './components/help/HelpCaseView'
+
+const routes = [
+	{ path: '/case/:id', component: HelpCaseView }
+];
+const router = new VueRouter({ routes });
 
 /* eslint-disable no-new */
 new Vue({
@@ -16,5 +25,6 @@ new Vue({
     return {
       isLoading: false
     }
-  }
+  },
+  router: router
 })

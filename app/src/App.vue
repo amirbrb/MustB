@@ -129,8 +129,8 @@ export default {
 }
 
 .fade-short-enter-active, .fade-short-leave-active {
-  -webkit-transition: width 0.5s ease-out;
-  transition: opacity 0.5s ease-out;
+  -webkit-transition: width 1s ease-out;
+  transition: opacity 1s ease-out;
 }
 
 .fade-short-enter, .fade-short-leave-to {

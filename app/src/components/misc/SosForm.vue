@@ -48,12 +48,16 @@ export default {
       help: {
         title: '',
         description: '',
-        images: []
+        images: [],
+        location: {
+
+        }
       }
     }
   },
   mounted(){
-    this.initAutocomplete();
+    var self = this;
+    self.initAutocomplete();
   },
   methods: {
     hide(){
@@ -79,8 +83,17 @@ export default {
       setTimeout(this.locateHelpLocation, 1000);
       autocomplete.addListener('place_changed', this.helpLocationChanged);
     },
+    helpLocationChanged() {
+      var self = this;
+      var place = autocomplete.getPlace();
+      self.help.location = {
+        lat: place.geometry.location.lat(),
+        lng: place.geometry.location.lng()
+      }
+    },
     locateHelpLocation(){
       var self = this;
+      self.help.location = self.currentLocation;
       var url = 'https://maps.googleapis.com/maps/api/geocode/json?latlng=' + this.currentLocation.lat + ','+ this.currentLocation.lng + '&key=AIzaSyBSqo5kFr5ENcknN23v5QUfQy-zoWnpopA'; 
       axios.get(url).then(response => {
         if(response.data.results && response.data.results.length > 0){
@@ -106,6 +119,8 @@ export default {
           formData.append('userId', self.userId);  
           formData.append('title', self.help.title);  
           formData.append('description', self.help.description);  
+          formData.append('lat', self.help.location.lat);
+          formData.append('lng', self.help.location.lng);
           for(var fileIndex = 0; fileIndex < self.help.images.length; fileIndex++){
             formData.append(self.help.images[fileIndex].image, self.help.images[fileIndex].file);  
           }
@@ -129,7 +144,7 @@ export default {
       var curFiles = imageInput.files;
       for (var fileIndex = 0; fileIndex < curFiles.length; fileIndex++) {
         var image = document.createElement('img');
-        image.style.cssText = 'width: 50px;height: 50px;border-radius: 50px;margin-left: 5px;';
+        image.style.cssText = 'width: 80px;height:60px;border-radius:50px;margin-left:5px;';
         var dataUri = window.URL.createObjectURL(curFiles[fileIndex]);
         image.src = dataUri;
         imageContainer.appendChild(image);
