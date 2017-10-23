@@ -161,7 +161,7 @@ export default {
 
 <style scoped>
   .sos-request{
-    margin-top: 100px;
+    margin-top: 200px;
   }
 
   .close{
