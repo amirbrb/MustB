@@ -21,6 +21,7 @@
 <script>
 
 import LoginType from './enums/loginType'
+import ViewType from './enums/viewType'
 import axios from 'axios';
 import MBBase from './MBBase.vue';
 import Login from './components/login/Login.vue';
@@ -46,7 +47,9 @@ export default {
           sosControlLocation: {
             left: 50,
             top: 50
-          }
+          },
+          viewType: ViewType.table,
+          mapZoomLevel: 14
         }
       },
       currentLocation: {},
@@ -56,6 +59,7 @@ export default {
     }
   },
   created () {
+    window.ViewType = ViewType;
     var self = this;
     self.geolocate();
     var usernameCookie = window.localStorage.mb_usercookie;
@@ -96,6 +100,8 @@ export default {
       self.userData.id = userData.userId;
       self.userData.isLoggedIn = true;
       self.userData.settings.sosControlLocation = userData.settings.sosControlLocation;
+      self.userData.settings.viewType = userData.settings.viewType;
+      self.userData.settings.mapZoomLevel = userData.settings.mapZoomLevel;
       self.isLoginForm = false;
       self.isRegistrationForm = false;
     },

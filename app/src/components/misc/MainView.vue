@@ -3,20 +3,27 @@
     <HeaderNavbar v-on:toggleSettings="isShowingSettings = !isShowingSettings"></HeaderNavbar>
     <div class="data-view" v-if="!isShowingHelp && !isShowingSettings">
       <ul class="nav nav-tabs">
-        <li class="active"><a data-toggle="tab" href="#sosTable">Table</a></li>
-        <li><a data-toggle="tab" href="#sosMap">Map</a></li>
+        <li :class="{'active': userData.settings.viewType === 1}">
+          <a data-toggle="tab" href="#sosTable" @click="selectTableView">Table</a>
+        </li>
+        <li :class="{'active': userData.settings.viewType === 2}">
+          <a data-toggle="tab" href="#sosMap" @click="selectMapView">Map</a>
+        </li>
       </ul>
       <div class="tab-content">
-        <div id="sosTable" class="tab-pane fade in active">
+        <div id="sosTable" 
+          :class="{'tab-pane': true, 'fade': true, 'in': userData.settings.viewType === 1, 'active': userData.settings.viewType === 1}">
           <TableView 
             :currentLocation="currentLocation"
             v-show="!isShowingCase" v-on:caseShowing="isShowingCase = true"></TableView>
         </div>
-        <div id="sosMap" class="tab-pane fade">
+        <div id="sosMap" :class="{'tab-pane': true, 'fade': true, 'in': userData.settings.viewType === 2, 'active': userData.settings.viewType === 2}">
           <MapView
             v-show="!isShowingCase" 
             v-on:caseShowing="isShowingCase = true" 
-            :currentLocation="currentLocation">
+            :mapZoomLevel="userData.settings.mapZoomLevel"
+            :currentLocation="currentLocation"
+            v-on:mapZoomChanged="mapZoomChanged">
           </MapView>
         </div>
         <transition name="fade-short">
@@ -42,6 +49,7 @@
 <script>
 
 import MBBase from '../../MBBase.vue';
+import ViewType from '../../enums/viewType'
 import SosControl from './SosControl.vue';
 import SosForm from './SosForm.vue';
 import TableView from '../help/TableView.vue';
@@ -56,7 +64,8 @@ export default {
     TableView,
     HeaderNavbar,
     Settings,
-    MapView
+    MapView,
+    ViewType
   },
   data () {
     return {
@@ -67,6 +76,7 @@ export default {
   },
   props: ['userData', 'currentLocation'],
   created(){
+    window.ViewType = ViewType
   },
   beforeRouteUpdate (to, from, next) {
     console.log(to);
@@ -77,6 +87,22 @@ export default {
     sosControlLocationChanged (location){
       var self = this;
       self.userData.settings.sosControlLocation = location;
+      self.$emit('userSettingsChanged', self.userData.settings);
+    },
+    selectTableView(){
+      this.selectedTabChanged(ViewType.table)
+    },
+    selectMapView(){
+      this.selectedTabChanged(ViewType.map)
+    },
+    selectedTabChanged(viewType){
+      var self = this;
+      self.userData.settings.viewType = viewType;
+      self.$emit('userSettingsChanged', self.userData.settings);
+    },
+    mapZoomChanged(zoomLevel){
+      var self = this;
+      self.userData.settings.mapZoomLevel = zoomLevel;
       self.$emit('userSettingsChanged', self.userData.settings);
     },
     helpRequested(){
