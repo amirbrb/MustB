@@ -7,7 +7,7 @@
             <img ref="userAvater" class="profile-img" :src="domain + '/images/community.png'" alt="">
             <div class="registration-form" v-bind:style="{ display: step == 1 ? null : 'none'}">
               <div class="form-group has-feedback">
-                <input name="email" v-model="userDetails.mail" 
+                <input name="email" v-model="userDetails.mail" type="email" 
                   v-validate="'required|email'" :class="{'form-control': true, 'error-input': errors.has('email') }" 
                   placeholder="email">
                 <span v-show="errors.has('email')" class="glyphicon glyphicon-exclamation-sign form-control-feedback"></span>

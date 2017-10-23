@@ -1,6 +1,6 @@
 <template>
   <div class="table-view">
-    <div v-for="helpIssue in data" class="help-issue" @click="caseShowing">
+    <div v-for="helpIssue in cases" class="help-issue" @click="caseShowing">
       <router-link :to="{ path: '/case/' + helpIssue.id}">
         <div class="help-issuer">
           <img class="img" :src="helpIssue.image"></img>
@@ -17,18 +17,44 @@
 <script>
 
 import MBBase from '../../MBBase.vue';
+import axios from 'axios';
 export default {
   extends: MBBase,
   components: {
 
   },
-  props: ['data'],
+  created(){
+    this.getData();
+  },
+  props: ['currentLocation'],
   data () {
     return {
-      maxDescriptionChars: 100
+      maxDescriptionChars: 100,
+      cases: []
     }
   },
   methods: {
+    getData() {
+      var self = this;
+      var url = self.domain + '/sos';
+      axios.get(url, {
+        location: self.currentLocation
+      }).then(response => {
+        self.cases = response.data.map(data => {
+          return {
+            image: self.domain + '/images/' + data.userImage,
+            title: data.title,
+            description: data.description,
+            id: data.id,
+            location: data.location
+          }
+        });
+        setTimeout(self.getData, 1000);
+      }).catch(response => {
+        alert(response.data);
+        //TBD: proper error message
+      });
+    },
     caseShowing(){
       this.$emit('caseShowing');
     }

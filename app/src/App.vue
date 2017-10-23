@@ -8,7 +8,11 @@
       <Register v-on:registered="userAuthenticated" v-on:showLogin="showLogin" v-show="!userData.isLoggedIn && isRegistrationForm"></Register>
     </transition>
     <transition name="fade-long">
-      <MainView v-if="userData.isLoggedIn" v-on:userSettingsChanged="userSettingsChanged" :userData="userData"></MainView>
+      <MainView v-if="userData.isLoggedIn" 
+        v-on:userSettingsChanged="userSettingsChanged" 
+        :userData="userData" 
+        :currentLocation="currentLocation">
+      </MainView>
     </transition>
   </div>
 
@@ -53,6 +57,7 @@ export default {
   },
   created () {
     var self = this;
+    self.geolocate();
     var usernameCookie = window.localStorage.mb_usercookie;
     if(usernameCookie){
       var loginTypeEnum = window.localStorage.mb_loginType;
@@ -73,6 +78,17 @@ export default {
     }
   },
   methods: {
+    geolocate() {
+      var self = this;
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(function(position) {
+          self.currentLocation = {
+            lat: position.coords.latitude,
+            lng: position.coords.longitude
+          };
+        });
+      }
+    },
     userAuthenticated (userData){
       var self = this;
       self.userData.name = userData.fullName;

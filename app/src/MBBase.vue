@@ -12,20 +12,10 @@ export default {
   	}
   },
   created(){
-    this.geolocate();
+    
   },
   methods:{
-    geolocate() {
-      var self = this;
-      if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(function(position) {
-          self.currentLocation = {
-            lat: position.coords.latitude,
-            lng: position.coords.longitude
-          };
-        });
-      }
-    }
+    
   }
 }
 

@@ -8,10 +8,16 @@
       </ul>
       <div class="tab-content">
         <div id="sosTable" class="tab-pane fade in active">
-          <TableView :data="cases" v-show="!isShowingCase" v-on:caseShowing="isShowingCase = true"></TableView>
+          <TableView 
+            :currentLocation="currentLocation"
+            v-show="!isShowingCase" v-on:caseShowing="isShowingCase = true"></TableView>
         </div>
         <div id="sosMap" class="tab-pane fade">
-          aaa
+          <MapView
+            v-show="!isShowingCase" 
+            v-on:caseShowing="isShowingCase = true" 
+            :currentLocation="currentLocation">
+          </MapView>
         </div>
         <transition name="fade-short">
           <div class="data-viewer" v-show="isShowingCase">
@@ -28,7 +34,7 @@
       </SosControl>
     </transition>
     <transition name="fade-short">
-      <SosForm :userId="userData.id" v-if="isShowingHelp" v-on:SosFormHidden="hideSosForm"></SosForm>
+      <SosForm :userId="userData.id" v-if="isShowingHelp" v-on:SosFormHidden="hideSosForm" :currentLocation="currentLocation"></SosForm>
     </transition>
   </div>
 </template>
@@ -39,9 +45,9 @@ import MBBase from '../../MBBase.vue';
 import SosControl from './SosControl.vue';
 import SosForm from './SosForm.vue';
 import TableView from '../help/TableView.vue';
+import MapView from '../help/MapView.vue';
 import HeaderNavbar from './HeaderNavbar.vue';
 import Settings from './Settings.vue';
-import axios from 'axios';
 export default {
   extends: MBBase,
   components: {
@@ -49,20 +55,18 @@ export default {
     SosForm,
     TableView,
     HeaderNavbar,
-    Settings
+    Settings,
+    MapView
   },
   data () {
     return {
       isShowingHelp: false,
       isShowingCase: false,
-      isShowingSettings: false,
-      cases: []
+      isShowingSettings: false
     }
   },
-  props: ['userData'],
+  props: ['userData', 'currentLocation'],
   created(){
-    var self = this;
-    self.getData();
   },
   beforeRouteUpdate (to, from, next) {
     console.log(to);
@@ -70,26 +74,6 @@ export default {
     next();
   },
   methods: {
-    getData() {
-      var self = this;
-      var url = self.domain + '/sos';
-      axios.get(url, {
-        location: self.currentLocation
-      }).then(response => {
-        self.cases = response.data.map(data => {
-          return {
-            image: self.domain + '/images/' + data.userImage,
-            title: data.title,
-            description: data.description,
-            id: data.id
-          }
-        });
-        setTimeout(self.getData, 1000);
-      }).catch(response => {
-        alert(response.data);
-        //TBD: proper error message
-      });
-    },
     sosControlLocationChanged (location){
       var self = this;
       self.userData.settings.sosControlLocation = location;

@@ -37,12 +37,13 @@ import Information from './Information.vue'
 import axios from 'axios'
 
 var autocomplete;
+var google = window.google;
 export default {
   extends: MBBase,
   components: {
     Information
   },
-  props: ['userId'],
+  props: ['userId', 'currentLocation'],
   data () {
     return {
       help: {
@@ -72,12 +73,13 @@ export default {
       this.$emit('SosFormHidden');
     },
     initAutocomplete(){
-      autocomplete = new window.google.maps.places.Autocomplete(
+      var self = this;
+      autocomplete = new google.maps.places.Autocomplete(
         this.$refs.autocomplete,
         {types: ['geocode']}
       );
-      var circle = new window.google.maps.Circle({
-        center: this.currentLocation
+      var circle = new google.maps.Circle({
+        center: self.currentLocation
       });
       autocomplete.setBounds(circle.getBounds());
       setTimeout(this.locateHelpLocation, 1000);
@@ -94,7 +96,7 @@ export default {
     locateHelpLocation(){
       var self = this;
       self.help.location = self.currentLocation;
-      var url = 'https://maps.googleapis.com/maps/api/geocode/json?latlng=' + this.currentLocation.lat + ','+ this.currentLocation.lng + '&key=AIzaSyBSqo5kFr5ENcknN23v5QUfQy-zoWnpopA'; 
+      var url = 'https://maps.googleapis.com/maps/api/geocode/json?latlng=' + self.currentLocation.lat + ','+ self.currentLocation.lng + '&key=AIzaSyBSqo5kFr5ENcknN23v5QUfQy-zoWnpopA'; 
       axios.get(url).then(response => {
         if(response.data.results && response.data.results.length > 0){
           self.$refs.autocomplete.value = response.data.results[0].formatted_address;
