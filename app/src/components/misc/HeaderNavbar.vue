@@ -3,10 +3,8 @@
     <div class="container-fluid">
       <div class="mb-navbar-header">
         <a href="#" id="toggle" @click="toggleSettings" :class="{'on' : navbarIsOpen}"><span></span></a>
-        <div class="mb-navbar-brand">
-          <img class="mb-navbar-logo" :src="this.domain + '/images/community.png'"/>
-        </div>
-        <a class="navbar-brand">someone's out there</a>
+        <img class="mb-navbar-logo" :src="this.domain + '/images/community.png'"/>
+        <a class="mb-navbar-brand">someone's out there</a>
       </div>
     </div>
   </nav>
@@ -45,6 +43,11 @@
     position: absolute;
     left: 20px;
     top: 10px;
+  }
+
+  .mb-navbar-brand{
+    color: #777;
+    font-size: 20px;
   }
 
   .navbar-close{
