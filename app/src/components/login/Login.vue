@@ -82,8 +82,6 @@ export default {
                   window.localStorage.mb_usercookie = self.userDetails.mail;
                   window.localStorage.mb_loginType = LoginType.mail;
                 }
-
-                debugger;
                 if(data.data.userData.imageUrl){
                   self.$refs.userAvater.src = self.domain + data.data.userData.imageUrl;
                 }

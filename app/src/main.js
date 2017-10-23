@@ -18,15 +18,25 @@ const routes = [
 ];
 const router = new VueRouter({ routes });
 
-/* eslint-disable no-new */
-new Vue({
-  el: '#app',
-  template: '<App/>',
-  components: { App },
-  data () {
-    return {
-      isLoading: false
-    }
-  },
-  router: router
-})
+if(document.deviceready){
+  document.addEventListener('deviceready', init, false);
+}
+else{
+  init();
+}
+
+function init(){
+  /* eslint-disable no-new */
+  new Vue({
+    el: '#app',
+    template: '<App/>',
+    components: { App },
+    data () {
+      return {
+        isLoading: false
+      }
+    },
+    router: router
+  }) 
+}
+

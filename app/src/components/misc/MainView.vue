@@ -120,6 +120,9 @@ export default {
     position:relative;
     margin: 5px 5px 5px 5px;
   }
+  .tab-pane{
+    width: 95%;
+  }
   .fade {
    -webkit-transition: opacity 1.5s linear;
       -moz-transition: opacity 1.5s linear;
