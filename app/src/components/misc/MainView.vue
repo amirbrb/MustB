@@ -1,6 +1,7 @@
 <template>
   <div class="main-view">
-    <div class="data-view" v-if="!isShowingHelp">
+    <HeaderNavbar v-on:toggleSettings="isShowingSettings = !isShowingSettings"></HeaderNavbar>
+    <div class="data-view" v-if="!isShowingHelp && !isShowingSettings">
       <ul class="nav nav-tabs">
         <li class="active"><a data-toggle="tab" href="#sosTable">Table</a></li>
         <li><a data-toggle="tab" href="#sosMap">Map</a></li>
@@ -19,17 +20,17 @@
         </transition>
       </div>
     </div>
+    <Settings v-if="isShowingSettings"></Settings>
     <transition name="fade-short">
-      <SosControl v-show="!isShowingHelp" :location="userData.settings.sosControlLocation" 
+      <SosControl v-show="!isShowingHelp && !isShowingSettings" :location="userData.settings.sosControlLocation" 
         v-on:sosControlLocationChanged="sosControlLocationChanged" 
         v-on:helpRequested="helpRequested">
       </SosControl>
     </transition>
     <transition name="fade-short">
-      <SosForm :userId="userData.id" v-show="isShowingHelp" v-on:SosFormHidden="hideSosForm"></SosForm>
+      <SosForm :userId="userData.id" v-if="isShowingHelp" v-on:SosFormHidden="hideSosForm"></SosForm>
     </transition>
   </div>
-
 </template>
 
 <script>
@@ -38,18 +39,23 @@ import MBBase from '../../MBBase.vue';
 import SosControl from './SosControl.vue';
 import SosForm from './SosForm.vue';
 import TableView from '../help/TableView.vue';
+import HeaderNavbar from './HeaderNavbar.vue';
+import Settings from './Settings.vue';
 import axios from 'axios';
 export default {
   extends: MBBase,
   components: {
     SosControl,
     SosForm,
-    TableView
+    TableView,
+    HeaderNavbar,
+    Settings
   },
   data () {
     return {
       isShowingHelp: false,
       isShowingCase: false,
+      isShowingSettings: false,
       cases: []
     }
   },
@@ -88,6 +94,9 @@ export default {
     },
     hideSosForm(){
       this.isShowingHelp = false;
+    },
+    showSettings(){
+      this.isShowingSettings = true;
     }
   }
 }
@@ -96,16 +105,14 @@ export default {
 
 <style scoped>
   .data-view{
-    margin: 10px 5px 10px 5px;
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    left: 0;
-    right: 0;
+    position: fixed;
+    top: 65px;
+    margin: 0px 5px 5px 5px;
+    width: 100%;
   }
   .tab-content{
     position:relative;
-    margin: 10px 10px 10px 10px;
+    margin: 5px 5px 5px 5px;
   }
   .fade {
    -webkit-transition: opacity 1.5s linear;
@@ -113,11 +120,6 @@ export default {
        -ms-transition: opacity 1.5s linear;
         -o-transition: opacity 1.5s linear;
            transition: opacity 1.5s linear;
-   }
-  .tab-content > .tab-pane {
-     top: 0;
-     position:absolute;
-     display:block;
    }
   .tab-content>.tab-pane:not(.active) {
       opacity: 0;

@@ -10,9 +10,11 @@ Vue.use(VeeValidate);
 Vue.config.productionTip = false;
 
 import HelpCaseView from './components/help/HelpCaseView'
+import Settings from './components/misc/Settings'
 
 const routes = [
-	{ path: '/case/:id', component: HelpCaseView }
+	{ path: '/case/:id', component: HelpCaseView },
+	{ path: '/settings', component: Settings }
 ];
 const router = new VueRouter({ routes });
 
