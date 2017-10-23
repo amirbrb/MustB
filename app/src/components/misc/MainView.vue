@@ -62,21 +62,7 @@ export default {
   props: ['userData'],
   created(){
     var self = this;
-    var url = self.domain + '/sos';
-    axios.get(url, {
-      location: self.currentLocation
-    }).then(response => {
-      self.cases = response.data.map(data => {
-        return {
-          image: self.domain + '/images/' + data.userImage,
-          title: data.title,
-          description: data.description,
-          id: data.id
-        }
-      })
-    }).catch(response => {
-      debugger;
-    });
+    self.getData();
   },
   beforeRouteUpdate (to, from, next) {
     console.log(to);
@@ -84,6 +70,26 @@ export default {
     next();
   },
   methods: {
+    getData() {
+      var self = this;
+      var url = self.domain + '/sos';
+      axios.get(url, {
+        location: self.currentLocation
+      }).then(response => {
+        self.cases = response.data.map(data => {
+          return {
+            image: self.domain + '/images/' + data.userImage,
+            title: data.title,
+            description: data.description,
+            id: data.id
+          }
+        });
+        setTimeout(self.getData, 1000);
+      }).catch(response => {
+        alert(response.data);
+        //TBD: proper error message
+      });
+    },
     sosControlLocationChanged (location){
       var self = this;
       self.userData.settings.sosControlLocation = location;
