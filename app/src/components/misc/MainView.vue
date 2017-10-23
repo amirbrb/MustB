@@ -22,7 +22,7 @@
     </div>
     <Settings v-if="isShowingSettings"></Settings>
     <transition name="fade-short">
-      <SosControl v-show="!isShowingHelp" :location="userData.settings.sosControlLocation" 
+      <SosControl v-show="!isShowingHelp && !isShowingSettings" :location="userData.settings.sosControlLocation" 
         v-on:sosControlLocationChanged="sosControlLocationChanged" 
         v-on:helpRequested="helpRequested">
       </SosControl>
@@ -105,7 +105,10 @@ export default {
 
 <style scoped>
   .data-view{
-    margin: 65px 5px 5px 5px;
+    position: fixed;
+    top: 65px;
+    margin: 0px 5px 5px 5px;
+    width: 100%;
   }
   .tab-content{
     position:relative;

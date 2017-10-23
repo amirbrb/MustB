@@ -2,7 +2,7 @@
   <nav class="navbar navbar-default navbar-fixed-top">
     <div class="container-fluid">
       <div class="mb-navbar-header">
-        <a href="#" id="toggle" @click="toggleSettings" :class="{'on' : navbarIsOpen}"><span></span></a>
+        <a id="toggle" @click="toggleSettings" :class="{'on' : navbarIsOpen}"><span></span></a>
         <img class="mb-navbar-logo" :src="this.domain + '/images/community.png'"/>
         <a class="mb-navbar-brand">someone's out there</a>
       </div>

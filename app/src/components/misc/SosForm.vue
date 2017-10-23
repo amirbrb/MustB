@@ -100,7 +100,7 @@ export default {
           self.$refs.autocomplete.value = response.data.results[0].formatted_address;
         }
       }).catch(response => {
-        debugger;
+        
       });
     },
     callHelp(){
@@ -109,12 +109,6 @@ export default {
         title: self.help.title
       }).then((result) => {
         if(result){
-          axios.post(self.domain + '/sos/text', {
-            userId: self.userId,
-            title: self.help.title,
-            description: self.help.description
-          });
-
           const formData = new FormData();
           formData.append('userId', self.userId);  
           formData.append('title', self.help.title);  
@@ -131,9 +125,15 @@ export default {
             }
           };
           axios.post(self.domain + '/sos/text', formData, config)
-            .then(response => {
-              self.hide();
-            });  
+          .then(response => {
+            if(response.data.isSuccess){
+              self.hide();  
+            }
+            else{
+              alert(response.data.message);
+              //TBD - show error message if not success  
+            }           
+          });  
         }
       });
     },
