@@ -13,12 +13,12 @@
       <div class="tab-content">
         <div id="sosTable" 
           :class="{'tab-pane': true, 'fade': true, 'in': userData.settings.viewType === 1, 'active': userData.settings.viewType === 1}">
-          <TableView 
+          <TableView v-if="userData.settings.viewType === 1"
             :currentLocation="currentLocation"
             v-show="!isShowingCase" v-on:caseShowing="isShowingCase = true"></TableView>
         </div>
         <div id="sosMap" :class="{'tab-pane': true, 'fade': true, 'in': userData.settings.viewType === 2, 'active': userData.settings.viewType === 2}">
-          <MapView
+          <MapView v-if="userData.settings.viewType === 2"
             v-show="!isShowingCase" 
             v-on:caseShowing="isShowingCase = true" 
             :mapZoomLevel="userData.settings.mapZoomLevel"

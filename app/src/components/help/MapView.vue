@@ -23,7 +23,6 @@ export default {
   },
   mounted(){
     var self = this;
-    debugger;
     self.map = new google.maps.Map(document.getElementById('map'), {
       center: {lat: self.currentLocation.lat, lng: self.currentLocation.lng},
       zoom: self.mapZoomLevel,
