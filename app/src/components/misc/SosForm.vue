@@ -159,7 +159,7 @@ export default {
       var curFiles = imageInput.files;
       for (var fileIndex = 0; fileIndex < curFiles.length; fileIndex++) {
         var image = document.createElement('img');
-        image.style.cssText = 'width: 80px;height:60px;border-radius:50px;margin-left:5px;';
+        image.style.cssText = 'width: 60px;height:60px;border-radius:50px;margin-left:5px;margin-top:5px;';
         var dataUri = window.URL.createObjectURL(curFiles[fileIndex]);
         image.src = dataUri;
         imageContainer.appendChild(image);
