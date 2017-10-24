@@ -14,7 +14,7 @@ export default {
   components: {
     
   },
-  props: ['currentLocation'],
+  props: ['currentLocation', 'mapZoomLevel'],
   data () {
     return {
       map: {},
@@ -25,9 +25,14 @@ export default {
     var self = this;
     self.map = new google.maps.Map(document.getElementById('map'), {
       center: {lat: self.currentLocation.lat, lng: self.currentLocation.lng},
-      zoom: 14,
+      zoom: self.mapZoomLevel,
       disableDefaultUI: true,
       mapTypeControlOptions: google.maps.MapTypeId.ROADMAP
+    });
+
+    self.map.addListener('zoom_changed', function() {
+      var zoom = self.map.getZoom();
+      self.$emit('mapZoomChanged', zoom);
     });
 
     self.getData();
@@ -84,7 +89,7 @@ export default {
 
 <style scoped>
   .map-view {
-    height: 600px;
+    height: 80vh;
     width: 100%;
     overflow-y: auto;
     overflow-x: hidden;

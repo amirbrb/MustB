@@ -94,8 +94,14 @@ export default {
               }
             })
             .catch(e => {
+              self.log({
+                data: {
+                  url: url,
+                  loginData: data
+                },
+                message: 'login failed'
+              });
               self.hasErrors = true;
-              console.error(e);
               self.$refs.errors.innerHTML = 'an error occured, please try again';
             });          
         }
