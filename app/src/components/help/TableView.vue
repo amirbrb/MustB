@@ -1,15 +1,18 @@
 <template>
   <div class="table-view">
     <div v-for="helpIssue in cases" class="help-issue" @click="caseShowing">
-      <router-link :to="{ path: '/case/' + helpIssue.id}">
-        <div class="help-issuer">
+      <div class="help-issuer">
+        <router-link :to="{ path: '/user/' + helpIssue.id}">
           <img class="img" :src="helpIssue.image"></img>
+        </router-link>
+        <div class="help-distance">{{farwaway(helpIssue.location.lat, helpIssue.location.lng)}}</div>
+        <router-link :to="{ path: '/case/' + helpIssue.id}">
           <div class="help-title">{{helpIssue.title}}</div>
-          <div class="help-description">
-            {{helpIssue.description.length > maxDescriptionChars ? helpIssue.description.substring(0, maxDescriptionChars) + '...' : helpIssue.description}}
-          </div>
+        </router-link>
+        <div class="help-description">
+          {{helpIssue.description.length > maxDescriptionChars ? helpIssue.description.substring(0, maxDescriptionChars) + '...' : helpIssue.description}}
         </div>
-      </router-link>
+      </div>
     </div>  
   </div>
 </template>
@@ -57,6 +60,31 @@ export default {
     },
     caseShowing(){
       this.$emit('caseShowing');
+    },
+    farwaway(lat, lng){
+      var self = this;
+      var lat2 = self.currentLocation.lat;
+      var lng2 = self.currentLocation.lng;
+      var R = 6371; // Radius of the earth in km
+      var dLat = self.deg2rad(lat2-lat);  // deg2rad below
+      var dLon = self.deg2rad(lng2-lng); 
+      var a = 
+        Math.sin(dLat/2) * Math.sin(dLat/2) +
+        Math.cos(self.deg2rad(lat)) * Math.cos(self.deg2rad(lat2)) * 
+        Math.sin(dLon/2) * Math.sin(dLon/2)
+        ; 
+      var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a)); 
+      var d = R * c; // Distance in km
+
+      if(d > 1){
+        return Math.round(d, 2) + ' km from you';
+      }
+      else{
+        return Math.round(d * 1000, 2) + ' meters from you'
+      }
+    },
+    deg2rad(deg) {
+      return deg * (Math.PI/180)
     }
   }
 }
@@ -84,12 +112,20 @@ export default {
     height: 90px;
   }
 
-  .help-title {
+  .help-distance{
     font-weight: bolder;
-    font-size: 22px;
+    font-size: 18px;
     left: 85px;
     position: relative;
-    top: -70px
+    top: -70px;
+  }
+
+  .help-title {
+    font-weight: bolder;
+    font-size: 16px;
+    left: 85px;
+    position: relative;
+    top: -70px;
   }
   .help-description {
     font-size: 15px;

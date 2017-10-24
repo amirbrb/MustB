@@ -126,21 +126,4 @@ export default {
     margin: 0px 5px 5px 5px;
     width: 100%;
   }
-  .tab-content{
-    position:relative;
-    margin: 5px 5px 5px 5px;
-  }
-  .tab-pane{
-    width: 95%;
-  }
-  .fade {
-   -webkit-transition: opacity 1.5s linear;
-      -moz-transition: opacity 1.5s linear;
-       -ms-transition: opacity 1.5s linear;
-        -o-transition: opacity 1.5s linear;
-           transition: opacity 1.5s linear;
-   }
-  .tab-content>.tab-pane:not(.active) {
-      opacity: 0;
-   }
 </style>

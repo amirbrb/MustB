@@ -69,16 +69,28 @@ export default {
         };
         var icon = {
           url: data.image,
-          scaledSize: new google.maps.Size(40, 40), // scaled size
-          origin: new google.maps.Point(0,0), // origin
-          anchor: new google.maps.Point(0, 0) // anchor
+          scaledSize: new google.maps.Size(40, 40), 
+          origin: new google.maps.Point(0,0), 
+          anchor: new google.maps.Point(0, 0) 
         };
+
+        var markerString = "<h3>" + data.title + "</h3>";
+        markerString += "<p>" + data.description + "</p>";
+        var infowindow = new google.maps.InfoWindow({
+          content: markerString
+        });
+
         var marker = new google.maps.Marker({
           position: position,
           map: self.map,
           title: data.title,
           icon: icon
         });
+
+        marker.addListener('click', function() {
+          infowindow.open(self.map, marker);
+        });
+
         marker.setMap(self.map);
       });
     }

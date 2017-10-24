@@ -37,7 +37,7 @@
               </div>
               <div class="form-group has-feedback">
                 <input name="phone" v-model="userDetails.phone" 
-                  v-validate="'required|numeric'" :class="{'form-control': true, 'error-input': errors.has('phone') }" 
+                  v-validate="'required|numeric'" type="phone" :class="{'form-control': true, 'error-input': errors.has('phone') }" 
                   placeholder="phone number">
                 <span v-show="errors.has('phone')" class="glyphicon glyphicon-exclamation-sign form-control-feedback"></span>
               </div>
@@ -118,7 +118,9 @@ export default {
                 self.$refs.errors.innerHTML = data.data.message;
               }
               else{
-                self.$refs.userAvater.src = self.domain + data.data.userData.imageUrl;
+                self.$refs.userAvater.src = data.data.userData.imageUrl 
+                ? self.domain + data.data.userData.imageUrl 
+                : self.domain + '/images/avatar.png';
                 setTimeout(function(){
                   self.$emit('registered', data.data.userData)
                 }, 3000)

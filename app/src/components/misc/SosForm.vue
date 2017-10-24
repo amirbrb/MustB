@@ -5,12 +5,24 @@
     <div class="form-group has-feedback">
       <input name="title" v-model="help.title"
         v-validate="'required'" :class="{'form-control': true, 'error-input': errors.has('title') }" 
-        placeholder="title">
+        placeholder="short title">
       <span v-show="errors.has('email')" class="glyphicon glyphicon-exclamation-sign form-control-feedback"></span>
+    </div>
+    <div class="seperator">
+      <span>OR</span>
+    </div>
+    <div class="form-group has-feedback">
+      <select v-model="help.selectedType" v-validate="'required'" class="form-control">
+        <option>select</option>
+        <option>in house assistance</option>
+        <option>car fixing</option>
+        <option>cooking and baking</option>
+        <option>other</option>
+      </select>
     </div>
     <div class="form-group has-feedback">
       <textarea name="description"  v-model="help.description"
-        class="form-control" placeholder="description" rows="5"></textarea>
+        class="form-control" placeholder="describe what you need" rows="5"></textarea>
     </div>
     <div class="form-group has-feedback">
       <input ref="autocomplete" class="form-control" placeholder="where sre you?" type="text">
@@ -48,6 +60,7 @@ export default {
     return {
       help: {
         title: '',
+        selectedType: 'select',
         description: '',
         images: [],
         location: {
@@ -108,12 +121,12 @@ export default {
     callHelp(){
       var self = this;
       self.$validator.validateAll({
-        title: self.help.title
+        title: self.help.title || self.help.selectedType
       }).then((result) => {
         if(result){
           const formData = new FormData();
           formData.append('userId', self.userId);  
-          formData.append('title', self.help.title);  
+          formData.append('title', self.help.title || self.help.selectedType);  
           formData.append('description', self.help.description);  
           formData.append('lat', self.help.location.lat);
           formData.append('lng', self.help.location.lng);
@@ -163,7 +176,7 @@ export default {
 
 <style scoped>
   .sos-request{
-    margin-top: 200px;
+    margin-top: 150px;
   }
 
   .close{
