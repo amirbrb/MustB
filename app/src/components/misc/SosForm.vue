@@ -176,12 +176,12 @@ export default {
 
 <style scoped>
   .sos-request{
-    margin-top: 150px;
+    margin-top: 90px;
   }
 
   .close{
     position: absolute;
-    top: -60px;
+    top: -20px;
     left: -10px;
   }
 
