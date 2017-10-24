@@ -18,6 +18,11 @@ const routes = [
 ];
 const router = new VueRouter({ routes });
 
+window.onerror = function(message, file, line, column, error) {
+  alert(message);
+  alert(error);
+}
+
 if(document.deviceready){
   document.addEventListener('deviceready', init, false);
 }

@@ -100,8 +100,8 @@ export default {
       self.userData.id = userData.userId;
       self.userData.isLoggedIn = true;
       self.userData.settings.sosControlLocation = userData.settings.sosControlLocation;
-      self.userData.settings.viewType = userData.settings.viewType;
-      self.userData.settings.mapZoomLevel = userData.settings.mapZoomLevel;
+      self.userData.settings.viewType = userData.settings.viewType || self.userData.settings.viewType;
+      self.userData.settings.mapZoomLevel = userData.settings.mapZoomLevel || self.userData.settings.mapZoomLevel;
       self.isLoginForm = false;
       self.isRegistrationForm = false;
     },
