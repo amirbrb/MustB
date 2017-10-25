@@ -32,7 +32,6 @@ export default {
   },
   methods: {
     toggleCaseShowing(){
-      debugger;
       this.$emit('toggleCaseData');
     },
     getData(){
@@ -44,7 +43,6 @@ export default {
           this.caseData = data.data.helpCase;
         }
       }).catch(response => {
-        debugger;
       });
     }
   }

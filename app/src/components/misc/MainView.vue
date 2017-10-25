@@ -115,7 +115,6 @@ export default {
       this.isShowingSettings = true;
     },
     hideHelpCase(){
-      debugger;
       this.isShowingCase = false
     }
   }
