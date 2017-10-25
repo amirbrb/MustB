@@ -62,6 +62,7 @@
     position: absolute;
     right: 25px;
     top: 28px;
+    cursor: pointer;
   }
 
   #toggle span:after,

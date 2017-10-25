@@ -27,7 +27,7 @@
           </MapView>
         </div>
         <transition name="fade-short">
-          <div class="data-viewer" v-show="isShowingCase">
+          <div class="data-viewer" v-if="isShowingCase" v-on:toggleCaseData="hideHelpCase">
             <router-view></router-view>  
           </div>
         </transition>
@@ -113,6 +113,10 @@ export default {
     },
     showSettings(){
       this.isShowingSettings = true;
+    },
+    hideHelpCase(){
+      debugger;
+      this.isShowingCase = false
     }
   }
 }

@@ -45,7 +45,7 @@ export default {
       }).then(response => {
         self.cases = response.data.map(data => {
           return {
-            image: self.domain + '/images/' + data.userImage,
+            image: self.domain + data.userImage,
             title: data.title,
             description: data.description,
             id: data.id,
@@ -109,7 +109,7 @@ export default {
   }
 
   .help-issue {
-    height: 90px;
+    max-height: 125px;
   }
 
   .help-distance{
@@ -131,6 +131,7 @@ export default {
     font-size: 15px;
     left: 85px;
     position: relative;
-    top: -70px
+    top: -70px;
+    width: 75%;
   }
 </style>

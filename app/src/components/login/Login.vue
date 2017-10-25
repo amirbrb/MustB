@@ -118,11 +118,11 @@ export default {
 <style scoped>
 
 #login{
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  /* bring your own prefixes */
-  transform: translate(-50%, -50%);
+  position: absolute;
+  top: 150px;
+  left: 0;
+  right: 0;
+  bottom: 0;
   width: 100%
 }
 
@@ -170,7 +170,7 @@ export default {
 }
 .account-wall
 {
-    padding: 10px 0px 0px 0px;
+    padding: 25px 0px 0px 0px;
     background-color: #f7f7f7;
     -moz-box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.3);
     -webkit-box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.3);

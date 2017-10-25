@@ -1,11 +1,21 @@
 <template>
-  <div>case</div>
+  <div class="case-view">
+    <span class="close" @click="toggleCaseShowing"><i class="fa-times fa"></i></span>
+    <div class="case-issuer">
+      
+    </div>
+    <div class="case-title">{{caseData.title}}</div>
+    <div class="case-description">{{caseData.description}}</div>
+    <div class="case-images">
+      <img v-for="img in caseData.images" :src="domain + '/images/' + img"/> 
+    </div>
+  </div>
 </template>
 
 <script>
 
 import MBBase from '../../MBBase.vue'
-//import axios from 'axios';
+import axios from 'axios';
 export default {
   extends: MBBase,
   components: {
@@ -14,25 +24,28 @@ export default {
   props: [],
   data () {
     return {
-      
+      caseData: {}
     }
   },
   created(){
     this.getData();
   },
-  watch: {
-    // call again the method if the route changes
-    '$route': 'getData'
-  },
   methods: {
+    toggleCaseShowing(){
+      debugger;
+      this.$emit('toggleCaseData');
+    },
     getData(){
-      /*var self = this;
+      var self = this;
       var url = self.domain + '/sos/' + self.$route.params.id;
       axios.get(url).then(response => {
-        debugger;
+        var data = response.data;
+        if(data.isSuccess){
+          this.caseData = data.data.helpCase;
+        }
       }).catch(response => {
         debugger;
-      });*/
+      });
     }
   }
 }
@@ -40,5 +53,10 @@ export default {
 </script>
 
 <style scoped>
+  .case-images img{
+    width: 100px;
+    height: 100px;
+    border-radius: 100px;
+  }
   
 </style>

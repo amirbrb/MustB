@@ -2,10 +2,10 @@
   <div id="app">
     <div v-show="isLoading">loading...</div>
     <transition name="fade">
-      <Login v-on:loggedIn="userAuthenticated" v-on:showRegistration="showRegistration" v-show="!userData.isLoggedIn && isLoginForm"></Login>
+      <Login v-on:loggedIn="userAuthenticated" v-on:showRegistration="showRegistration" v-if="!userData.isLoggedIn && isLoginForm"></Login>
     </transition>
     <transition name="fade">
-      <Register v-on:registered="userAuthenticated" v-on:showLogin="showLogin" v-show="!userData.isLoggedIn && isRegistrationForm"></Register>
+      <Register v-on:registered="userAuthenticated" v-on:showLogin="showLogin" v-if="!userData.isLoggedIn && isRegistrationForm"></Register>
     </transition>
     <transition name="fade-long">
       <MainView v-if="userData.isLoggedIn" 

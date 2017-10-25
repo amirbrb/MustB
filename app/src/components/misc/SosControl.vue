@@ -1,5 +1,7 @@
 <template>
-  <div ref="sosControl" id="sosControl" class="sos-control" v-bind:style="{ top: location.top + 'px', left: location.left + 'px'  }"><i class="fa fa-handshake-o"></i></div>
+  <div ref="sosControl" id="sosControl" class="sos-control" 
+    v-bind:style="{ top: location.top + 'px', left: location.left + 'px'  }">
+    <i class="fa fa-handshake-o"></i></div>
 </template>
 
 <script>

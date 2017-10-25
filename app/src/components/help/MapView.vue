@@ -8,6 +8,7 @@
 
 import MBBase from '../../MBBase.vue'
 import axios from 'axios';
+import $ from 'jquery';
 var google = window.google;
 export default {
   extends: MBBase,
@@ -46,7 +47,7 @@ export default {
       }).then(response => {
         self.cases = response.data.map(data => {
           return {
-            image: self.domain + '/images/' + data.userImage,
+            image: self.domain + data.userImage,
             title: data.title,
             description: data.description,
             id: data.id,
@@ -76,8 +77,15 @@ export default {
 
         var markerString = "<h3>" + data.title + "</h3>";
         markerString += "<p>" + data.description + "</p>";
+        markerString += "<a data-case-id='" + data.id + "'>get involved</a>";
         var infowindow = new google.maps.InfoWindow({
           content: markerString
+        });
+
+        $(document).on('click', 'a[data-case-id]', function(link){
+          var caseId = link.target.attributes['data-case-id'].value;
+          self.$router.push('/case/' + caseId);
+          self.$emit('caseShowing');
         });
 
         var marker = new google.maps.Marker({

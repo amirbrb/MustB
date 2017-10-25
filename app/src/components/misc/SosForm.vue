@@ -12,8 +12,7 @@
       <span>OR</span>
     </div>
     <div class="form-group has-feedback">
-      <select v-model="help.selectedType" v-validate="'required'" class="form-control">
-        <option>select</option>
+      <select v-model="help.selectedType" v-validate="'required'" class="form-control shown">
         <option>in house assistance</option>
         <option>car fixing</option>
         <option>cooking and baking</option>
@@ -231,5 +230,9 @@ export default {
 
   .file-loader{
     width: 100%;
+  }
+
+  select.form-control.selectpicker.shown{
+    display: block !important;
   }
 </style>
