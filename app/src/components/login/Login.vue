@@ -68,7 +68,8 @@ export default {
           var url = self.domain + '/users/login';
           var data = {
             mail: self.userDetails.mail,
-            password: self.userDetails.password
+            password: self.userDetails.password,
+            gcmRegistrationId: window.localStorage.mb_registrationId
           };
           axios.post(url, data)        
             .then(response => {

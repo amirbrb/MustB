@@ -108,7 +108,8 @@ export default {
             password: self.userDetails.password,
             firstName: self.userDetails.first,
             lastName: self.userDetails.last,
-            phoneNumber: self.userDetails.phone
+            phoneNumber: self.userDetails.phone,
+            gcmRegistrationId: window.localStorage.mb_registrationId
           };
           axios.post(url, data)        
             .then(response => {
