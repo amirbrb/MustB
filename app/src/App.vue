@@ -67,7 +67,8 @@ export default {
       if(loginTypeEnum == LoginType.mail){
         var url = self.domain + '/users/relogin';
         var data = {
-          mail: usernameCookie
+          mail: usernameCookie,
+          gcmRegistrationId: window.localStorage.mb_registrationId
         };
         axios.post(url, data)        
         .then(response => {
