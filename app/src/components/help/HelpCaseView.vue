@@ -1,5 +1,5 @@
 <template>
-  <div class="case-view col-xs-10 col-xs-offset-1">
+  <div class="case-view col-xs-12">
     <span class="close" @click="toggleCaseShowing"><i class="fa-times fa"></i></span>
     <div class="case-title">{{caseData.title}}</div>
     <div class="case-description">{{caseData.description}}</div>
@@ -58,7 +58,7 @@ export default {
   .close{
     position: absolute;
     top: -20px;
-    left: -10px;
+    left: 10px;
   }
 
   .case-title{

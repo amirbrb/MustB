@@ -44,5 +44,6 @@ export default {
   img{
     width: 100%;
     height: 80vh;
+    margin-top: 10px
   }
 </style>

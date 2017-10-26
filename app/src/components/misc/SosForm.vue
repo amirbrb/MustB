@@ -1,5 +1,5 @@
 <template>
-  <div class="sos-request col-xs-10 col-xs-offset-1">
+  <div class="sos-request col-xs-12">
     <span class="close" @click="hide"><i class="fa-times fa"></i></span>
     <div class="col-xs-12 text-center help-title">Need help?</div>
     <div class="form-group has-feedback">
@@ -196,7 +196,7 @@ export default {
   .close{
     position: absolute;
     top: -20px;
-    left: -10px;
+    left: 10px;
   }
 
   .help-title{
