@@ -81,7 +81,7 @@ export default {
     sosControlLocationChanged (location){
       var self = this;
       self.userData.settings.sosControlLocation = location;
-      self.$emit('userSettingsChanged', self.userData.settings);
+      self.userSettingsChanged(self.userData.settings, self.userData.id);
     },
     selectTableView(){
       this.selectedTabChanged(ViewType.table)
@@ -92,12 +92,12 @@ export default {
     selectedTabChanged(viewType){
       var self = this;
       self.userData.settings.viewType = viewType;
-      self.$emit('userSettingsChanged', self.userData.settings);
+      self.userSettingsChanged(self.userData.settings, self.userData.id);
     },
     mapZoomChanged(zoomLevel){
       var self = this;
       self.userData.settings.mapZoomLevel = zoomLevel;
-      self.$emit('userSettingsChanged', self.userData.settings);
+      self.userSettingsChanged(self.userData.settings, self.userData.id);
     },
     helpRequested(){
       this.isShowingHelp = true;

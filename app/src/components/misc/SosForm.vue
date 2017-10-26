@@ -123,6 +123,7 @@ export default {
       });
     },
     callHelp(){
+      //TBD - add thinker image
       var self = this;
       self.$validator.validateAll({
         title: self.help.title || self.help.selectedType

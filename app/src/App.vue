@@ -113,17 +113,6 @@ export default {
       var self = this;
       self.isLoginForm = true;
       self.isRegistrationForm = false;
-    },
-    userSettingsChanged (settings){
-      var self = this;
-      var url = self.domain + '/users/settings';
-        var data = {
-          settings: settings,
-          userId: self.userData.id
-        };
-        axios.post(url, data)        
-        .then(response => {
-        });   
     }
   }
 };
