@@ -21,8 +21,15 @@
     },
     methods:{
       toggleSettings() {
+        var self = this;
+        if(!self.navbarIsOpen){
+          self.$router.push('/settings');
+        }
+        else{
+          self.$router.push('/');
+        }
+
         this.navbarIsOpen = !this.navbarIsOpen;
-        this.$emit('toggleSettings');
       }
     }
   }

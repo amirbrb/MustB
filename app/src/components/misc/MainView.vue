@@ -1,7 +1,6 @@
 <template>
   <div class="main-view">
-    <HeaderNavbar v-on:toggleSettings="isShowingSettings = !isShowingSettings"></HeaderNavbar>
-    <div class="data-view" v-if="!isShowingHelp && !isShowingSettings">
+    <div class="data-view" v-if="!isShowingHelp">
       <ul class="nav nav-tabs">
         <li :class="{'active': userData.settings.viewType === 1}">
           <a data-toggle="tab" href="#sosTable" @click="selectTableView">Table</a>
@@ -26,16 +25,10 @@
             v-on:mapZoomChanged="mapZoomChanged">
           </MapView>
         </div>
-        <transition name="fade-short">
-          <div class="data-viewer" v-if="isShowingCase" v-on:toggleCaseData="hideHelpCase">
-            <router-view></router-view>  
-          </div>
-        </transition>
       </div>
     </div>
-    <Settings v-if="isShowingSettings"></Settings>
     <transition name="fade-short">
-      <SosControl v-show="!isShowingHelp && !isShowingSettings" :location="userData.settings.sosControlLocation" 
+      <SosControl v-show="!isShowingHelp" :location="userData.settings.sosControlLocation" 
         v-on:sosControlLocationChanged="sosControlLocationChanged" 
         v-on:helpRequested="helpRequested">
       </SosControl>
@@ -71,10 +64,11 @@ export default {
     return {
       isShowingHelp: false,
       isShowingCase: false,
-      isShowingSettings: false
+      userData: this.$parent.userData,
+      currentLocation: this.$parent.currentLocation
     }
   },
-  props: ['userData', 'currentLocation'],
+  props: [],
   created(){
     window.ViewType = ViewType
   },
@@ -110,12 +104,6 @@ export default {
     },
     hideSosForm(){
       this.isShowingHelp = false;
-    },
-    showSettings(){
-      this.isShowingSettings = true;
-    },
-    hideHelpCase(){
-      this.isShowingCase = false
     }
   }
 }

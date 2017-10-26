@@ -25,19 +25,19 @@
             <div class="registration-form" v-bind:style="{ display: step == 2 ? null : 'none'}">
               <div class="form-group has-feedback">
                 <input name="first" v-model="userDetails.first" 
-                  v-validate="'required|alpha'" :class="{'form-control': true, 'error-input': errors.has('first') }" 
+                  v-validate="'required'" :class="{'form-control': true, 'error-input': errors.has('first') }" 
                   placeholder="first name">
                 <span v-show="errors.has('first')" class="glyphicon glyphicon-exclamation-sign form-control-feedback"></span>
               </div>
               <div class="form-group has-feedback">
                 <input name="last" v-model="userDetails.last" 
-                  v-validate="'required|alpha'" :class="{'form-control': true, 'error-input': errors.has('last') }" 
+                  v-validate="'required'" :class="{'form-control': true, 'error-input': errors.has('last') }" 
                   placeholder="last name">
                 <span v-show="errors.has('last')" class="glyphicon glyphicon-exclamation-sign form-control-feedback"></span>
               </div>
               <div class="form-group has-feedback">
                 <input name="phone" v-model="userDetails.phone" 
-                  v-validate="'required|numeric'" type="phone" :class="{'form-control': true, 'error-input': errors.has('phone') }" 
+                  v-validate="'required|numeric'" type="number" :class="{'form-control': true, 'error-input': errors.has('phone') }" 
                   placeholder="phone number">
                 <span v-show="errors.has('phone')" class="glyphicon glyphicon-exclamation-sign form-control-feedback"></span>
               </div>
@@ -106,9 +106,9 @@ export default {
           var data = {
             mail: self.userDetails.mail,
             password: self.userDetails.password,
-            firstName: self.userDetails.firstName,
-            lastName: self.userDetails.lastName,
-            phoneNumber: self.userDetails.phoneNumber
+            firstName: self.userDetails.first,
+            lastName: self.userDetails.last,
+            phoneNumber: self.userDetails.phone
           };
           axios.post(url, data)        
             .then(response => {

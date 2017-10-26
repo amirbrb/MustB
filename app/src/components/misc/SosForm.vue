@@ -5,37 +5,41 @@
     <div class="form-group has-feedback">
       <input name="title" v-model="help.title"
         v-validate="'required'" :class="{'form-control': true, 'error-input': errors.has('title') }" 
-        placeholder="short title">
+        placeholder="tell others what is needed">
       <span v-show="errors.has('email')" class="glyphicon glyphicon-exclamation-sign form-control-feedback"></span>
     </div>
     <div class="seperator">
-      <span>OR</span>
+      <span>OR (choose)</span>
     </div>
     <div class="form-group has-feedback">
       <select v-model="help.selectedType" v-validate="'required'" class="form-control shown">
+        <option>other</option>
         <option>in house assistance</option>
         <option>car fixing</option>
         <option>cooking and baking</option>
-        <option>other</option>
       </select>
     </div>
     <div class="form-group has-feedback">
       <textarea name="description"  v-model="help.description"
-        class="form-control" placeholder="describe what you need" rows="5"></textarea>
+        class="form-control" placeholder="describe others what is needed - try to be specific" rows="5"></textarea>
     </div>
     <div class="form-group has-feedback">
       <input ref="autocomplete" class="form-control" placeholder="where sre you?" type="text">
       <span class="glyphicon glyphicon-map-marker col-xs-offset-1 form-control-feedback"></span>
     </div>
-    <div class="form-group has-feedback col-xs-12">
+    <div class="form-group has-feedback col-xs-8 col-md-2">
       <label class="file-container">
-        <a class="btn btn-default file-loader">choose images</a>
+        <a class="btn btn-default file-loader">
+          <span class="fa fa-upload"></span> Choose images
+        </a>
         <input ref="images" type="file" @change="imagesSelected" multiple/>
       </label>
       <Information :data="'provide users with images of the issue so they can help'"></Information>
-      <div ref="imageContainer" class="images-container"></div>
     </div>
-    <div class="form-group text-center">
+    <div class="form-group col-xs-12">
+      <div ref="imageContainer" id="imageContainer" class="images-container"></div>
+    </div>
+    <div class="form-group text-center col-xs-12">
       <a class="btn btn-primary call-help-btn" v-on:click="callHelp">SOS</a>
     </div>
   </div>
@@ -46,6 +50,7 @@
 import MBBase from '../../MBBase.vue'
 import Information from './Information.vue'
 import axios from 'axios'
+import $ from 'jquery';
 
 var autocomplete;
 var google = window.google;
@@ -59,7 +64,7 @@ export default {
     return {
       help: {
         title: '',
-        selectedType: 'select',
+        selectedType: 'other',
         description: '',
         images: [],
         location: {
@@ -157,23 +162,33 @@ export default {
       var imageContainer = self.$refs.imageContainer;
       var curFiles = imageInput.files;
       for (var fileIndex = 0; fileIndex < curFiles.length; fileIndex++) {
-        var image = document.createElement('img');
-        image.style.cssText = 'width: 60px;height:60px;border-radius:50px;margin-left:5px;margin-top:5px;';
         var dataUri = window.URL.createObjectURL(curFiles[fileIndex]);
-        image.src = dataUri;
-        imageContainer.appendChild(image);
+        var userImageDiv = $('<div class="user-image"><img src="' + dataUri + '"><div class="close"><i class="fa fa-times"></i></div></div>');
+        var id = fileIndex  + '_' + curFiles[fileIndex].name;
+        userImageDiv.find('.close').click(function(){
+          var me = $(this);
+          me.parent('.user-image').remove();
+          self.removeImage(id);
+        })
+        imageContainer.appendChild(userImageDiv.get(0));
         self.help.images.push({
             image: curFiles[fileIndex].name, 
-            file: curFiles[fileIndex]
+            file: curFiles[fileIndex],
+            id: id
         });
       };
+    },
+    removeImage(id){
+      var self = this;
+      var existingIndex = self.help.images.findIndex(img => img.id === id);
+      self.help.images.splice(existingIndex, 1);
     }
   }
 }
 
 </script>
 
-<style scoped>
+<style>
   .sos-request{
     margin-top: 90px;
   }
@@ -228,8 +243,28 @@ export default {
     top: 0;
   }
 
-  .file-loader{
-    width: 100%;
+  .images-container{
+    max-height: 85px;
+    overflow: auto
+  }
+
+  div.user-image{
+    width: 70px;
+    float: left;
+    margin: 5px;
+  }
+
+  div.user-image img{
+    height: 70px;
+    width: 70px;
+    border-radius: 60px;
+  }
+
+  div.user-image .close{
+    position: relative;
+    top: -73px;
+    left: 5px;
+    font-size: 15px;
   }
 
   select.form-control.selectpicker.shown{

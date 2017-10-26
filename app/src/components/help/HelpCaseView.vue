@@ -1,13 +1,12 @@
 <template>
-  <div class="case-view">
+  <div class="case-view col-xs-10 col-xs-offset-1">
     <span class="close" @click="toggleCaseShowing"><i class="fa-times fa"></i></span>
-    <div class="case-issuer">
-      
-    </div>
     <div class="case-title">{{caseData.title}}</div>
     <div class="case-description">{{caseData.description}}</div>
     <div class="case-images">
-      <img v-for="img in caseData.images" :src="domain + '/images/' + img"/> 
+      <router-link v-for="img in caseData.images" :to="'/image/' + img">
+        <img :src="domain + '/images/' + img"/>   
+      </router-link>
     </div>
   </div>
 </template>
@@ -32,7 +31,7 @@ export default {
   },
   methods: {
     toggleCaseShowing(){
-      this.$emit('toggleCaseData');
+      this.$router.push('/');
     },
     getData(){
       var self = this;
@@ -43,6 +42,7 @@ export default {
           this.caseData = data.data.helpCase;
         }
       }).catch(response => {
+        //TBD - show proper error
       });
     }
   }
@@ -51,10 +51,36 @@ export default {
 </script>
 
 <style scoped>
-  .case-images img{
-    width: 100px;
-    height: 100px;
-    border-radius: 100px;
+  .case-view{
+    margin-top: 90px;
   }
+
+  .close{
+    position: absolute;
+    top: -20px;
+    left: -10px;
+  }
+
+  .case-title{
+    margin-top: 10px; 
+  }
+
+  .case-description{
+    margin-top: 10px; 
+  }
+
+  .case-images{
+    width: 100%;
+  }
+
+  .case-images img{
+    width: 60px;
+    height: 60px;
+    border-radius: 10px;
+    margin-left: 10px;
+    margin-top: 10px;
+  }
+
+
   
 </style>

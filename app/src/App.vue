@@ -7,13 +7,10 @@
     <transition name="fade">
       <Register v-on:registered="userAuthenticated" v-on:showLogin="showLogin" v-if="!userData.isLoggedIn && isRegistrationForm"></Register>
     </transition>
-    <transition name="fade-long">
-      <MainView v-if="userData.isLoggedIn" 
-        v-on:userSettingsChanged="userSettingsChanged" 
-        :userData="userData" 
-        :currentLocation="currentLocation">
-      </MainView>
-    </transition>
+    <div class="data-viewer" v-if="userData.isLoggedIn">
+      <HeaderNavbar></HeaderNavbar>
+      <transition name="fade-short"><router-view></router-view></transition>
+    </div>
   </div>
 
 </template>
@@ -27,6 +24,7 @@ import MBBase from './MBBase.vue';
 import Login from './components/login/Login.vue';
 import Register from './components/login/Register.vue';
 import MainView from './components/misc/MainView.vue';
+import HeaderNavbar from './components/misc/HeaderNavbar.vue';
 
 export default {
   extends: MBBase,
@@ -34,7 +32,8 @@ export default {
   components: {
     Login,
     Register,
-    MainView
+    MainView,
+    HeaderNavbar
   },
   data () {
     return {
