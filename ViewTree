@@ -1,1 +1,22 @@
 
+Main view - holds the active view, header menu and SOS button (movable) 
+Header Menu - logo, text and setting settings button
+Table view - lists all cases currently visible to the user. Case data:
+   1. User avatar - redirects to user info view 
+   2. Case title - redirects to case info view
+   3. Case description
+Map view - lists all cases on a map. Each case is shown as a marker. The marker is the avatar of the user. A click on the marker will show information balloon with the follwo9n:
+   1. Case title - redirects to case info v
+   2. Case description - will show the first 30 letters and continuing dots...
+Case view - includes:
+   1. User's avatar - redirects to user info view
+   2. Title and description of the case
+   3. Images that were uploaded with the case
+   4. Chat area - disabled of the case was marked as done by the user
+User info view - includes:
+   1. Avatar 
+   2. Contact details
+   3. All user's cases in a list (similar to table vies
+   4. An option to rate the user and write review. 
+Settings view 
+   
