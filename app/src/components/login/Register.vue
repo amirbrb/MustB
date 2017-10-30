@@ -41,6 +41,14 @@
                   placeholder="phone number">
                 <span v-show="errors.has('phone')" class="glyphicon glyphicon-exclamation-sign form-control-feedback"></span>
               </div>
+              <div class="form-group has-feedback">
+                <label class="file-container">
+                  <a class="btn btn-default file-loader">
+                    <span class="fa fa-upload"></span> avatar
+                  </a>
+                  <input ref="images" type="file" @change="avatarSelected" multiple/>
+                </label>
+              </div>
               <div class="form-group text-center">
                 <a class="btn btn-lg btn-primary prev" @click="prev">prev</a>
                 <a class="btn btn-lg btn-success next" @click="register">done</a>  
@@ -75,7 +83,8 @@ export default {
         password: "",
         first: "",
         last: "",
-        phone: ""
+        phone: "",
+        avatar: null
       }
     }
   },
@@ -94,6 +103,14 @@ export default {
     prev: function(){
       this.step-=1;
     },
+    avatarSelected: function(){
+      var self = this;
+      var imageInput = self.$refs.images;
+      var file = imageInput.files[0];
+      var dataUri = window.URL.createObjectURL(file);
+      self.$refs.userAvater.src = dataUri;
+      self.userDetails.avatar = file;
+    },
     register: function (){
       var self = this;
       self.$validator.validateAll({
@@ -103,15 +120,22 @@ export default {
       }).then((result) => {
         if(result){
           var url = self.domain + '/users/register';
-          var data = {
-            mail: self.userDetails.mail,
-            password: self.userDetails.password,
-            firstName: self.userDetails.first,
-            lastName: self.userDetails.last,
-            phoneNumber: self.userDetails.phone,
-            gcmRegistrationId: window.localStorage.mb_registrationId
+          const formData = new FormData();
+          formData.append('mail', self.userDetails.mail);  
+          formData.append('password', self.userDetails.password);  
+          formData.append('firstName', self.userDetails.first);  
+          formData.append('lastName', self.userDetails.last);
+          formData.append('phoneNumber', self.userDetails.phone);
+          formData.append('gcmRegistrationId', window.localStorage.mb_registrationId);
+          formData.append('avatar', self.userDetails.avatar);
+          
+          const config = {
+            headers: {
+              'content-type': 'multipart/form-data'
+            }
           };
-          axios.post(url, data)        
+
+          axios.post(url, formData, config)
             .then(response => {
               var data = response.data;
               self.hasErrors = !data.isSuccess;
@@ -120,7 +144,7 @@ export default {
               }
               else{
                 self.$refs.userAvater.src = data.data.userData.imageUrl 
-                ? self.domain + data.data.userData.imageUrl 
+                ? self.domain + '/images/' + data.data.userData.imageUrl
                 : self.domain + '/images/avatar.png';
                 setTimeout(function(){
                   self.$emit('registered', data.data.userData)
@@ -130,7 +154,7 @@ export default {
             .catch(e => {
               self.hasErrors = true;
               console.error(e);
-              self.$refs.errors.innerHTML = 'an error occured, please try again';
+              ///TBD - add propper logs
             });
         }
       });
@@ -230,6 +254,26 @@ export default {
 {
     display: block;
     margin-top: 10px;
+}
+
+.file-container {
+  overflow: hidden;
+  position: relative;
+  width: 80%;
+}
+
+.file-container [type=file] {
+  cursor: inherit;
+  display: block;
+  font-size: 999px;
+  filter: alpha(opacity=0);
+  min-height: 100%;
+  min-width: 100%;
+  opacity: 0;
+  position: absolute;
+  right: 0;
+  text-align: right;
+  top: 0;
 }
 
 </style>

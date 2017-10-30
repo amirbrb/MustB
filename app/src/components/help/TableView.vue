@@ -45,7 +45,7 @@ export default {
       }).then(response => {
         self.cases = response.data.map(data => {
           return {
-            image: self.domain + data.userImage,
+            image: self.domain + '/images/' + data.userImage,
             title: data.title,
             description: data.description,
             id: data.id,

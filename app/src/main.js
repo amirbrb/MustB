@@ -25,8 +25,7 @@ const routes = [
 const router = new VueRouter({ routes });
 
 window.onerror = function(message, file, line, column, error) {
-  alert(message);
-  alert(error);
+  
 }
 
 document.addEventListener('deviceready', function(){
@@ -71,17 +70,38 @@ window.setTimeout(function() {
 }, 100);
 
 function init(){  
-  /* eslint-disable no-new */
-  new Vue({
-    el: '#app',
-    template: '<App/>',
-    components: { App },
-    data () {
-      return {
-        isLoading: false
-      }
-    },
-    router: router
-  }) 
+  if(navigator.geolocation){
+    var geoLocationOptions = {
+      enableHighAccuracy: true
+    };
+
+    var geoLoctionSuccess = function(position) {
+      var coords = position.coords;
+      var currentLocation = {
+        lat: coords.latitude,
+        lng: coords.longitude
+      };
+
+      /* eslint-disable no-new */
+      new Vue({
+        el: '#app',
+        template: '<App />',
+        components: { App },
+        data () {
+          return {
+            isLoading: false,
+            currentLocation: currentLocation
+          }
+        },
+        router: router
+      }) 
+    };
+
+    var geoLocationFailure = function(err){
+      console.log(err);
+      alert("MustB is location based application, though, we could not track location...");
+    }
+    navigator.geolocation.getCurrentPosition(geoLoctionSuccess, geoLocationFailure, geoLocationOptions);
+  }
 }
 

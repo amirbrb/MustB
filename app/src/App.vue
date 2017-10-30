@@ -9,7 +9,9 @@
     </transition>
     <div class="data-viewer" v-if="userData.isLoggedIn">
       <HeaderNavbar></HeaderNavbar>
-      <transition name="fade-short"><router-view></router-view></transition>
+      <div class="main-view">
+        <transition name="fade-short"><router-view></router-view></transition>  
+      </div>
     </div>
   </div>
 
@@ -51,7 +53,7 @@ export default {
           mapZoomLevel: 14
         }
       },
-      currentLocation: {},
+      currentLocation: null,
       isLoading: false,
       isLoginForm: true,
       isRegistrationForm: false
@@ -60,7 +62,8 @@ export default {
   created () {
     window.ViewType = ViewType;
     var self = this;
-    self.geolocate();
+    self.currentLocation = self.$parent.currentLocation;
+    self.watchGeolocation();
     var usernameCookie = window.localStorage.mb_usercookie;
     if(usernameCookie){
       var loginTypeEnum = window.localStorage.mb_loginType;
@@ -82,15 +85,21 @@ export default {
     }
   },
   methods: {
-    geolocate() {
+    watchGeolocation() {
       var self = this;
       if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(function(position) {
-          self.currentLocation = {
-            lat: position.coords.latitude,
-            lng: position.coords.longitude
-          };
-        });
+        var watchOptions = {
+          enableHighAccuracy: false,
+          maximumAge: 0
+        };
+
+        navigator.geolocation.watchPosition(function(position){
+          var coords = position.coords;
+          self.currentLocation.lat = coords.lat;
+          self.currentLocation.lng = coords.lng;
+        }, function(err){
+          console.log(err); //TBD - add proper logging
+        }, watchOptions);
       }
     },
     userAuthenticated (userData){
@@ -146,6 +155,10 @@ export default {
 
 .fade-short-enter, .fade-short-leave-to {
   opacity: 0;
+}
+
+.main-view{
+  margin-top: 110px;
 }
 
 </style>

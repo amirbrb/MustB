@@ -51,10 +51,6 @@ export default {
 </script>
 
 <style scoped>
-  .case-view{
-    margin-top: 90px;
-  }
-
   .close{
     position: absolute;
     top: -20px;

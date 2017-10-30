@@ -50,8 +50,12 @@
 <style scoped>
 	.settings{
 		position: fixed;
-		top: 65px;
-    margin: 0px 5px 5px 5px;
+		top: 80px;
+    margin: 5px 5px 5px 5px;
 		width: 100%;
 	}
+
+  .nav li{
+    font-size: 20px;
+  }
 </style>

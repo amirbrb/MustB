@@ -47,7 +47,7 @@ export default {
       }).then(response => {
         self.cases = response.data.map(data => {
           return {
-            image: self.domain + data.userImage,
+            image: self.domain + '/images/' + data.userImage,
             title: data.title,
             description: data.description,
             id: data.id,
@@ -72,12 +72,11 @@ export default {
           url: data.image,
           scaledSize: new google.maps.Size(40, 40), 
           origin: new google.maps.Point(0,0), 
-          anchor: new google.maps.Point(0, 0) 
+          anchor: new google.maps.Point(0, 0)
         };
 
-        var markerString = "<h3>" + data.title + "</h3>";
+        var markerString = "<a data-case-id='" + data.id + "'><h3 data-case-id='" + data.id + "'>" + data.title + "</h3></a>";
         markerString += "<p>" + data.description + "</p>";
-        markerString += "<a data-case-id='" + data.id + "'>get involved</a>";
         var infowindow = new google.maps.InfoWindow({
           content: markerString
         });

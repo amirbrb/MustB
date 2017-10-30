@@ -3,10 +3,10 @@
     <div class="data-view" v-if="!isShowingHelp">
       <ul class="nav nav-tabs">
         <li :class="{'active': userData.settings.viewType === 1}">
-          <a data-toggle="tab" href="#sosTable" @click="selectTableView">Table</a>
+          <a data-toggle="tab" href="#sosTable" @click="selectTableView">table</a>
         </li>
         <li :class="{'active': userData.settings.viewType === 2}">
-          <a data-toggle="tab" href="#sosMap" @click="selectMapView">Map</a>
+          <a data-toggle="tab" href="#sosMap" @click="selectMapView">map</a>
         </li>
       </ul>
       <div class="tab-content">
@@ -101,8 +101,12 @@ export default {
 <style scoped>
   .data-view{
     position: fixed;
-    top: 65px;
-    margin: 0px 5px 5px 5px;
+    top: 80px;
+    margin: 5px 5px 5px 5px;
     width: 100%;
+  }
+
+  .nav li{
+    font-size: 20px;
   }
 </style>

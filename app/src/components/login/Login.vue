@@ -84,7 +84,7 @@ export default {
                   window.localStorage.mb_loginType = LoginType.mail;
                 }
                 if(data.data.userData.imageUrl){
-                  self.$refs.userAvater.src = self.domain + data.data.userData.imageUrl;
+                  self.$refs.userAvater.src = self.domain + '/images/' + data.data.userData.imageUrl;
                 }
                 else{
                   self.$refs.userAvater.src = self.domain + '/images/avatar.png'; 

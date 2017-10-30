@@ -36,8 +36,8 @@
 </script>
 <style scoped>
   .navbar{
-    height: 60px;
-    line-height: 60px;
+    height: 80px;
+    line-height: 80px;
   }
 
   .mb-navbar-header{
@@ -49,12 +49,12 @@
     height: 40px;    
     position: absolute;
     left: 20px;
-    top: 10px;
+    top: 20px;
   }
 
   .mb-navbar-brand{
     color: #777;
-    font-size: 20px;
+    font-size: 26px;
   }
 
   .navbar-close{
@@ -68,7 +68,7 @@
     height: 30px;
     position: absolute;
     right: 25px;
-    top: 28px;
+    top: 40px;
     cursor: pointer;
   }
 
