@@ -6,8 +6,9 @@ import VueRouter from 'vue-router'
 import VeeValidate from 'vee-validate';
 import HelpCaseView from './components/help/HelpCaseView'
 import MainView from './components/misc/MainView'
-import Settings from './components/misc/Settings'
+import Settings from './components/settings/Settings'
 import ImageView from './components/misc/ImageView';
+import SosForm from './components/misc/SosForm';
 
 Vue.use(VueRouter)
 Vue.use(VeeValidate);
@@ -15,6 +16,7 @@ Vue.config.productionTip = false;
 
 const routes = [
   { path: '/', component: MainView },
+  { path: '/help', component: SosForm },
 	{ path: '/case/:id', component: HelpCaseView },
   { path: '/image/:id', component: ImageView },
 	{ path: '/settings', component: Settings }

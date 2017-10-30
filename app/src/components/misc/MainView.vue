@@ -29,12 +29,8 @@
     </div>
     <transition name="fade-short">
       <SosControl v-show="!isShowingHelp" :location="userData.settings.sosControlLocation" 
-        v-on:sosControlLocationChanged="sosControlLocationChanged" 
-        v-on:helpRequested="helpRequested">
+        v-on:sosControlLocationChanged="sosControlLocationChanged">
       </SosControl>
-    </transition>
-    <transition name="fade-short">
-      <SosForm :userId="userData.id" v-if="isShowingHelp" v-on:SosFormHidden="hideSosForm" :currentLocation="currentLocation"></SosForm>
     </transition>
   </div>
 </template>
@@ -48,7 +44,6 @@ import SosForm from './SosForm.vue';
 import TableView from '../help/TableView.vue';
 import MapView from '../help/MapView.vue';
 import HeaderNavbar from './HeaderNavbar.vue';
-import Settings from './Settings.vue';
 export default {
   extends: MBBase,
   components: {
@@ -56,7 +51,6 @@ export default {
     SosForm,
     TableView,
     HeaderNavbar,
-    Settings,
     MapView,
     ViewType
   },
@@ -98,12 +92,6 @@ export default {
       var self = this;
       self.userData.settings.mapZoomLevel = zoomLevel;
       self.userSettingsChanged(self.userData.settings, self.userData.id);
-    },
-    helpRequested(){
-      this.isShowingHelp = true;
-    },
-    hideSosForm(){
-      this.isShowingHelp = false;
     }
   }
 }

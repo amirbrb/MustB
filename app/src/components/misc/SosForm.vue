@@ -59,17 +59,16 @@ export default {
   components: {
     Information
   },
-  props: ['userId', 'currentLocation'],
   data () {
     return {
+      userId: this.$parent.userData.id,
+      currentLocation: this.$parent.currentLocation,
       help: {
         title: '',
         selectedType: 'other',
         description: '',
         images: [],
-        location: {
-
-        }
+        location: {}
       }
     }
   },
@@ -87,7 +86,7 @@ export default {
       while (container.firstChild) {
           container.removeChild(container.firstChild);
       }
-      this.$emit('SosFormHidden');
+      self.$router.back();
     },
     initAutocomplete(){
       var self = this;

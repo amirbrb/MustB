@@ -30,7 +30,7 @@ export default {
     var isDragging = false;
     
     hammertime.on('tap', function(ev) {
-      self.$emit('helpRequested');
+      self.$router.push('/help');
     });
 
     hammertime.on('pan', function(ev) {

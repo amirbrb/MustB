@@ -31,7 +31,7 @@ export default {
   },
   methods: {
     toggleCaseShowing(){
-      this.$router.push('/');
+      this.$router.back();
     },
     getData(){
       var self = this;
