@@ -7,7 +7,6 @@
 <script>
 
 import MBBase from '../../MBBase.vue'
-import axios from 'axios';
 import $ from 'jquery';
 var google = window.google;
 export default {
@@ -15,11 +14,10 @@ export default {
   components: {
     
   },
-  props: ['currentLocation', 'mapZoomLevel'],
+  props: ['currentLocation', 'mapZoomLevel', 'cases'],
   data () {
     return {
-      map: {},
-      cases: []   
+      map: {}
     }
   },
   mounted(){
@@ -36,31 +34,16 @@ export default {
       self.$emit('mapZoomChanged', zoom);
     });
 
-    self.getData();
+    self.placeDataOnMaps();
+  },
+  watch: {
+    cases: function (newCases) {
+      var self = this;
+      self.cases = newCases
+      self.placeDataOnMaps();
+    }
   },
   methods: {
-    getData() {
-      var self = this;
-      var url = self.domain + '/sos';
-      axios.get(url, {
-        location: self.currentLocation
-      }).then(response => {
-        self.cases = response.data.map(data => {
-          return {
-            image: self.domain + '/images/' + data.userImage,
-            title: data.title,
-            description: data.description,
-            id: data.id,
-            location: data.location
-          }
-        });
-        self.placeDataOnMaps();
-        setTimeout(self.getData, 1000);
-      }).catch(response => {
-        alert(response.data);
-        //TBD: proper error message
-      });
-    },
     placeDataOnMaps(){
       var self = this;
       self.cases.forEach(function(data){

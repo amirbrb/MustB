@@ -189,6 +189,13 @@ export default {
 </script>
 
 <style>
+  .sos-request{
+    position: fixed;
+    top: 110px;
+    margin: 5px 5px 5px 5px;
+    width: 100%;
+  }
+
   .close{
     position: absolute;
     top: -20px;

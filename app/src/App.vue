@@ -1,6 +1,5 @@
 <template>
   <div id="app">
-    <div v-show="isLoading">loading...</div>
     <transition name="fade">
       <Login v-on:loggedIn="userAuthenticated" v-on:showRegistration="showRegistration" v-if="!userData.isLoggedIn && isLoginForm"></Login>
     </transition>
@@ -9,9 +8,9 @@
     </transition>
     <div class="data-viewer" v-if="userData.isLoggedIn">
       <HeaderNavbar></HeaderNavbar>
-      <div class="main-view">
-        <transition name="fade-short"><router-view></router-view></transition>  
-      </div>
+      <transition name="fade-short">
+        <router-view></router-view>
+      </transition>  
     </div>
   </div>
 
@@ -158,7 +157,8 @@ export default {
 }
 
 .main-view{
-  margin-top: 110px;
+  position: fixed;
+  width: 100%;
 }
 
 </style>

@@ -3,7 +3,8 @@ import axios from 'axios';
 export default {
   data() {
   	return {
-		  domain: 'https://mustb-amirbrb.c9users.io'
+		  domain: 'https://mustb-amirbrb.c9users.io',
+      userData: this.$parent.userData
   	}
   },
   methods:{

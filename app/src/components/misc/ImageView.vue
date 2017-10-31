@@ -32,6 +32,13 @@ export default {
 </script>
 
 <style scoped>
+  .image-view {
+    position: fixed;
+    top: 110px;
+    margin: 5px 5px 5px 5px;
+    width: 100%;
+  }
+
   .close{
     position: absolute;
     top: -20px;

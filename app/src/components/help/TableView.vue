@@ -1,16 +1,16 @@
 <template>
   <div class="table-view">
-    <div v-for="helpIssue in cases" class="help-issue" @click="caseShowing">
+    <div v-for="caseData in cases" class="help-issue" @click="caseShowing">
       <div class="help-issuer">
-        <router-link :to="{ path: '/user/' + helpIssue.id}">
-          <img class="img" :src="helpIssue.image"></img>
+        <router-link :to="{ path: '/user/' + caseData.id}">
+          <img class="img" :src="caseData.image"></img>
         </router-link>
-        <div class="help-distance">{{farwaway(helpIssue.location.lat, helpIssue.location.lng)}}</div>
-        <router-link :to="{ path: '/case/' + helpIssue.id}">
-          <div class="help-title">{{helpIssue.title}}</div>
+        <div class="help-distance">{{farwaway(caseData.location.lat, caseData.location.lng)}}</div>
+        <router-link :to="{ path: '/case/' + caseData.id}">
+          <div class="help-title">{{caseData.title}}</div>
         </router-link>
         <div class="help-description">
-          {{helpIssue.description.length > maxDescriptionChars ? helpIssue.description.substring(0, maxDescriptionChars) + '...' : helpIssue.description}}
+          {{caseData.description.length > maxDescriptionChars ? caseData.description.substring(0, maxDescriptionChars) + '...' : caseData.description}}
         </div>
       </div>
     </div>  
@@ -20,44 +20,18 @@
 <script>
 
 import MBBase from '../../MBBase.vue';
-import axios from 'axios';
 export default {
   extends: MBBase,
   components: {
 
   },
-  created(){
-    this.getData();
-  },
-  props: ['currentLocation'],
+  props: ['currentLocation', 'cases'],
   data () {
     return {
-      maxDescriptionChars: 100,
-      cases: []
+      maxDescriptionChars: 100
     }
   },
   methods: {
-    getData() {
-      var self = this;
-      var url = self.domain + '/sos';
-      axios.get(url, {
-        location: self.currentLocation
-      }).then(response => {
-        self.cases = response.data.map(data => {
-          return {
-            image: self.domain + '/images/' + data.userImage,
-            title: data.title,
-            description: data.description,
-            id: data.id,
-            location: data.location
-          }
-        });
-        setTimeout(self.getData, 1000);
-      }).catch(response => {
-        alert(response.data);
-        //TBD: proper error message
-      });
-    },
     caseShowing(){
       this.$emit('caseShowing');
     },
@@ -93,7 +67,7 @@ export default {
 
 <style scoped>
   .table-view {
-    max-height: 600px;
+    height: 400px;
     width: 100%;
     overflow-y: auto;
     overflow-x: hidden;
