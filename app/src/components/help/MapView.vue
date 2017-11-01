@@ -91,7 +91,7 @@ export default {
 
 <style scoped>
   .map-view {
-    height: 80vh;
+    height: 75vh;
     width: 100%;
     overflow-y: auto;
     overflow-x: hidden;

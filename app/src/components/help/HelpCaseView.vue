@@ -2,13 +2,18 @@
   <div class="case-view col-xs-12">
     <span class="close" @click="toggleCaseShowing"><i class="fa-times fa"></i></span>
     <h3 class="case-title">{{caseData.title}}</h3>
-    <div class="case-description">{{caseData.description}}</div>
-    <div class="case-images">
-      <router-link v-for="img in caseData.images" :to="'/image/' + img">
-        <img :src="domain + '/images/' + img"/>   
-      </router-link>
+    <div class="case-data-wrraper">
+      <div class="case-description">{{caseData.description}}</div>
+      <div class="case-images">
+        <router-link v-for="img in caseData.images" :to="'/image/' + img">
+          <img :src="domain + '/images/' + img"/>   
+        </router-link>
+      </div>
     </div>
-    <Chabox :caseId="$route.params.id" ></Chabox>
+    <div class="case-issuer-wrapper">
+      <img :src="domain + '/users/avatar/' + userData.id"/>
+    </div>
+    <Chabox :caseId="caseData.id" :isActive="caseData.isActive" ></Chabox>
   </div>
 </template>
 
@@ -64,7 +69,6 @@ export default {
         self.caseData.messages = response.data;
         self.timeoutId = setTimeout(self.getChatMessages, 1000);
       }).catch(response => {
-        debugger;
         //TBD - show proper error
       });
     }
@@ -88,16 +92,37 @@ export default {
   }
 
   .case-title{
-    margin-top: 10px; 
+    margin-top: 10px;
+    font-weight: bold; 
+  }
+
+  .case-data-wrraper{
+    width: 80%;
+    float: left;
+  }
+  .case-issuer-wrapper{
+    width: 19%;
+    float: right;
+    height: 80px;
+    position: relative;
+    top: -60px;
+  }
+
+  .case-issuer-wrapper img{
+    width: 80px;
+    height: 80px;
+    border-radius: 80px;
   }
 
   .case-description{
-    margin-top: 10px; 
+    margin-top: 10px;
+    font-size: 17px; 
+    max-height: 100px;
+    overflow-y: auto;
   }
 
   .case-images{
-    width: 100%;
-    height: 80px;
+    max-height: 80px;
     overflow: auto;
   }
 

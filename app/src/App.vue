@@ -94,8 +94,8 @@ export default {
 
         navigator.geolocation.watchPosition(function(position){
           var coords = position.coords;
-          self.currentLocation.lat = coords.lat;
-          self.currentLocation.lng = coords.lng;
+          self.currentLocation.lat = coords.latitude;
+          self.currentLocation.lng = coords.longitude;
         }, function(err){
           console.log(err); //TBD - add proper logging
         }, watchOptions);

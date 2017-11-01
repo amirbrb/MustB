@@ -1,17 +1,21 @@
 <template>
-	<div class="chat-box col-xs-10 col-xs-offset-1">
-		<p>messages: </p>
-      	<div class="messages-wrapper">
-	      	<div v-for="message in messages" class="chat-message">
-	        	<label>{{message.timestamp}}</label>
-		        <label>{{message.sender}}</label>
-		        <p>{{message.text}}</p>
+	<div class="chat-box col-xs-12" :disabled="!isActive">
+		<p class="mb_title">messages: </p>
+      	<div class="messages-wrapper col-xs-12" ref="messagesContainer">
+      		<div v-if="isLoading">Getting images</div>
+	      	<div v-if="!isLoading" v-for="message in messages" :class="{'wrap-message': true, 'wrap-message-right' : message.senderId === userData.id}">
+		      	<div class="chat-message">
+			        <div class="message-sender">
+			        	<img :src="domain + '/users/avatar/' + message.senderId"/>
+			        </div>
+			        <p>{{message.text}}</p>
+		      	</div>
 	      	</div>
       	</div>
-      	<div class="chat-text col-xs-10 col-xs-offset-1">
+      	<div class="chat-text col-xs-8 col-xs-offset-4 col-md-4 col-md-offset-8">
       		<div class="input-group">
-		  		<input type="text" class="form-control" v-model="newMessage" placeholder="enter message here" aria-describedby="send-addon">
-		  		<span class="input-group-addon" id="send-addon" @click="sendMessage"><i class="glyphicon glyphicon-send"></i></span>
+		  		<input type="text" :disabled="!isActive" class="form-control" v-model="newMessage" placeholder="enter message here" aria-describedby="send-addon">
+		  		<span class="input-group-addon" :disabled="!isActive" id="send-addon" @click="sendMessage"><i class="glyphicon glyphicon-send"></i></span>
 			</div>
       	</div>
 	</div>
@@ -21,27 +25,28 @@
 	import MBBase from '../../MBBase.vue'
 	import axios from 'axios';
 	import moment from 'moment';
-	export default {
-  		extends: MBBase,
+	import $ from 'jquery'
+	export default{
+		extends: MBBase,
 	  	components: {
 	    },
-	  	props: ['caseId'],
+	  	props: ['caseId', 'isActive'],
 	  	data () {
 		    return {
 	      		messages: [],
 	      		timeoutId: null,
 	      		newMessage: '',
-	      		lastQuery: moment(new Date(-8640000000000000)).format()
+	      		lastQuery: moment(new Date(-8640000000000000)).format(),
+	      		alive: true,
+	      		isLoading: true
 		    }
 	  	},
 	  	created(){
 	    	this.getChatMessages();
 	  	},
-	  	destroyed(){
+	  	beforeDestroy(){
 	    	var self = this;
-	    	if(self.timeoutId){
-	      		clearTimeout(self.timeoutId);
-	    	}
+	    	self.alive = false;
 	  	},
 	  	methods: {
 	    	getChatMessages(){
@@ -54,28 +59,38 @@
 	        			self.lastQuery = response.data.lastTimestamp;
 	        		}
 
-	        		self.timeoutId = setTimeout(self.getChatMessages, 1000);
+	        		if(response.data.messages.length > 0){
+	        			var scroller = $(self.$refs.messagesContainer);
+	        			setTimeout(function(){
+	        				scroller.stop().animate({
+							  scrollTop: scroller[0].scrollHeight
+							}, 400)
+        				}, 200);
+	        		}
+
+        			self.isLoading = false;
+
+	        		if(self.alive){
+	        			self.timeoutId = setTimeout(self.getChatMessages, 1000);
+	        		}
 	      		})
 	      		.catch(response => {
-			        debugger;
 			        //TBD - show proper error
 		      	});
 	    	},
 	    	sendMessage(){
     			var self = this;
+    			if(!self.isActive) return;
+
 	      		var url = self.domain + '/sos/message/';
 	      		var data = {
 	      			caseId: self.caseId,
 	      			text: self.newMessage,
 	      			userId: self.userData.id
 	      		};
-      			axios.post(url, data)
-      			.then(response => {
-	        		
-	      		})
-	      		.catch(response => {
-	        		//TBD - show proper error
-	      		});
+      			axios.post(url, data).then(response => {
+      				self.newMessage = '';
+      			});
     		}
 	}
 }
@@ -86,12 +101,49 @@
 
 	}
 	.chat-text{
-		margin-top: 10px;
+		margin-top: 5px;
 	}
 	.messages-wrapper{
 		border: 1px solid black;
-		max-height: 250px;
-		min-height: 40px;
+		height: 320px;
 		overflow: auto;
+	}
+	.chat-message{
+		min-height: 50px;
+		background: grey;
+		opacity: 0.8;
+		border-radius: 5px;
+		padding-left: 25px;
+		padding-top: 5px;
+		padding-bottom: 5px;
+		margin: 5px 5px 5px 5px;
+		width: 100%; 
+	}
+
+	.wrap-message{
+		width: 55%;
+		float: left;
+	}
+	.wrap-message-right{
+		float: right;
+	}
+
+	.wrap-message-right .chat-message{
+		float: right;
+	}
+
+	.input-group-addon{
+		cursor: pointer;
+	}
+
+	.message-sender{
+		float: left;
+	}
+	.message-sender img{
+		width: 40px;
+		height: 40px;
+		position: relative;
+		left: -20px;
+		border-radius: 40px
 	}
 </style>

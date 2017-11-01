@@ -67,7 +67,7 @@ export default {
 
 <style scoped>
   .table-view {
-    height: 400px;
+    height: 75vh;
     width: 100%;
     overflow-y: auto;
     overflow-x: hidden;
@@ -80,6 +80,7 @@ export default {
     width: 80px;
     height: 80px;
     border-radius: 80px;
+    margin-right: 10px;
   }
 
   .help-issue {
@@ -89,23 +90,23 @@ export default {
   .help-distance{
     font-weight: bolder;
     font-size: 18px;
-    left: 85px;
+    left: 100px;
     position: relative;
-    top: -70px;
+    top: -75px
   }
 
   .help-title {
     font-weight: bolder;
     font-size: 16px;
-    left: 85px;
+    left: 100px;
     position: relative;
-    top: -70px;
+    top: -75px;
   }
   .help-description {
     font-size: 15px;
-    left: 85px;
+    left: 100px;
     position: relative;
-    top: -70px;
+    top: -75px;
     width: 75%;
   }
 </style>

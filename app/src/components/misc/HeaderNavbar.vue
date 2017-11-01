@@ -26,7 +26,7 @@
           self.$router.push('/settings');
         }
         else{
-          self.$router.push('/');
+          self.$router.back();
         }
 
         this.navbarIsOpen = !this.navbarIsOpen;

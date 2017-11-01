@@ -1,8 +1,7 @@
 <template>
   <div class="sos-request col-xs-12">
     <span class="close" @click="hide"><i class="fa-times fa"></i></span>
-    <div class="col-xs-12 text-center help-title">Need help?</div>
-    <div class="form-group has-feedback">
+    <div class="form-group has-feedback" style="margin-top: 5px;">
       <input name="title" v-model="help.title"
         v-validate="'required'" :class="{'form-control': true, 'error-input': errors.has('title') }" 
         placeholder="tell others what is needed">
@@ -13,7 +12,7 @@
     </div>
     <div class="form-group has-feedback">
       <select v-model="help.selectedType" v-validate="'required'" class="form-control shown">
-        <option>other</option>
+        <option>i just need some help</option>
         <option>in house assistance</option>
         <option>car fixing</option>
         <option>cooking and baking</option>
@@ -21,7 +20,7 @@
     </div>
     <div class="form-group has-feedback">
       <textarea name="description"  v-model="help.description"
-        class="form-control" placeholder="describe others what is needed - try to be specific" rows="5"></textarea>
+        class="form-control" placeholder="describe others what is needed - try to be specific" rows="4"></textarea>
     </div>
     <div class="form-group has-feedback">
       <input ref="autocomplete" class="form-control" placeholder="where sre you?" type="text">
@@ -65,7 +64,7 @@ export default {
       currentLocation: this.$parent.currentLocation,
       help: {
         title: '',
-        selectedType: 'other',
+        selectedType: 'i just need some help',
         description: '',
         images: [],
         location: {}
@@ -129,7 +128,7 @@ export default {
       }).then((result) => {
         if(result){
           const formData = new FormData();
-          formData.append('userId', self.userId);  
+          formData.append('userId', self.userData.id);  
           formData.append('title', self.help.title || self.help.selectedType);  
           formData.append('description', self.help.description);  
           formData.append('lat', self.help.location.lat);
@@ -145,11 +144,11 @@ export default {
           };
           axios.post(self.domain + '/sos/text', formData, config)
           .then(response => {
+            debugger;
             if(response.data.isSuccess){
               self.hide();  
             }
             else{
-              alert(response.data.message);
               //TBD - show error message if not success  
             }           
           });  
@@ -203,15 +202,14 @@ export default {
   }
 
   .help-title{
-    margin-bottom: 10px;
-    font-size: 32px;
+    margin-bottom: 5px;
   }
 
   .call-help-btn{
     border-radius: 150px;
-    height: 70px;
-    width: 70px;
-    line-height: 60px;
+    height: 50px;
+    width: 50px;
+    line-height: 40px;
   }
 
   .record-help{
