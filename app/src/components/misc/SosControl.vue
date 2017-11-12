@@ -77,11 +77,12 @@ export default {
   background-color: lightgray;
   z-index: 9999;
   border-radius: 150px;
-  position: absolute;
+  position: fixed;
   right: 30px;
   bottom: 30px;
   color: white;
   font-size: 24px;
   cursor: pointer;
+  box-shadow: 5px 5px 5px grey;
 }
 </style>

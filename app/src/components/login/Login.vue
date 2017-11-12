@@ -66,10 +66,12 @@ export default {
       }).then((result) => {
         if(result){
           var url = self.domain + '/users/login';
+          debugger;
           var data = {
             mail: self.userDetails.mail,
             password: self.userDetails.password,
-            gcmRegistrationId: window.localStorage.mb_registrationId
+            gcmRegistrationId: window.localStorage.mb_registrationId,
+            currentLocation: self.currentLocation
           };
           axios.post(url, data)        
             .then(response => {

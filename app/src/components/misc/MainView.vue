@@ -128,7 +128,7 @@ export default {
     position: absolute;;
     top: 80px;
     margin: 5px 5px 5px 5px;
-    width: 100%;
+    width: 98%;
   }
 
   .nav li{

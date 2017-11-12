@@ -1,5 +1,8 @@
 <template>
   <div class="table-view">
+    <div v-if="cases.length === 0" class="no-cases empty-data">
+      nothing to show in your area
+    </div>
     <div v-for="caseData in cases" class="help-issue" @click="caseShowing">
       <div class="help-issuer">
         <router-link :to="{ path: '/user/' + caseData.id}">
@@ -25,7 +28,7 @@ export default {
   components: {
 
   },
-  props: ['currentLocation', 'cases'],
+  props: ['cases'],
   data () {
     return {
       maxDescriptionChars: 100
@@ -108,5 +111,13 @@ export default {
     position: relative;
     top: -75px;
     width: 75%;
+  }
+  .no-cases{
+    width: 100%;
+    height: 400px;
+    top: 50%;
+    left: 50%;
+    margin-right: -50%;
+    transform: translate(-50%, -50%); 
   }
 </style>

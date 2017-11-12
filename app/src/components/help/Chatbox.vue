@@ -105,7 +105,7 @@
 	}
 	.messages-wrapper{
 		border: 1px solid black;
-		height: 320px;
+		height: 250px;
 		overflow: auto;
 	}
 	.chat-message{

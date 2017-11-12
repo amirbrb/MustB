@@ -106,6 +106,7 @@ export default {
     height: 80px;
     position: relative;
     top: -60px;
+    text-align: right;
   }
 
   .case-issuer-wrapper img{

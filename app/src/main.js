@@ -97,9 +97,20 @@ function init(){
       }) 
     };
 
-    var geoLocationFailure = function(err){
-      console.log(err);
-      alert("MustB is location based application, though, we could not track location...");
+    var geoLocationFailure = function(){
+      /* eslint-disable no-new */
+      new Vue({
+        el: '#app',
+        template: '<App />',
+        components: { App },
+        data () {
+          return {
+            isLoading: false,
+            currentLocation: null
+          }
+        },
+        router: router
+      })
     }
     navigator.geolocation.getCurrentPosition(geoLoctionSuccess, geoLocationFailure, geoLocationOptions);
   }

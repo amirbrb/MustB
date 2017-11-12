@@ -70,7 +70,8 @@ export default {
         var url = self.domain + '/users/relogin';
         var data = {
           mail: usernameCookie,
-          gcmRegistrationId: window.localStorage.mb_registrationId
+          gcmRegistrationId: window.localStorage.mb_registrationId,
+          currentLocation: self.currentLocation
         };
         axios.post(url, data)        
         .then(response => {

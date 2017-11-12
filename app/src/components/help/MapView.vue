@@ -14,7 +14,7 @@ export default {
   components: {
     
   },
-  props: ['currentLocation', 'mapZoomLevel', 'cases'],
+  props: ['mapZoomLevel', 'cases'],
   data () {
     return {
       map: {}

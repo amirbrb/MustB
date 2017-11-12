@@ -4,7 +4,8 @@ export default {
   data() {
   	return {
 		  domain: 'https://mustb-amirbrb.c9users.io',
-      userData: this.$parent.userData
+      userData: this.$parent.userData,
+      currentLocation: this.$parent.currentLocation
   	}
   },
   methods:{

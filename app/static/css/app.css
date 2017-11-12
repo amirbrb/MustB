@@ -12,6 +12,11 @@ body{
 	border-color: red;
 }
 
+.empty-data{
+  font-size: 24px;
+
+}
+
 .checkbox {
   padding-left: 20px; }
 .checkbox label {
@@ -103,11 +108,4 @@ body{
  }
 .tab-content>.tab-pane:not(.active) {
     opacity: 0;
-}
-
-.mb_title{
-  margin-top: 5px;
-  margin-bottom: 5px;
-  font-size: 20px;
-  font-weight: bolder;
 }

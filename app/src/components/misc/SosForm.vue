@@ -144,7 +144,6 @@ export default {
           };
           axios.post(self.domain + '/sos/text', formData, config)
           .then(response => {
-            debugger;
             if(response.data.isSuccess){
               self.hide();  
             }
