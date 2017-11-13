@@ -1,12 +1,12 @@
 <template>
   <div id="app">
     <transition name="fade">
-      <Login v-on:loggedIn="userAuthenticated" v-on:showRegistration="showRegistration" v-if="!userData.isLoggedIn && isLoginForm"></Login>
+      <Login v-on:loggedIn="userAuthenticated" v-on:showRegistration="showRegistration" v-if="!isLoggedIn && isLoginForm"></Login>
     </transition>
     <transition name="fade">
-      <Register v-on:registered="userAuthenticated" v-on:showLogin="showLogin" v-if="!userData.isLoggedIn && isRegistrationForm"></Register>
+      <Register v-on:registered="userAuthenticated" v-on:showLogin="showLogin" v-if="!isLoggedIn && isRegistrationForm"></Register>
     </transition>
-    <div class="data-viewer" v-if="userData.isLoggedIn">
+    <div class="data-viewer" v-if="isLoggedIn">
       <HeaderNavbar></HeaderNavbar>
       <transition name="fade-short">
         <router-view></router-view>
@@ -18,9 +18,7 @@
 
 <script>
 
-import LoginType from './enums/loginType'
 import ViewType from './enums/viewType'
-import axios from 'axios';
 import MBBase from './MBBase.vue';
 import Login from './components/login/Login.vue';
 import Register from './components/login/Register.vue';
@@ -36,10 +34,11 @@ export default {
     MainView,
     HeaderNavbar
   },
+  props: ['loggedInUserData'],
   data () {
     return {
+      isLoggedIn: false,
       userData: {
-        isLoggedIn: false,
         name: "",
         avatar: "",
         id: 0,
@@ -61,28 +60,13 @@ export default {
   created () {
     window.ViewType = ViewType;
     var self = this;
+    if(self.$parent.loggedInUserData){
+      self.userData = self.$parent.loggedInUserData;
+      self.isLoggedIn = true;
+    }
+
     self.currentLocation = self.$parent.currentLocation;
     self.watchGeolocation();
-    var usernameCookie = window.localStorage.mb_usercookie;
-    if(usernameCookie){
-      var loginTypeEnum = window.localStorage.mb_loginType;
-      if(loginTypeEnum == LoginType.mail){
-        var url = self.domain + '/users/relogin';
-        var data = {
-          mail: usernameCookie,
-          gcmRegistrationId: window.localStorage.mb_registrationId,
-          currentLocation: self.currentLocation
-        };
-        axios.post(url, data)        
-        .then(response => {
-          var data = response.data;
-          self.hasErrors = !data.isSuccess;
-          if(data.isSuccess){
-            self.userAuthenticated(data.data.userData);
-          }
-        });          
-      }
-    }
   },
   methods: {
     watchGeolocation() {
@@ -107,12 +91,12 @@ export default {
       self.userData.name = userData.fullName;
       self.userData.avatar = userData.imageUrl;
       self.userData.id = userData.userId;
-      self.userData.isLoggedIn = true;
       self.userData.settings.sosControlLocation = userData.settings.sosControlLocation;
       self.userData.settings.viewType = userData.settings.viewType || self.userData.settings.viewType;
       self.userData.settings.mapZoomLevel = userData.settings.mapZoomLevel || self.userData.settings.mapZoomLevel;
       self.isLoginForm = false;
       self.isRegistrationForm = false;
+      self.isLoggedIn = true;
     },
     showRegistration (){
       var self = this;
@@ -158,7 +142,6 @@ export default {
 }
 
 .main-view{
-  position: fixed;
   width: 100%;
 }
 

@@ -9,6 +9,8 @@ import MainView from './components/misc/MainView'
 import Settings from './components/settings/Settings'
 import ImageView from './components/misc/ImageView';
 import SosForm from './components/misc/SosForm';
+import LoginType from './enums/loginType'
+import axios from 'axios';
 
 Vue.use(VueRouter)
 Vue.use(VeeValidate);
@@ -82,37 +84,51 @@ function init(){
         lng: coords.longitude
       };
 
-      /* eslint-disable no-new */
-      new Vue({
-        el: '#app',
-        template: '<App />',
-        components: { App },
-        data () {
-          return {
-            isLoading: false,
+      var usernameCookie = window.localStorage.mb_usercookie;
+      if(usernameCookie){
+        var loginTypeEnum = window.localStorage.mb_loginType;
+        if(loginTypeEnum == LoginType.mail){
+          var url = 'https://mustb-amirbrb.c9users.io/users/relogin';
+          var data = {
+            mail: usernameCookie,
+            gcmRegistrationId: window.localStorage.mb_registrationId,
             currentLocation: currentLocation
-          }
-        },
-        router: router
-      }) 
+          };
+          axios.post(url, data)        
+          .then(response => {
+            var data = response.data;
+            if(data.isSuccess){
+              createApplication(data.data.userData, currentLocation);
+            }
+          });          
+        }
+      }
+      else{
+        createApplication(null, currentLocation);
+      }
     };
 
     var geoLocationFailure = function(){
-      /* eslint-disable no-new */
-      new Vue({
-        el: '#app',
-        template: '<App />',
-        components: { App },
-        data () {
-          return {
-            isLoading: false,
-            currentLocation: null
-          }
-        },
-        router: router
-      })
+      //TBD - show error and close application
     }
     navigator.geolocation.getCurrentPosition(geoLoctionSuccess, geoLocationFailure, geoLocationOptions);
   }
+}
+
+function createApplication(userData, currentLocation){
+  /* eslint-disable no-new */
+  new Vue({
+    el: '#app',
+    template: '<App />',
+    components: { App },
+    data () {
+      return {
+        loggedInUserData: userData,
+        isLoading: false,
+        currentLocation: currentLocation
+      }
+    },
+    router: router
+  })
 }
 

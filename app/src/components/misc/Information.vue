@@ -20,20 +20,27 @@ export default {
   props: ['data'],
   data () {
     return {
-      isShowingData: false
+      isShowingData: false,
+      timeoutId: null
     }
   },
   methods: {
     showInfo(){
       var self = this;
-      self.isShowingData = !self.isShowingData;
-      var e = window.event;
-      var el = self.$refs.dataElement;
-      el.style.left = e.clientX - 48 + 'px';
-      el.style.top = e.clientY + 15 + 'px';
-      setTimeout(function(){
+      if(self.isShowingData){
         self.isShowingData = false;
-      }, 2000);
+        clearTimeout(self.timeoutId);
+      }
+      else{
+        self.isShowingData = true;
+        var e = window.event;
+        var el = self.$refs.dataElement;
+        el.style.left = e.clientX - 48 + 'px';
+        el.style.top = e.clientY + 15 + 'px';
+        self.timeoutId = setTimeout(function(){
+          self.isShowingData = false;
+        }, 2500);
+      }
     }
   }
 }
@@ -56,6 +63,8 @@ export default {
 
   .information-data{
     color: black;
+    background-color: gray;
+    border-color: black;
     width: 100px;
     font-size: 14px;
     border: 1px solid gray;
@@ -66,5 +75,6 @@ export default {
     padding-bottom: 10px;
     text-align: center;
     position: fixed;
+    z-index: 9999;
   }
 </style>

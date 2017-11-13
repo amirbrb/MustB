@@ -100,7 +100,7 @@ export default {
     sosControlLocationChanged (location){
       var self = this;
       self.userData.settings.sosControlLocation = location;
-      self.userSettingsChanged(self.userData.settings, self.userData.id);
+      self.userSettingsChanged(self.userData.settings, self.userData.userId);
     },
     selectTableView(){
       this.selectedTabChanged(ViewType.table)
@@ -111,12 +111,12 @@ export default {
     selectedTabChanged(viewType){
       var self = this;
       self.userData.settings.viewType = viewType;
-      self.userSettingsChanged(self.userData.settings, self.userData.id);
+      self.userSettingsChanged(self.userData.settings, self.userData.userId);
     },
     mapZoomChanged(zoomLevel){
       var self = this;
       self.userData.settings.mapZoomLevel = zoomLevel;
-      self.userSettingsChanged(self.userData.settings, self.userData.id);
+      self.userSettingsChanged(self.userData.settings, self.userData.userId);
     }
   }
 }
@@ -128,7 +128,7 @@ export default {
     position: absolute;;
     top: 80px;
     margin: 5px 5px 5px 5px;
-    width: 98%;
+    width: 97%;
   }
 
   .nav li{

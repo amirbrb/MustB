@@ -77,7 +77,7 @@ export default {
   background-color: lightgray;
   z-index: 9999;
   border-radius: 150px;
-  position: fixed;
+  position: relative;
   right: 30px;
   bottom: 30px;
   color: white;

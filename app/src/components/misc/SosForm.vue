@@ -1,7 +1,7 @@
 <template>
   <div class="sos-request col-xs-12">
     <span class="close" @click="hide"><i class="fa-times fa"></i></span>
-    <div class="form-group has-feedback" style="margin-top: 5px;">
+    <div class="form-group has-feedback" style="margin-top: 20px;">
       <input name="title" v-model="help.title"
         v-validate="'required'" :class="{'form-control': true, 'error-input': errors.has('title') }" 
         placeholder="tell others what is needed">
@@ -188,10 +188,8 @@ export default {
 
 <style>
   .sos-request{
-    position: fixed;
-    top: 110px;
+    top: 130px;
     margin: 5px 5px 5px 5px;
-    width: 100%;
   }
 
   .close{
