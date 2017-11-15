@@ -1,7 +1,7 @@
 <template>
   <div class="image-view col-xs-12">
     <span class="close" @click="goBack"><i class="fa-times fa"></i></span>
-    <img :src="this.domain + '/images/' + this.imageId"/>
+    <img :src="imagesDomain + this.imageId"/>
   </div>
 </template>
 

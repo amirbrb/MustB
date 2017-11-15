@@ -6,7 +6,7 @@
       <div class="case-description">{{caseData.description}}</div>
       <div class="case-images">
         <router-link v-for="img in caseData.images" :to="'/image/' + img">
-          <img :src="domain + '/images/' + img"/>   
+          <img :src="imagesDomain + img"/>   
         </router-link>
       </div>
     </div>

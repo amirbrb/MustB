@@ -2,7 +2,7 @@
 	<div class="chat-box col-xs-12" :disabled="!isActive">
 		<p class="mb_title">messages: </p>
       	<div class="messages-wrapper col-xs-12" ref="messagesContainer">
-      		<div v-if="isLoading">Getting images</div>
+      		<div v-if="isLoading">Getting messages</div>
 	      	<div v-if="!isLoading" v-for="message in messages" :class="{'wrap-message': true, 'wrap-message-right' : message.senderId === userData.id}">
 		      	<div class="chat-message">
 			        <div class="message-sender">
