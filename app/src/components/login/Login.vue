@@ -66,7 +66,6 @@ export default {
       }).then((result) => {
         if(result){
           var url = self.domain + '/users/login';
-          debugger;
           var data = {
             mail: self.userDetails.mail,
             password: self.userDetails.password,

@@ -2,20 +2,20 @@
   <div class="settings">
       <ul class="nav nav-tabs">
         <li class="active">
-          <a data-toggle="tab" href="#about" @click="selectedSettingsType = 2">about</a>
+          <a data-toggle="tab" href="#profile" @click="selectedSettingsType = 1">me</a>
         </li>
         <li>
-          <a data-toggle="tab" href="#profile" @click="selectedSettingsType = 1">me</a>
+          <a data-toggle="tab" href="#about" @click="selectedSettingsType = 2">about</a>
         </li>
       </ul>
       <div class="tab-content">
+      <div id="profile" 
+          :class="{'tab-pane' : true, 'fade': true, 'in' : selectedSettingsType === 1, 'active' : selectedSettingsType === 1}" v-if="selectedSettingsType === 1">
+          <Profile :userId="$parent.userData.id" v-if="selectedSettingsType === 1"></Profile>
+        </div>
         <div id="about" 
           :class="{'tab-pane' : true, 'fade': true, 'in' : selectedSettingsType === 2, 'active' : selectedSettingsType === 2}" v-if="selectedSettingsType === 2">
           <About v-if="selectedSettingsType === 2"></About>
-        </div>
-        <div id="profile" 
-          :class="{'tab-pane' : true, 'fade': true, 'in' : selectedSettingsType === 1, 'active' : selectedSettingsType === 1}" v-if="selectedSettingsType === 1">
-          <Profile :userId="$parent.userData.id" v-if="selectedSettingsType === 1"></Profile>
         </div>
       </div>
     </div>
@@ -42,7 +42,7 @@
     },
     data(){
       return {
-        selectedSettingsType: 2
+        selectedSettingsType: 1
       }
     }
   }
@@ -52,7 +52,7 @@
 		position: fixed;
 		top: 80px;
     margin: 5px 5px 5px 5px;
-		width: 100%;
+		width: 97%;
 	}
 
   .nav li{

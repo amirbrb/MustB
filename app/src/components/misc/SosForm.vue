@@ -29,9 +29,9 @@
     <div class="form-group has-feedback col-xs-8 col-md-2">
       <label class="file-container">
         <a class="btn btn-default file-loader">
-          <span class="fa fa-upload"></span> Choose images
+          <span class="fa fa-upload"></span><p>Choose images</p>
         </a>
-        <input ref="images" type="file" @change="imagesSelected" multiple/>
+        <input ref="images" type="file" accept="image/*" @change="imagesSelected" multiple/>
       </label>
       <Information :data="'provide users with images of the issue so they can help'"></Information>
     </div>
@@ -219,26 +219,6 @@ export default {
     line-height: 100px;
     border-radius: 100px;
     font-size: 40px;
-  }
-
-  .file-container {
-    overflow: hidden;
-    position: relative;
-    width: 80%;
-  }
-
-  .file-container [type=file] {
-    cursor: inherit;
-    display: block;
-    font-size: 999px;
-    filter: alpha(opacity=0);
-    min-height: 100%;
-    min-width: 100%;
-    opacity: 0;
-    position: absolute;
-    right: 0;
-    text-align: right;
-    top: 0;
   }
 
   .images-container{

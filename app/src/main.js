@@ -98,9 +98,14 @@ function init(){
           .then(response => {
             var data = response.data;
             if(data.isSuccess){
+              debugger;
               createApplication(data.data.userData, currentLocation);
             }
-          });          
+          })
+          .catch(e => {
+            //TBD - log
+            createApplication(null, currentLocation);
+          });       
         }
       }
       else{
