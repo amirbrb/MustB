@@ -3,40 +3,28 @@
     <div class="avatar section container">
       <label class="file-container">
         <img ref="avatarPresent" :src="imagesDomain + userData.imageUrl" class="user-avatar"/>
+        <i class="img-editor fa fa-edit"></i>
         <input ref="userAvatar" type="file" @change="avatarSelected"/>
-        <a class="btn btn-default file-loader">
-          <span class="fa fa-upload"></span><p>Upload avatar</p>
-        </a>
       </label>
     </div>
     <div class="basics section container">
       <form class="form-horizontal">
         <div class="form-group">
-          <label class="control-label col-xs-4 col-sm-3" for="first">first name:</label>
+          <label class="control-label col-xs-4 col-sm-3" for="first">name</label>
           <div class="col-xs-8">
-            <input class="form-control" id="first" placeholder="first name" v-model="userProfile.firstName" name="first">
+            <input class="form-control" id="first" placeholder="first name" v-model="userProfile.name" name="first">
           </div>
         </div>
-        <div class="form-group">
-          <label class="control-label col-xs-4 col-sm-3" for="last">Password:</label>
-          <div class="col-xs-8">          
-            <input class="form-control" id="last" placeholder="last name" v-model="userProfile.lastName" name="last">
-          </div>
-        </div>
-      </form>
-    </div>
-    <div class="contact section container">
-      <form class="form-horizontal">
         <div class="form-group">
           <label class="control-label col-xs-4 col-sm-3" for="phone">phone:</label>
           <div class="col-xs-8">
-            <input class="form-control" id="phone" placeholder="phone" v-model="userProfile.phone" name="phone">
+            <input type="number" class="form-control" id="phone" placeholder="phone" v-model="userProfile.phone" name="phone">
           </div>
         </div>
         <div class="form-group">
-          <label class="control-label col-xs-4 col-sm-3" for="facebook">facebook profile:</label>
-          <div class="col-xs-8">          
-            <input class="form-control" id="facebook" placeholder="" v-model="userProfile.facebook" name="facebook">
+          <label class="control-label col-xs-4 col-sm-3" for="phone">about you:</label>
+          <div class="col-xs-8">
+            <textarea v-model="userProfile.description" class="form-control"></textarea>
           </div>
         </div>
       </form>
@@ -56,10 +44,8 @@
       return {
         userProfile: {
           avatar: null,
-          firstName: '',
-          lastName: '',
+          name: '',
           phone: '',
-          facebook: '',
           description: '',
           born: null,
           goodAt: [],
@@ -106,7 +92,7 @@
 
   .section{
     text-align: center;
-    width: 49%;
+    width: 100%;
     float: left;
   }
 
@@ -118,9 +104,15 @@
   }
 
   .user-avatar{
-    width: 80px;
-    height: 80px;
-    border-radius: 80px;
+    width: 150px;
+    height: 150px;
+    border-radius: 150px;
+  }
+
+  .img-editor{
+    position: relative;
+    z-index: 9999;
+    font-size: 24px;
   }
 
   .save-settings{

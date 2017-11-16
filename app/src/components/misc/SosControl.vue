@@ -84,6 +84,6 @@ export default {
   font-size: 24px;
   cursor: pointer;
   box-shadow: 5px 5px 5px grey;
-  opacity: 0.3;
+  opacity: 0.45;
 }
 </style>
