@@ -8,10 +8,17 @@ body{
   font-family: 'Source Serif Pro', serif;
 }
 
+.form-control{
+    border-top: 0;
+    border-left: 0;
+    border-right: 0
+}
+
 .file-container {
   overflow: hidden;
   position: relative;
   width: 80%;
+  cursor: pointer;
 }
 
 .file-container [type=file] {

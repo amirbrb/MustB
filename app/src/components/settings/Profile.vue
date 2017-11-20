@@ -3,16 +3,18 @@
     <div class="avatar section container">
       <label class="file-container">
         <img ref="avatarPresent" :src="imagesDomain + userData.imageUrl" class="user-avatar"/>
-        <i class="img-editor fa fa-edit"></i>
         <input ref="userAvatar" type="file" @change="avatarSelected"/>
       </label>
+    </div>
+    <div class="cases section container">
+      <router-link :to="'cases/' + userData.userId" class="btn btn-primary btn-md">my cases <span class="badge">7</span></router-link>
     </div>
     <div class="basics section container">
       <form class="form-horizontal">
         <div class="form-group">
-          <label class="control-label col-xs-4 col-sm-3" for="first">name</label>
+          <label class="control-label col-xs-4 col-sm-3" for="name">name</label>
           <div class="col-xs-8">
-            <input class="form-control" id="first" placeholder="first name" v-model="userProfile.name" name="first">
+            <input class="form-control" id="name" placeholder="name" :value="userData.name" v-model="userProfile.name" name="name">
           </div>
         </div>
         <div class="form-group">
@@ -30,7 +32,7 @@
       </form>
     </div>
     <div class="save-settings">
-      <a class="btn btn-large btn-warning">save settings</a>
+      <a class="btn btn-large btn-warning" @click="saveSettings">save settings</a>
       <a class="btn btn-large btn-danger" @click="logout">logout</a>
     </div>
   </div>
@@ -38,6 +40,7 @@
 
 <script>
   import MBBase from '../../MBBase.vue';
+  import axios from 'axios';
   export default {
     extends: MBBase,
     data () {
@@ -58,7 +61,18 @@
       }
     },
     created(){
-
+      var self = this;
+      var url = self.domain + '/users/settings';
+      axios.get(url, {
+        userId: self.userData.userId
+      })
+      .then(response => {
+        self.userProfile.name = response.fullName;
+        self.userProfile.phone = response.phone;
+      })
+      .catch(e => {
+        //TBD: add logs
+      });   
     },
     methods: {
       avatarSelected() {
@@ -75,11 +89,15 @@
         self.userProfile.avatar = image;
         reader.readAsDataURL(image);
       },
+      saveSettings(){
+
+      },
       logout(){
         var self = this;
         window.localStorage.removeItem('mb_usercookie');
         window.localStorage.removeItem('mb_loginType');
         window.localStorage.removeItem('mb_registrationId');
+        window.location.href = '/';
         self.$parent.$parent.isLoggedIn = false;        
       }
     }
@@ -94,6 +112,7 @@
     text-align: center;
     width: 100%;
     float: left;
+    margin-top: 10px;
   }
 
   @media only screen and (max-width: 768px) {

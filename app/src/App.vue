@@ -88,12 +88,7 @@ export default {
     },
     userAuthenticated (userData){
       var self = this;
-      self.userData.name = userData.fullName;
-      self.userData.avatar = userData.imageUrl;
-      self.userData.id = userData.userId;
-      self.userData.settings.sosControlLocation = userData.settings.sosControlLocation;
-      self.userData.settings.viewType = userData.settings.viewType || self.userData.settings.viewType;
-      self.userData.settings.mapZoomLevel = userData.settings.mapZoomLevel || self.userData.settings.mapZoomLevel;
+      self.userData = userData;
       self.isLoginForm = false;
       self.isRegistrationForm = false;
       self.isLoggedIn = true;
