@@ -98,8 +98,10 @@ function init(){
           .then(response => {
             var data = response.data;
             if(data.isSuccess){
-              debugger;
               createApplication(data.data.userData, currentLocation);
+            }
+            else{
+              createApplication(null, currentLocation);
             }
           })
           .catch(e => {
