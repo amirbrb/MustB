@@ -1,6 +1,6 @@
 <template>
   <div class="sos-request col-xs-12">
-    <span class="close" @click="hide"><i class="fa-times fa"></i></span>
+    <StateControl></StateControl>
     <div class="form-group has-feedback" style="margin-top: 20px;">
       <input name="title" v-model="help.title"
         v-validate="'required'" :class="{'form-control': true, 'error-input': errors.has('title') }" 
@@ -26,7 +26,7 @@
       <input ref="autocomplete" class="form-control" placeholder="where sre you?" type="text">
       <span class="glyphicon glyphicon-map-marker col-xs-offset-1 form-control-feedback"></span>
     </div>
-    <div class="form-group has-feedback col-xs-8 col-md-2">
+    <div class="form-group has-feedback col-xs-8 col-md-3">
       <label class="file-container">
         <a class="btn btn-default file-loader">
           <span class="fa fa-upload"></span><p>Choose images</p>
@@ -47,6 +47,7 @@
 <script>
 
 import MBBase from '../../MBBase.vue'
+import StateControl from './StateControl.vue'
 import Information from './Information.vue'
 import axios from 'axios'
 import $ from 'jquery';
@@ -56,7 +57,8 @@ var google = window.google;
 export default {
   extends: MBBase,
   components: {
-    Information
+    Information,
+    StateControl
   },
   data () {
     return {
@@ -128,7 +130,7 @@ export default {
       }).then((result) => {
         if(result){
           const formData = new FormData();
-          formData.append('userId', self.userData.id);  
+          formData.append('userId', self.userData.userId);  
           formData.append('title', self.help.title || self.help.selectedType);  
           formData.append('description', self.help.description);  
           formData.append('lat', self.help.location.lat);
@@ -188,7 +190,7 @@ export default {
 
 <style>
   .sos-request{
-    top: 130px;
+    top: 25px;
     margin: 5px 5px 5px 5px;
   }
 

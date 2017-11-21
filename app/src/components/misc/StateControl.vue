@@ -1,27 +1,22 @@
 <template>
-  <div class="image-view col-xs-12">
-    <StateControl></StateControl>
-    <img :src="imagesDomain + this.imageId"/>
+  <div class="state-control">
+    <span class="close" @click="goBack"><i class="fa-times fa"></i></span>
   </div>
 </template>
 
 <script>
 
 import MBBase from '../../MBBase.vue'
-import StateControl from './StateControl.vue'
 export default {
   extends: MBBase,
   components: {
-    StateControl
+    
   },
   props: [],
   data () {
     return {
       imageId: ''
     }
-  },
-  created(){
-    this.imageId = this.$route.params.id;
   },
   methods: {
     goBack(){
@@ -33,19 +28,11 @@ export default {
 </script>
 
 <style scoped>
-  .image-view {
-    top: 25px;
-    width: 100%;
-  }
-
   .close{
     position: absolute;
     top: -20px;
     left: 10px;
   }
-
-  img{
-    width: 100%;
-    margin-top: 10px
-  }
 </style>
+
+this.$router.back();

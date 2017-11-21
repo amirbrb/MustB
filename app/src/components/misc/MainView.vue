@@ -1,6 +1,6 @@
 <template>
-  <div class="main-view">
-    <div class="data-view" v-if="!isShowingHelp">
+  <div>
+    <div class="data-view data-container">
       <ul class="nav nav-tabs">
         <li :class="{'active': userData.settings.viewType === 1}">
           <a data-toggle="tab" href="#sosTable" @click="selectTableView">table</a>
@@ -14,11 +14,11 @@
           :class="{'tab-pane': true, 'fade': true, 'in': userData.settings.viewType === 1, 'active': userData.settings.viewType === 1}">
           <TableView :cases="cases"
             :currentLocation="currentLocation"
-            v-show="!isShowingCase && userData.settings.viewType === 1" v-on:caseShowing="isShowingCase = true"></TableView>
+            v-show="userData.settings.viewType === 1" v-on:caseShowing="isShowingCase = true"></TableView>
         </div>
         <div id="sosMap" :class="{'tab-pane': true, 'fade': true, 'in': userData.settings.viewType === 2, 'active': userData.settings.viewType === 2}">
           <MapView :cases="cases"
-            v-show="!isShowingCase && userData.settings.viewType === 2" 
+            v-show="userData.settings.viewType === 2" 
             v-on:caseShowing="isShowingCase = true" 
             :mapZoomLevel="userData.settings.mapZoomLevel"
             :currentLocation="currentLocation"
@@ -27,11 +27,6 @@
         </div>
       </div>
     </div>
-    <transition name="fade-short">
-      <SosControl v-show="!isShowingHelp" :location="userData.settings.sosControlLocation" 
-        v-on:sosControlLocationChanged="sosControlLocationChanged">
-      </SosControl>
-    </transition>
   </div>
 </template>
 
@@ -40,7 +35,6 @@
 import axios from 'axios';
 import MBBase from '../../MBBase.vue';
 import ViewType from '../../enums/viewType'
-import SosControl from './SosControl.vue';
 import SosForm from './SosForm.vue';
 import TableView from '../help/TableView.vue';
 import MapView from '../help/MapView.vue';
@@ -48,7 +42,6 @@ import HeaderNavbar from './HeaderNavbar.vue';
 export default {
   extends: MBBase,
   components: {
-    SosControl,
     SosForm,
     TableView,
     HeaderNavbar,
@@ -57,8 +50,6 @@ export default {
   },
   data () {
     return {
-      isShowingHelp: false,
-      isShowingCase: false,
       userData: this.$parent.userData,
       currentLocation: this.$parent.currentLocation,
       cases: [],
@@ -79,9 +70,12 @@ export default {
     getData(){
       var self = this;
       var url = self.domain + '/sos';
-      axios.get(url, {
-        location: self.currentLocation
-      }).then(response => {
+      axios.get(url, { 
+          params: {
+            location: self.currentLocation,
+            userId: self.userData.userId
+          }
+        }).then(response => {
         self.cases = response.data.map(data => {
           return {
             image: self.domain + '/images/' + data.userImage,
@@ -96,11 +90,6 @@ export default {
         console.log(response);
         //TBD: proper error message
       });
-    },
-    sosControlLocationChanged (location){
-      var self = this;
-      self.userData.settings.sosControlLocation = location;
-      self.userSettingsChanged(self.userData.settings, self.userData.userId);
     },
     selectTableView(){
       this.selectedTabChanged(ViewType.table)
@@ -125,10 +114,7 @@ export default {
 
 <style scoped>
   .data-view{
-    position: absolute;;
-    top: 80px;
     margin: 5px 5px 5px 5px;
-    width: 97%;
   }
 
   .nav li{

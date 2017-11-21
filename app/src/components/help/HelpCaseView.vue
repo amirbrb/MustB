@@ -1,6 +1,6 @@
 <template>
   <div class="case-view col-xs-12">
-    <span class="close" @click="toggleCaseShowing"><i class="fa-times fa"></i></span>
+    <StateControl></StateControl>
     <h3 class="case-title">{{caseData.title}}</h3>
     <div class="case-data-wrraper">
       <div class="case-description">{{caseData.description}}</div>
@@ -11,7 +11,7 @@
       </div>
     </div>
     <div class="case-issuer-wrapper">
-      <img :src="domain + '/users/avatar/' + userData.id"/>
+      <img :src="domain + '/users/avatar/' + userData.userId"/>
     </div>
     <Chabox :caseId="caseData.id" :isActive="caseData.isActive" ></Chabox>
   </div>
@@ -20,12 +20,14 @@
 <script>
 
 import MBBase from '../../MBBase.vue'
+import StateControl from '../misc/StateControl.vue'
 import Chabox from './Chatbox.vue';
 import axios from 'axios';
 export default {
   extends: MBBase,
   components: {
-    Chabox
+    Chabox,
+    StateControl
   },
   props: [],
   data () {
@@ -44,9 +46,6 @@ export default {
     }
   },
   methods: {
-    toggleCaseShowing(){
-      this.$router.back();
-    },
     getData(){
       var self = this;
       var url = self.domain + '/sos/' + self.$route.params.id;
@@ -97,15 +96,16 @@ export default {
   }
 
   .case-data-wrraper{
-    width: 80%;
+    width: 100%;
     float: left;
   }
   .case-issuer-wrapper{
     width: 19%;
     float: right;
     height: 80px;
-    position: relative;
-    top: -60px;
+    position: absolute;
+    top: -30px;
+    right: 10px;
     text-align: right;
   }
 

@@ -30,6 +30,11 @@ window.onerror = function(message, file, line, column, error) {
   
 }
 
+window.addEventListener('native.keyboardshow', function(e){
+  var height = e.keyboardHeight;
+  alert(height);
+});
+
 document.addEventListener('deviceready', function(){
   /* eslint-disable no-undef */
   /* eslint-disable valid-typeof */

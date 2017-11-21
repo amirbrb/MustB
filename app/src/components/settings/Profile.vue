@@ -135,7 +135,7 @@
   }
 
   .save-settings{
-    position: fixed;
+    position: relative;
     right: 5px;
     bottom: 5px;
   }

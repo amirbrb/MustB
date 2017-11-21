@@ -49,10 +49,9 @@
 </script>
 <style scoped>
 	.settings{
-		position: fixed;
-		top: 80px;
     margin: 5px 5px 5px 5px;
 		width: 97%;
+    overflow-y:auto;
 	}
 
   .nav li{

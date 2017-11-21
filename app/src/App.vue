@@ -8,12 +8,16 @@
     </transition>
     <div class="data-viewer" v-if="isLoggedIn">
       <HeaderNavbar></HeaderNavbar>
-      <transition name="fade-short">
+      <div class="view-router">
         <router-view></router-view>
-      </transition>  
+      </div>
     </div>
+    <transition name="fade-short">
+      <SosControl v-show="!isShowingHelp" :location="userData.settings.sosControlLocation" 
+        v-on:sosControlLocationChanged="sosControlLocationChanged">
+      </SosControl>
+    </transition>
   </div>
-
 </template>
 
 <script>
@@ -24,6 +28,7 @@ import Login from './components/login/Login.vue';
 import Register from './components/login/Register.vue';
 import MainView from './components/misc/MainView.vue';
 import HeaderNavbar from './components/misc/HeaderNavbar.vue';
+import SosControl from './components/misc/SosControl.vue';
 
 export default {
   extends: MBBase,
@@ -32,7 +37,8 @@ export default {
     Login,
     Register,
     MainView,
-    HeaderNavbar
+    HeaderNavbar,
+    SosControl
   },
   props: ['loggedInUserData'],
   data () {
@@ -54,7 +60,8 @@ export default {
       currentLocation: null,
       isLoading: false,
       isLoginForm: true,
-      isRegistrationForm: false
+      isRegistrationForm: false,
+      isShowingHelp: false
     }
   },
   created () {
@@ -69,6 +76,11 @@ export default {
     self.watchGeolocation();
   },
   methods: {
+    sosControlLocationChanged (location){
+      var self = this;
+      self.userData.settings.sosControlLocation = location;
+      self.userSettingsChanged(self.userData.settings, self.userData.userId);
+    },
     watchGeolocation() {
       var self = this;
       if (navigator.geolocation) {
@@ -109,6 +121,7 @@ export default {
 </script>
 
 <style>
+
 .fade-enter-active, .fade-leave-active {
   -webkit-transition: opacity 1.5s ease-in;
   transition: opacity 1.5s ease-in;
@@ -128,7 +141,7 @@ export default {
 }
 
 .fade-short-enter-active, .fade-short-leave-active {
-  -webkit-transition: width 1s ease-out;
+  -webkit-transition: opacity 1s ease-out;
   transition: opacity 1s ease-out;
 }
 
@@ -137,6 +150,16 @@ export default {
 }
 
 .main-view{
+  width: 100%;
+}
+
+.data-container{
+  height: 70vh; 
+}
+
+.view-router{
+  position: absolute;;
+  top: 80px;
   width: 100%;
 }
 

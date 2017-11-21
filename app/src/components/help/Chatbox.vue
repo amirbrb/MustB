@@ -86,7 +86,7 @@
 	      		var data = {
 	      			caseId: self.caseId,
 	      			text: self.newMessage,
-	      			userId: self.userData.id
+	      			userId: self.userData.userId
 	      		};
       			axios.post(url, data).then(response => {
       				self.newMessage = '';

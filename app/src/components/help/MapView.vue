@@ -1,5 +1,5 @@
 <template>
-  <div class="map-view">
+  <div class="map-view view-container">
     <div id="map"></div>    
   </div>
 </template>
@@ -69,12 +69,13 @@ export default {
           self.$router.push('/case/' + caseId);
           self.$emit('caseShowing');
         });
-
+        
         var marker = new google.maps.Marker({
           position: position,
           map: self.map,
           title: data.title,
-          icon: icon
+          icon: icon,
+          optimized:false
         });
 
         marker.addListener('click', function() {
@@ -91,7 +92,6 @@ export default {
 
 <style scoped>
   .map-view {
-    height: 75vh;
     width: 100%;
     overflow-y: auto;
     overflow-x: hidden;

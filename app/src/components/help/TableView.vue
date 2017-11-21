@@ -70,8 +70,8 @@ export default {
 
 <style scoped>
   .table-view {
-    height: 75vh;
     width: 100%;
+    height: 100%;
     overflow-y: auto;
     overflow-x: hidden;
   }
