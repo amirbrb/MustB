@@ -129,14 +129,11 @@
   }
 
   .img-editor{
-    position: relative;
     z-index: 9999;
     font-size: 24px;
   }
 
   .save-settings{
-    position: relative;
-    right: 5px;
-    bottom: 5px;
+    
   }
 </style>

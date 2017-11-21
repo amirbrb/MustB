@@ -31,8 +31,11 @@ window.onerror = function(message, file, line, column, error) {
 }
 
 window.addEventListener('native.keyboardshow', function(e){
-  var height = e.keyboardHeight;
-  alert(height);
+  //var height = e.keyboardHeight;
+  //alert(height);
+  setTimeout(function() {
+      window.scrollTo(document.body.scrollLeft, document.body.scrollTop);
+  }, 0);
 });
 
 document.addEventListener('deviceready', function(){
