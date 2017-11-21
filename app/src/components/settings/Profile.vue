@@ -94,11 +94,7 @@
       },
       logout(){
         var self = this;
-        window.localStorage.removeItem('mb_usercookie');
-        window.localStorage.removeItem('mb_loginType');
-        window.localStorage.removeItem('mb_registrationId');
-        window.location.href = '/';
-        self.$parent.$parent.isLoggedIn = false;        
+        self.$emit('logout');
       }
     }
   }

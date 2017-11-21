@@ -11,7 +11,7 @@
       <div class="tab-content">
       <div id="profile" 
           :class="{'tab-pane' : true, 'fade': true, 'in' : selectedSettingsType === 1, 'active' : selectedSettingsType === 1}" v-if="selectedSettingsType === 1">
-          <Profile :userId="$parent.userData.id" v-if="selectedSettingsType === 1"></Profile>
+          <Profile :userId="$parent.userData.id" v-if="selectedSettingsType === 1" v-on:logout="logout"></Profile>
         </div>
         <div id="about" 
           :class="{'tab-pane' : true, 'fade': true, 'in' : selectedSettingsType === 2, 'active' : selectedSettingsType === 2}" v-if="selectedSettingsType === 2">
@@ -36,6 +36,18 @@
       About, 
       Profile,
       SettingsType
+    },
+    methods: {
+      logout(){
+        window.localStorage.removeItem('mb_usercookie');
+        window.localStorage.removeItem('mb_loginType');
+        window.localStorage.removeItem('mb_registrationId');
+
+        var self = this;
+        self.$parent.isLoggedIn = false;
+        self.$parent.isLoginForm = true;
+        self.$router.replace('/');
+      }
     },
     created(){
       this.SettingsType = SettingsType;

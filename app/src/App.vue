@@ -13,7 +13,7 @@
       </div>
     </div>
     <transition name="fade-short">
-      <SosControl v-show="!isShowingHelp" :location="userData.settings.sosControlLocation" 
+      <SosControl v-if="isLoggedIn" :location="userData.settings.sosControlLocation" 
         v-on:sosControlLocationChanged="sosControlLocationChanged">
       </SosControl>
     </transition>
