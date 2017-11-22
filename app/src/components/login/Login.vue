@@ -40,7 +40,8 @@
 <script>
 
 import LoginType from '../../enums/loginType'
-import axios from 'axios';
+import {HTTP} from '../../services/httpService';
+
 import MBBase from '../../MBBase.vue';
 export default {
   extends: MBBase,
@@ -65,14 +66,15 @@ export default {
         password: self.userDetails.password
       }).then((result) => {
         if(result){
-          var url = self.domain + '/login/login';
+          var url = '/login/login';
           var data = {
             mail: self.userDetails.mail,
             password: self.userDetails.password,
             gcmRegistrationId: window.localStorage.mb_registrationId,
             currentLocation: self.currentLocation
           };
-          axios.post(url, data)        
+
+          HTTP.post(url, data)        
             .then(response => {
               var data = response.data;
               self.hasErrors = !data.isSuccess;

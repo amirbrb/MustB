@@ -22,7 +22,7 @@
 import MBBase from '../../MBBase.vue'
 import StateControl from '../misc/StateControl.vue'
 import Chabox from './Chatbox.vue';
-import axios from 'axios';
+import {HTTP} from '../../services/httpService';
 export default {
   extends: MBBase,
   components: {
@@ -48,8 +48,8 @@ export default {
   methods: {
     getData(){
       var self = this;
-      var url = self.domain + '/sos/' + self.$route.params.id;
-      axios.get(url).then(response => {
+      var url = '/sos/' + self.$route.params.id;
+      HTTP.get(url).then(response => {
         var data = response.data;
         if(data.isSuccess){
           self.caseData = data.data.helpCase;
@@ -63,8 +63,8 @@ export default {
     getChatMessages(){
       var self = this;
       var now = new Date();
-      var url = self.domain + '/sos/messages/' + self.$route.params.id + '?q=' + now;
-      axios.get(url).then(response => {
+      var url = '/sos/messages/' + self.$route.params.id + '?q=' + now;
+      HTTP.get(url).then(response => {
         self.caseData.messages = response.data;
         self.timeoutId = setTimeout(self.getChatMessages, 1000);
       }).catch(response => {

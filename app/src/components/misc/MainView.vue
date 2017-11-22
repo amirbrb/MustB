@@ -32,7 +32,7 @@
 
 <script>
 
-import axios from 'axios';
+import {HTTP} from '../../services/httpService';
 import MBBase from '../../MBBase.vue';
 import ViewType from '../../enums/viewType'
 import SosForm from './SosForm.vue';
@@ -70,8 +70,8 @@ export default {
   methods: {
     getData(){
       var self = this;
-      var url = self.domain + '/sos';
-      axios.get(url, { 
+      var url = '/sos';
+      HTTP.get(url, { 
           params: {
             location: self.currentLocation,
             userId: self.userData.userId

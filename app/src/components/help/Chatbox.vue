@@ -23,7 +23,7 @@
 
 <script>
 	import MBBase from '../../MBBase.vue'
-	import axios from 'axios';
+	import {HTTP} from '../../services/httpService';
 	import moment from 'moment';
 	import $ from 'jquery'
 	export default{
@@ -51,8 +51,8 @@
 	  	methods: {
 	    	getChatMessages(){
 	      		var self = this;
-	      		var url = self.domain + '/sos/messages/' + self.caseId + '?q=' + self.lastQuery;
-	      		axios.get(url)
+	      		var url = '/sos/messages/' + self.caseId + '?q=' + self.lastQuery;
+	      		HTTP.get(url)
       			.then(response => {
 	        		self.messages.push.apply(self.messages, response.data.messages);
 	        		if(response.data.lastTimestamp){
@@ -82,13 +82,13 @@
     			var self = this;
     			if(!self.isActive) return;
 
-	      		var url = self.domain + '/sos/message/';
+	      		var url = '/sos/message/';
 	      		var data = {
 	      			caseId: self.caseId,
 	      			text: self.newMessage,
 	      			userId: self.userData.userId
 	      		};
-      			axios.post(url, data).then(response => {
+      			HTTP.post(url, data).then(response => {
       				self.newMessage = '';
       			});
     		}

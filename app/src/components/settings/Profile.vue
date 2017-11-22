@@ -48,7 +48,7 @@
 
 <script>
   import MBBase from '../../MBBase.vue';
-  import axios from 'axios';
+  import {HTTP} from '../../services/httpService';
   export default {
     extends: MBBase,
     data () {
@@ -70,8 +70,8 @@
     },
     created(){
       var self = this;
-      var url = self.domain + '/users/details/' + self.userData.userId;
-      axios.post(url)
+      var url = '/users/details/' + self.userData.userId;
+      HTTP.post(url)
       .then(response => {
         self.userProfile.name = response.fullName;
         self.userProfile.phone = response.phone;

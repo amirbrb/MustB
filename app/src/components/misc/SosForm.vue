@@ -50,6 +50,7 @@ import MBBase from '../../MBBase.vue'
 import StateControl from './StateControl.vue'
 import Information from './Information.vue'
 import axios from 'axios'
+import {HTTP} from '../../services/httpService';
 import $ from 'jquery';
 
 var autocomplete;
@@ -144,7 +145,7 @@ export default {
               'content-type': 'multipart/form-data'
             }
           };
-          axios.post(self.domain + '/sos/text', formData, config)
+          HTTP.post(self.domain + '/sos/text', formData, config)
           .then(response => {
             if(response.data.isSuccess){
               self.hide();  

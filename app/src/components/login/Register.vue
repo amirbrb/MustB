@@ -59,7 +59,7 @@
 
 <script>
 
-import axios from 'axios'
+import {HTTP} from '../../services/httpService';
 import MBBase from '../../MBBase.vue';
 export default {
   extends: MBBase,
@@ -111,7 +111,7 @@ export default {
         phone: self.userDetails.phone
       }).then((result) => {
         if(result){
-          var url = self.domain + '/login/register';
+          var url = '/login/register';
           const formData = new FormData();
           formData.append('mail', self.userDetails.mail);  
           formData.append('password', self.userDetails.password);  
@@ -127,7 +127,7 @@ export default {
             }
           };
 
-          axios.post(url, formData, config)
+          HTTP.post(url, formData, config)
             .then(response => {
               var data = response.data;
               self.hasErrors = !data.isSuccess;

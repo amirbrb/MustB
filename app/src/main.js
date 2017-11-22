@@ -10,7 +10,7 @@ import Settings from './components/settings/Settings'
 import ImageView from './components/misc/ImageView';
 import SosForm from './components/misc/SosForm';
 import LoginType from './enums/loginType'
-import axios from 'axios';
+import {HTTP} from './services/httpService';
 
 Vue.use(VueRouter)
 Vue.use(VeeValidate);
@@ -96,13 +96,13 @@ function init(){
       if(usernameCookie){
         var loginTypeEnum = window.localStorage.mb_loginType;
         if(loginTypeEnum == LoginType.mail){
-          var url = 'https://mustb-amirbrb.c9users.io/login/relogin';
+          var url = '/login/relogin';
           var data = {
             mail: usernameCookie,
             gcmRegistrationId: window.localStorage.mb_registrationId,
             currentLocation: currentLocation
           };
-          axios.post(url, data)        
+          HTTP.post(url, data)        
           .then(response => {
             var data = response.data;
             if(data.isSuccess){
