@@ -96,7 +96,7 @@ function init(){
       if(usernameCookie){
         var loginTypeEnum = window.localStorage.mb_loginType;
         if(loginTypeEnum == LoginType.mail){
-          var url = 'https://mustb-amirbrb.c9users.io/users/relogin';
+          var url = 'https://mustb-amirbrb.c9users.io/login/relogin';
           var data = {
             mail: usernameCookie,
             gcmRegistrationId: window.localStorage.mb_registrationId,
@@ -106,6 +106,7 @@ function init(){
           .then(response => {
             var data = response.data;
             if(data.isSuccess){
+              localStorage.mb_token = data.data.token;
               createApplication(data.data.userData, currentLocation);
             }
             else{

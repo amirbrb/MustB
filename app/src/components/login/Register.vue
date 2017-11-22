@@ -24,16 +24,10 @@
             </div>
             <div class="registration-form" v-bind:style="{ display: step == 2 ? null : 'none'}">
               <div class="form-group has-feedback">
-                <input name="first" v-model="userDetails.first" 
-                  v-validate="'required'" :class="{'form-control': true, 'error-input': errors.has('first') }" 
-                  placeholder="first name">
-                <span v-show="errors.has('first')" class="glyphicon glyphicon-exclamation-sign form-control-feedback"></span>
-              </div>
-              <div class="form-group has-feedback">
-                <input name="last" v-model="userDetails.last" 
-                  v-validate="'required'" :class="{'form-control': true, 'error-input': errors.has('last') }" 
-                  placeholder="last name">
-                <span v-show="errors.has('last')" class="glyphicon glyphicon-exclamation-sign form-control-feedback"></span>
+                <input name="name" v-model="userDetails.name" 
+                  v-validate="'required'" :class="{'form-control': true, 'error-input': errors.has('name') }" 
+                  placeholder="name">
+                <span v-show="errors.has('name')" class="glyphicon glyphicon-exclamation-sign form-control-feedback"></span>
               </div>
               <div class="form-group has-feedback">
                 <input name="phone" v-model="userDetails.phone" 
@@ -81,8 +75,7 @@ export default {
       userDetails: {
         mail: "",
         password: "",
-        first: "",
-        last: "",
+        name: "",
         phone: "",
         avatar: null
       }
@@ -114,17 +107,15 @@ export default {
     register: function (){
       var self = this;
       self.$validator.validateAll({
-        first: self.userDetails.first,
-        last: self.userDetails.last,
+        name: self.userDetails.name,
         phone: self.userDetails.phone
       }).then((result) => {
         if(result){
-          var url = self.domain + '/users/register';
+          var url = self.domain + '/login/register';
           const formData = new FormData();
           formData.append('mail', self.userDetails.mail);  
           formData.append('password', self.userDetails.password);  
-          formData.append('firstName', self.userDetails.first);  
-          formData.append('lastName', self.userDetails.last);
+          formData.append('name', self.userDetails.name);
           formData.append('phoneNumber', self.userDetails.phone);
           formData.append('gcmRegistrationId', window.localStorage.mb_registrationId);
           formData.append('avatar', self.userDetails.avatar);
@@ -144,12 +135,10 @@ export default {
                 self.$refs.errors.innerHTML = data.data.message;
               }
               else{
-                self.$refs.userAvater.src = data.data.userData.imageUrl 
-                ? self.domain + '/images/' + data.data.userData.imageUrl
-                : self.domain + '/images/avatar.png';
+                self.$refs.userAvater.src = self.imagesDomain + data.data.userData.avatar;
                 setTimeout(function(){
-                  self.$emit('registered', data.data.userData)
-                }, 3000)
+                  self.$emit('registered', data.data.userData, data.data.token)
+                }, 200)
               }
             })
             .catch(e => {

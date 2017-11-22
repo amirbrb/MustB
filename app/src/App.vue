@@ -29,6 +29,7 @@ import Register from './components/login/Register.vue';
 import MainView from './components/misc/MainView.vue';
 import HeaderNavbar from './components/misc/HeaderNavbar.vue';
 import SosControl from './components/misc/SosControl.vue';
+import axios from 'axios';
 
 export default {
   extends: MBBase,
@@ -72,6 +73,8 @@ export default {
       self.isLoggedIn = true;
     }
 
+    debugger;
+    axios.defaults.headers.common['mb-access-token'] = localStorage.mb_token;
     self.currentLocation = self.$parent.currentLocation;
     self.watchGeolocation();
   },
@@ -98,9 +101,10 @@ export default {
         }, watchOptions);
       }
     },
-    userAuthenticated (userData){
+    userAuthenticated (userData, token){
       var self = this;
       self.userData = userData;
+      localStorage.mb_token = token;
       self.isLoginForm = false;
       self.isRegistrationForm = false;
       self.isLoggedIn = true;

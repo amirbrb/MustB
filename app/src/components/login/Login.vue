@@ -65,7 +65,7 @@ export default {
         password: self.userDetails.password
       }).then((result) => {
         if(result){
-          var url = self.domain + '/users/login';
+          var url = self.domain + '/login/login';
           var data = {
             mail: self.userDetails.mail,
             password: self.userDetails.password,
@@ -84,15 +84,10 @@ export default {
                   window.localStorage.mb_usercookie = self.userDetails.mail;
                   window.localStorage.mb_loginType = LoginType.mail;
                 }
-                if(data.data.userData.imageUrl){
-                  self.$refs.userAvater.src = self.domain + '/images/' + data.data.userData.imageUrl;
-                }
-                else{
-                  self.$refs.userAvater.src = self.domain + '/images/avatar.png'; 
-                }
+                self.$refs.userAvater.src = self.imagesDomain + data.data.userData.avatar;
                 setTimeout(function(){
-                  self.$emit('loggedIn', data.data.userData);
-                }, 3000)
+                  self.$emit('loggedIn', data.data.userData, data.data.token);
+                }, 200)
               }
             })
             .catch(e => {

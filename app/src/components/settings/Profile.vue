@@ -2,7 +2,7 @@
   <div class="profile">
     <div class="avatar section container">
       <label class="file-container">
-        <img ref="avatarPresent" :src="imagesDomain + userData.imageUrl" class="user-avatar"/>
+        <img ref="avatarPresent" :src="imagesDomain + userData.avatar" class="user-avatar"/>
         <input ref="userAvatar" type="file" @change="avatarSelected"/>
       </label>
     </div>
@@ -26,7 +26,15 @@
         <div class="form-group">
           <label class="control-label col-xs-4 col-sm-3" for="phone">about you:</label>
           <div class="col-xs-8">
-            <textarea v-model="userProfile.description" class="form-control"></textarea>
+            <input type="text" v-model="userProfile.description" class="form-control"></input>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="control-label col-xs-4 col-sm-3" for="phone">gender:</label>
+          <div class="col-xs-8">
+            <label class="radio-inline"><input type="radio" name="gender" value="1" v-model="userProfile.gender">male</label>
+            <label class="radio-inline"><input type="radio" name="gender" value="2" v-model="userProfile.gender">female</label>
+            <label class="radio-inline"><input type="radio" name="gender" value="3" v-model="userProfile.gender">other</label>
           </div>
         </div>
       </form>
@@ -50,7 +58,7 @@
           name: '',
           phone: '',
           description: '',
-          born: null,
+          gender: 3,
           goodAt: [],
           notificationSettings: {
             alertDistance: 5,
@@ -62,10 +70,8 @@
     },
     created(){
       var self = this;
-      var url = self.domain + '/users/settings';
-      axios.get(url, {
-        userId: self.userData.userId
-      })
+      var url = self.domain + '/users/details/' + self.userData.userId;
+      axios.post(url)
       .then(response => {
         self.userProfile.name = response.fullName;
         self.userProfile.phone = response.phone;

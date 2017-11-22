@@ -53,7 +53,8 @@ export default {
       userData: this.$parent.userData,
       currentLocation: this.$parent.currentLocation,
       cases: [],
-      timeoutId: null
+      timeoutId: null,
+      queryDelay: 5000
     }
   },
   props: [],
@@ -78,14 +79,15 @@ export default {
         }).then(response => {
         self.cases = response.data.map(data => {
           return {
-            image: self.domain + '/images/' + data.userImage,
+            image: self.imagesDomain + data.userImage,
             title: data.title,
             description: data.description,
             id: data.id,
             location: data.location
           }
         });
-        self.timeoutId = setTimeout(self.getData, 2000);
+        clearTimeout(self.timeoutId);
+        self.timeoutId = setTimeout(self.getData, self.queryDelay);
       }).catch(response => {
         console.log(response);
         //TBD: proper error message
