@@ -109,7 +109,6 @@ function init(){
       if(usernameCookie){
         var loginTypeEnum = window.localStorage.mb_loginType;
         if(loginTypeEnum == LoginType.mail){
-          debugger;
           var url = '/login/relogin';
           var data = {
             mail: usernameCookie,

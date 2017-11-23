@@ -11,9 +11,9 @@
       </div>
     </div>
     <div class="case-issuer-wrapper">
-      <img :src="domain + '/users/avatar/' + userData.userId"/>
+      <img v-if="caseData.userId" :src="imagesDomain + '/avatar/' + caseData.userId"/>
     </div>
-    <Chabox :caseId="caseData.id" :isActive="caseData.isActive" ></Chabox>
+    <Chabox :caseId="$route.params.id" :isActive="caseData.isActive" ></Chabox>
   </div>
 </template>
 
@@ -22,7 +22,7 @@
 import MBBase from '../../MBBase.vue'
 import StateControl from '../misc/StateControl.vue'
 import Chabox from './Chatbox.vue';
-import {HTTP} from '../../services/httpService';
+import $ from 'jquery';
 export default {
   extends: MBBase,
   components: {
@@ -49,14 +49,18 @@ export default {
     getData(){
       var self = this;
       var url = '/sos/' + self.$route.params.id;
-      HTTP.get(url).then(response => {
-        var data = response.data;
+      $.ajax({
+        url: url,
+        method: 'GET'
+      }).done(function(response){
+        var data = response;
         if(data.isSuccess){
+          debugger;
           self.caseData = data.data.helpCase;
           self.caseData.messages = data.data.messages;
           self.timeoutId = setTimeout(self.getChatMessages, 1000);
         }
-      }).catch(response => {
+      }).fail(function(e){
         //TBD - show proper error
       });
     },
@@ -64,12 +68,15 @@ export default {
       var self = this;
       var now = new Date();
       var url = '/sos/messages/' + self.$route.params.id + '?q=' + now;
-      HTTP.get(url).then(response => {
-        self.caseData.messages = response.data;
+      $.ajax({
+        url: url,
+        method: 'GET'
+      }).done(function(response){
+        self.caseData.messages = response;
         self.timeoutId = setTimeout(self.getChatMessages, 1000);
-      }).catch(response => {
+      }).fail(function(e){
         //TBD - show proper error
-      });
+      })
     }
   }
 }
