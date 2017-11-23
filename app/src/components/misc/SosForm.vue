@@ -50,7 +50,6 @@ import MBBase from '../../MBBase.vue'
 import StateControl from './StateControl.vue'
 import Information from './Information.vue'
 import axios from 'axios'
-import {HTTP} from '../../services/httpService';
 import $ from 'jquery';
 
 var autocomplete;
@@ -130,30 +129,34 @@ export default {
         title: self.help.title || self.help.selectedType
       }).then((result) => {
         if(result){
+          const url = '/sos/text';
           const formData = new FormData();
           formData.append('userId', self.userData.userId);  
           formData.append('title', self.help.title || self.help.selectedType);  
           formData.append('description', self.help.description);  
           formData.append('lat', self.help.location.lat);
           formData.append('lng', self.help.location.lng);
+          formData.append('tokenKey', localStorage.mb_token);
           for(var fileIndex = 0; fileIndex < self.help.images.length; fileIndex++){
             formData.append(self.help.images[fileIndex].image, self.help.images[fileIndex].file);  
           }
-          
-          const config = {
-            headers: {
-              'content-type': 'multipart/form-data'
+
+          $.ajax({
+              url: url, 
+              data: formData, 
+              processData: false,
+              contentType: false
             }
-          };
-          HTTP.post(self.domain + '/sos/text', formData, config)
-          .then(response => {
-            if(response.data.isSuccess){
+          ).done(function(response){
+            if(response.isSuccess){
               self.hide();  
             }
             else{
               //TBD - show error message if not success  
             }           
-          });  
+          }).fail(function(e){
+            //TBD: log error
+          })
         }
       });
     },

@@ -59,7 +59,7 @@
 
 <script>
 
-import {HTTP} from '../../services/httpService';
+import $ from 'jquery'
 import MBBase from '../../MBBase.vue';
 export default {
   extends: MBBase,
@@ -121,15 +121,14 @@ export default {
           formData.append('avatar', self.userDetails.avatar);
           formData.append('currentLocation', JSON.stringify(self.currentLocation));
           
-          const config = {
-            headers: {
-              'content-type': 'multipart/form-data'
-            }
-          };
-
-          HTTP.post(url, formData, config)
-            .then(response => {
-              var data = response.data;
+          $.ajax({
+              url: url, 
+              data: formData, 
+              processData: false,
+              contentType: false
+            }).done(function(response){
+              debugger;
+              var data = response;
               self.hasErrors = !data.isSuccess;
               if(!data.isSuccess){
                 self.$refs.errors.innerHTML = data.data.message;
@@ -140,12 +139,12 @@ export default {
                   self.$emit('registered', data.data.userData, data.data.token)
                 }, 200)
               }
-            })
-            .catch(e => {
+            }).fail(function(e){
               self.hasErrors = true;
               console.error(e);
-              ///TBD - add propper logs
-            });
+              ///TBD - handle logs
+            }
+          );
         }
       });
     },

@@ -32,7 +32,7 @@
 
 <script>
 
-import {HTTP} from '../../services/httpService';
+import $ from 'jquery';
 import MBBase from '../../MBBase.vue';
 import ViewType from '../../enums/viewType'
 import SosForm from './SosForm.vue';
@@ -71,13 +71,15 @@ export default {
     getData(){
       var self = this;
       var url = '/sos';
-      HTTP.get(url, { 
-          params: {
-            location: self.currentLocation,
-            userId: self.userData.userId
-          }
-        }).then(response => {
-        self.cases = response.data.map(data => {
+      $.ajax({
+        url: url,
+        method: 'GET',
+        data: {
+          location: self.currentLocation,
+          userId: self.userData.userId
+        }
+      }).done(function(response){
+        self.cases = response.map(data => {
           return {
             image: self.imagesDomain + data.userImage,
             title: data.title,
@@ -88,7 +90,7 @@ export default {
         });
         clearTimeout(self.timeoutId);
         self.timeoutId = setTimeout(self.getData, self.queryDelay);
-      }).catch(response => {
+      }).fail(function(response){
         console.log(response);
         //TBD: proper error message
       });

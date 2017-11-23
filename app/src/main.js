@@ -10,7 +10,7 @@ import Settings from './components/settings/Settings'
 import ImageView from './components/misc/ImageView';
 import SosForm from './components/misc/SosForm';
 import LoginType from './enums/loginType'
-import {HTTP} from './services/httpService';
+import $ from 'jquery'
 
 Vue.use(VueRouter)
 Vue.use(VeeValidate);
@@ -80,6 +80,19 @@ window.setTimeout(function() {
 }, 100);
 
 function init(){  
+  const baseUrl = 'https://mustb-amirbrb.c9users.io';
+  $.ajaxSetup({
+      beforeSend: function(xhr, options) {
+        options.url = baseUrl + options.url;
+        xhr.setRequestHeader("mb_token", localStorage.mb_token);
+      },
+      data: {
+        mb_token: localStorage.mb_token
+      },
+      global: false,
+      type: "POST"
+  });
+
   if(navigator.geolocation){
     var geoLocationOptions = {
       enableHighAccuracy: true
@@ -96,15 +109,16 @@ function init(){
       if(usernameCookie){
         var loginTypeEnum = window.localStorage.mb_loginType;
         if(loginTypeEnum == LoginType.mail){
+          debugger;
           var url = '/login/relogin';
           var data = {
             mail: usernameCookie,
             gcmRegistrationId: window.localStorage.mb_registrationId,
             currentLocation: currentLocation
           };
-          HTTP.post(url, data)        
-          .then(response => {
-            var data = response.data;
+
+          $.post(url, data, function(response){
+            var data = response;
             if(data.isSuccess){
               localStorage.mb_token = data.data.token;
               createApplication(data.data.userData, currentLocation);
@@ -112,11 +126,10 @@ function init(){
             else{
               createApplication(null, currentLocation);
             }
-          })
-          .catch(e => {
+          }).fail(function(e){
             //TBD - log
             createApplication(null, currentLocation);
-          });       
+          });
         }
       }
       else{

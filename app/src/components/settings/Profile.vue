@@ -48,7 +48,7 @@
 
 <script>
   import MBBase from '../../MBBase.vue';
-  import {HTTP} from '../../services/httpService';
+  import $ from 'jquery'
   export default {
     extends: MBBase,
     data () {
@@ -70,15 +70,17 @@
     },
     created(){
       var self = this;
-      var url = '/users/details/' + self.userData.userId;
-      HTTP.post(url)
-      .then(response => {
-        self.userProfile.name = response.fullName;
-        self.userProfile.phone = response.phone;
-      })
-      .catch(e => {
-        //TBD: add logs
-      });   
+      const url = '/users/details/' + self.userData.userId;
+      
+      $.ajax({
+        method: 'GET',
+        url: url
+      }).done(function(response){
+        self.userProfile.name = response.name;
+        self.userProfile.phone = response.phoneNumber;
+      }).fail(function(e) {
+        //TBD: handke error
+      });
     },
     methods: {
       avatarSelected() {

@@ -40,7 +40,7 @@
 <script>
 
 import LoginType from '../../enums/loginType'
-import {HTTP} from '../../services/httpService';
+import $ from 'jquery'
 
 import MBBase from '../../MBBase.vue';
 export default {
@@ -74,35 +74,27 @@ export default {
             currentLocation: self.currentLocation
           };
 
-          HTTP.post(url, data)        
-            .then(response => {
-              var data = response.data;
-              self.hasErrors = !data.isSuccess;
-              if(!data.isSuccess){
-                self.$refs.errors.innerHTML = data.data.message;
+          $.post(url, data, function(response){
+            var data = response;
+            self.hasErrors = !data.isSuccess;
+            if(!data.isSuccess){
+              self.$refs.errors.innerHTML = data.data.message;
+            }
+            else{
+              if(self.$refs.letMeStay.checked){
+                window.localStorage.mb_usercookie = self.userDetails.mail;
+                window.localStorage.mb_loginType = LoginType.mail;
               }
-              else{
-                if(self.$refs.letMeStay.checked){
-                  window.localStorage.mb_usercookie = self.userDetails.mail;
-                  window.localStorage.mb_loginType = LoginType.mail;
-                }
-                self.$refs.userAvater.src = self.imagesDomain + data.data.userData.avatar;
-                setTimeout(function(){
-                  self.$emit('loggedIn', data.data.userData, data.data.token);
-                }, 200)
-              }
-            })
-            .catch(e => {
-              self.log({
-                data: {
-                  url: url,
-                  loginData: data
-                },
-                message: 'login failed'
-              });
-              self.hasErrors = true;
-              self.$refs.errors.innerHTML = 'an error occured, please try again';
-            });          
+              self.$refs.userAvater.src = self.imagesDomain + data.data.userData.avatar;
+              setTimeout(function(){
+                self.$emit('loggedIn', data.data.userData, data.data.token);
+              }, 200)
+            }
+          }).fail(function(e){
+            self.hasErrors = true;
+            self.$refs.errors.innerHTML = 'an error occured, please try again';
+            //TBD: handle error
+          }); 
         }
       });
     },
