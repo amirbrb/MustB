@@ -81,11 +81,12 @@ export default {
       }).done(function(response){
         self.cases = response.map(data => {
           return {
-            image: self.imagesDomain + data.userImage,
+            image: self.imagesDomain + 'avatar/' + data.userId,
             title: data.title,
             description: data.description,
             id: data.id,
-            location: data.location
+            location: data.location,
+            userId: data.userId
           }
         });
         clearTimeout(self.timeoutId);

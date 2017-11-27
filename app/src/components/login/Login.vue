@@ -86,6 +86,7 @@ export default {
                 window.localStorage.mb_loginType = LoginType.mail;
               }
               self.$refs.userAvater.src = self.imagesDomain + data.data.userData.avatar;
+              localStorage.mb_token = data.data.token;
               setTimeout(function(){
                 self.$emit('loggedIn', data.data.userData, data.data.token);
               }, 200)

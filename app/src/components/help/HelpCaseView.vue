@@ -55,7 +55,6 @@ export default {
       }).done(function(response){
         var data = response;
         if(data.isSuccess){
-          debugger;
           self.caseData = data.data.helpCase;
           self.caseData.messages = data.data.messages;
           self.timeoutId = setTimeout(self.getChatMessages, 1000);
@@ -111,8 +110,8 @@ export default {
     float: right;
     height: 80px;
     position: absolute;
-    top: -30px;
-    right: 10px;
+    top: -15px;
+    right: 20px;
     text-align: right;
   }
 

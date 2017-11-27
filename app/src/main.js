@@ -7,6 +7,7 @@ import VeeValidate from 'vee-validate';
 import HelpCaseView from './components/help/HelpCaseView'
 import MainView from './components/misc/MainView'
 import Settings from './components/settings/Settings'
+import Profile from './components/settings/Profile'
 import ImageView from './components/misc/ImageView';
 import SosForm from './components/misc/SosForm';
 import LoginType from './enums/loginType'
@@ -21,6 +22,7 @@ const routes = [
   { path: '/help', component: SosForm },
 	{ path: '/case/:id', component: HelpCaseView },
   { path: '/image/:id', component: ImageView },
+  { path: '/user/:id', component: Profile, props: { isReadOnly: true } },
 	{ path: '/settings', component: Settings }
 ];
 

@@ -127,7 +127,6 @@ export default {
               processData: false,
               contentType: false
             }).done(function(response){
-              debugger;
               var data = response;
               self.hasErrors = !data.isSuccess;
               if(!data.isSuccess){
@@ -135,6 +134,7 @@ export default {
               }
               else{
                 self.$refs.userAvater.src = self.imagesDomain + data.data.userData.avatar;
+                localStorage.mb_token = data.data.token;
                 setTimeout(function(){
                   self.$emit('registered', data.data.userData, data.data.token)
                 }, 200)

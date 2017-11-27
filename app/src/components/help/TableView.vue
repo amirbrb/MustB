@@ -5,7 +5,7 @@
     </div>
     <div v-for="caseData in cases" class="help-issue" @click="caseShowing">
       <div class="help-issuer">
-        <router-link :to="{ path: '/user/' + caseData.id}">
+        <router-link :to="{ path: '/user/' + caseData.userId}">
           <img class="img" :src="caseData.image"></img>
         </router-link>
         <div class="help-distance">{{farwaway(caseData.location.lat, caseData.location.lng)}}</div>
