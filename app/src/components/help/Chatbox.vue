@@ -6,7 +6,7 @@
 	      	<div v-if="!isLoading" v-for="message in messages" :class="{'wrap-message': true, 'wrap-message-right' : message.senderId === userData.id}">
 		      	<div class="chat-message">
 			        <div class="message-sender">
-			        	<img :src="domain + '/users/avatar/' + message.senderId"/>
+			        	<img :src="domain + '/images/avatar/' + message.senderId"/>
 			        </div>
 			        <p>{{message.text}}</p>
 		      	</div>
@@ -23,7 +23,6 @@
 
 <script>
 	import MBBase from '../../MBBase.vue'
-	import {HTTP} from '../../services/httpService';
 	import moment from 'moment';
 	import $ from 'jquery'
 	export default{
@@ -52,14 +51,13 @@
 	    	getChatMessages(){
 	      		var self = this;
 	      		var url = '/sos/messages/' + self.caseId + '?q=' + self.lastQuery;
-	      		HTTP.get(url)
-      			.then(response => {
-	        		self.messages.push.apply(self.messages, response.data.messages);
-	        		if(response.data.lastTimestamp){
-	        			self.lastQuery = response.data.lastTimestamp;
+	      		$.get(url, function(response){
+      				self.messages.push.apply(self.messages, response.messages);
+	        		if(response.lastTimestamp){
+	        			self.lastQuery = response.lastTimestamp;
 	        		}
 
-	        		if(response.data.messages.length > 0){
+	        		if(response.messages.length > 0){
 	        			var scroller = $(self.$refs.messagesContainer);
 	        			setTimeout(function(){
 	        				scroller.stop().animate({
@@ -73,8 +71,7 @@
 	        		if(self.alive){
 	        			self.timeoutId = setTimeout(self.getChatMessages, 1000);
 	        		}
-	      		})
-	      		.catch(response => {
+	      		}).fail(function(response) {
 			        //TBD - show proper error
 		      	});
 	    	},
@@ -88,7 +85,7 @@
 	      			text: self.newMessage,
 	      			userId: self.userData.userId
 	      		};
-      			HTTP.post(url, data).then(response => {
+      			$.post(url, data, function(response){
       				self.newMessage = '';
       			});
     		}
