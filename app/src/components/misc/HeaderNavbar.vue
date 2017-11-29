@@ -3,7 +3,7 @@
     <div class="container-fluid">
       <div class="mb-navbar-header">
         <a id="toggle" @click="toggleSettings" :class="{'on' : navbarIsOpen}"><span></span></a>
-        <img class="mb-navbar-logo" :src="this.domain + '/images/community.png'"/>
+        <img class="mb-navbar-logo" :src="this.domain + '/images/static/community.png'"/>
         <a class="mb-navbar-brand">someone's out there</a>
       </div>
     </div>
