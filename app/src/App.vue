@@ -12,11 +12,9 @@
         <router-view></router-view>
       </div>
     </div>
-    <transition name="fade-short">
-      <SosControl v-if="isLoggedIn" :location="userData.settings.sosControlLocation" 
-        v-on:sosControlLocationChanged="sosControlLocationChanged">
-      </SosControl>
-    </transition>
+    <SosControl location="userData.settings.sosControlLocation" 
+      v-on:sosControlLocationChanged="sosControlLocationChanged">
+    </SosControl>
   </div>
 </template>
 

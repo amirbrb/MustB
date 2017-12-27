@@ -71,7 +71,8 @@ export default {
             mail: self.userDetails.mail,
             password: self.userDetails.password,
             gcmRegistrationId: window.localStorage.mb_registrationId,
-            currentLocation: self.currentLocation
+            lat: self.currentLocation.lat,
+            lng: self.currentLocation.lng
           };
 
           $.post(url, data, function(response){

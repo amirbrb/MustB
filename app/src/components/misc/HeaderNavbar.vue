@@ -4,7 +4,7 @@
       <div class="mb-navbar-header">
         <a id="toggle" @click="toggleSettings" :class="{'on' : navbarIsOpen}"><span></span></a>
         <img class="mb-navbar-logo" :src="this.domain + '/images/static/community.png'"/>
-        <a class="mb-navbar-brand">someone's out there</a>
+        <a class="mb-navbar-brand">Ukholo</a>
       </div>
     </div>
   </nav>

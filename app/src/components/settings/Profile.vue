@@ -2,39 +2,39 @@
   <div class="profile">
     <div class="avatar section container">
       <label class="file-container">
-        <img v-if="userProfile.avatar" ref="avatarPresent" :src="imagesDomain + userProfile.avatar" class="user-avatar"/>
+        <img v-if="settings.avatar" ref="avatarPresent" :src="imagesDomain + settings.avatar" class="user-avatar"/>
         <input ref="userAvatar" type="file" @change="avatarSelected" :disabled="isReadOnly" />
       </label>
     </div>
     <div class="cases section container">
-      <router-link :to="'cases/' + userProfile.userId" class="btn btn-primary btn-md">cases <span class="badge">{{userProfile.caseCount}}</span></router-link>
+      <router-link :to="'cases/' + userId" class="btn btn-primary btn-md">cases <span class="badge">{{settings.caseCount}}</span></router-link>
     </div>
     <div class="basics section container">
       <form class="form-horizontal">
         <div class="form-group">
           <label class="control-label col-xs-4 col-sm-3" for="name">name</label>
           <div class="col-xs-8">
-            <input class="form-control" id="name" placeholder="name" v-model="userProfile.name" :readonly="isReadOnly" name="name">
+            <input class="form-control" id="name" placeholder="name" v-model="settings.name" :readonly="isReadOnly" name="name">
           </div>
         </div>
         <div class="form-group">
           <label class="control-label col-xs-4 col-sm-3" for="phone">phone:</label>
           <div class="col-xs-8">
-            <input type="number" class="form-control" id="phone" placeholder="phone" v-model="userProfile.phoneNumber" :readonly="isReadOnly" name="phone">
+            <input type="number" class="form-control" id="phone" placeholder="phone" v-model="settings.phoneNumber" :readonly="isReadOnly" name="phone">
           </div>
         </div>
         <div class="form-group">
           <label class="control-label col-xs-4 col-sm-3" for="phone">more details:</label>
           <div class="col-xs-8">
-            <input type="text" v-model="userProfile.description" :readonly="isReadOnly" class="form-control"></input>
+            <input type="text" v-model="settings.description" :readonly="isReadOnly" class="form-control"></input>
           </div>
         </div>
         <div class="form-group">
           <label class="control-label col-xs-4 col-sm-3" for="phone">gender:</label>
           <div class="col-xs-8 text-left">
-            <label class="radio-inline"><input type="radio" name="gender" value="1" :disabled="isReadOnly" v-model="userProfile.gender">male</label>
-            <label class="radio-inline"><input type="radio" name="gender" value="2" :disabled="isReadOnly" v-model="userProfile.gender">female</label>
-            <label class="radio-inline"><input type="radio" name="gender" value="3" :disabled="isReadOnly" v-model="userProfile.gender">other</label>
+            <label class="radio-inline"><input type="radio" name="gender" value="1" :disabled="isReadOnly" v-model="settings.gender">male</label>
+            <label class="radio-inline"><input type="radio" name="gender" value="2" :disabled="isReadOnly" v-model="settings.gender">female</label>
+            <label class="radio-inline"><input type="radio" name="gender" value="3" :disabled="isReadOnly" v-model="settings.gender">other</label>
           </div>
         </div>
       </form>
@@ -54,7 +54,7 @@
     props: ['userId', 'isReadOnly'],
     data () {
       return {
-        userProfile: {
+        settings: {
           avatar: null,
           name: '',
           phoneNumber: '',
@@ -68,18 +68,19 @@
           },
           caseCount: 0,
           userId: this.userId || this.$route.params.id  
-        }
+        }, 
+        uploadedAvatar: null
       }
     },
     created(){
       var self = this;
-      const url = '/users/details/' + self.userProfile.userId;
+      const url = '/users/details/' + self.userId;
       
       $.ajax({
         method: 'GET',
         url: url
       }).done(function(response){
-        self.userProfile = response;
+        self.settings = response;
       }).fail(function(e) {
         //TBD: handke error
       });
@@ -96,11 +97,30 @@
         };
 
         var image = imageInput.files[0];
-        self.userProfile.avatar = image;
+        self.uploadedAvatar = image;
         reader.readAsDataURL(image);
       },
       saveSettings(){
+        var self = this;
+        const url = '/users/settings';
+        
+        const formData = new FormData();
+        formData.append('userId', self.userId);  
+        formData.append('settings', JSON.stringify(self.settings));  
 
+        if(self.uploadedAvatar){
+          formData.append('avatar', self.uploadedAvatar);  
+        }
+
+        $.ajax({
+          url: url, 
+          data: formData, 
+          processData: false,
+          contentType: false
+        }).done(function(response){
+        }).fail(function(e) {
+          //TBD: handke error
+        });
       },
       logout(){
         var self = this;

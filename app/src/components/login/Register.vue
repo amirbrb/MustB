@@ -119,7 +119,8 @@ export default {
           formData.append('phoneNumber', self.userDetails.phone);
           formData.append('gcmRegistrationId', window.localStorage.mb_registrationId);
           formData.append('avatar', self.userDetails.avatar);
-          formData.append('currentLocation', JSON.stringify(self.currentLocation));
+          formData.append('lat', self.currentLocation.lat);
+          formData.append('lng', self.currentLocation.lng);
           
           $.ajax({
               url: url, 

@@ -29,6 +29,10 @@ export default {
     var lastPosY = self.location.top;
     var isDragging = false;
     
+    hammertime.on('press', function(ev){
+      
+    });
+
     hammertime.on('tap', function(ev) {
       self.$router.push('/help');
     });

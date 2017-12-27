@@ -8,7 +8,9 @@
         <router-link :to="{ path: '/user/' + caseData.userId}">
           <img class="img" :src="caseData.image"></img>
         </router-link>
-        <div class="help-distance">{{farwaway(caseData.location.lat, caseData.location.lng)}}</div>
+        <div class="help-distance">
+          <label>{{farwaway(caseData.location.lat, caseData.location.lng)}}</label>
+        </div>
         <router-link :to="{ path: '/case/' + caseData.id}">
           <div class="help-title">{{caseData.title}}</div>
         </router-link>

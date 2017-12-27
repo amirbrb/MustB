@@ -115,7 +115,8 @@ function init(){
           var data = {
             mail: usernameCookie,
             gcmRegistrationId: window.localStorage.mb_registrationId,
-            currentLocation: currentLocation
+            lat: currentLocation.lat,
+            lng: currentLocation.lng
           };
 
           $.post(url, data, function(response){

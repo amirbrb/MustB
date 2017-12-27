@@ -86,7 +86,8 @@ export default {
             description: data.description,
             id: data.id,
             location: data.location,
-            userId: data.userId
+            userId: data.userId,
+            created: data.created
           }
         });
         clearTimeout(self.timeoutId);
