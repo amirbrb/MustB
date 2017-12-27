@@ -4,7 +4,10 @@
       <div class="mb-navbar-header">
         <a id="toggle" @click="toggleSettings" :class="{'on' : navbarIsOpen}"><span></span></a>
         <img class="mb-navbar-logo" :src="this.domain + '/images/static/community.png'"/>
-        <a class="mb-navbar-brand">Ukholo</a>
+        <label>
+          <a class="mb-navbar-brand">Ukholo</a>
+           someone to trust
+        </label>
       </div>
     </div>
   </nav>
@@ -16,7 +19,7 @@
     extends: MBBase,
     data() {
       return {
-        navbarIsOpen: false
+        navbarIsOpen: this.$route.fullPath.indexOf('settings') > 0
       }
     },
     methods:{

@@ -3,7 +3,7 @@
     <div class="avatar section container">
       <label class="file-container">
         <img v-if="settings.avatar" ref="avatarPresent" :src="imagesDomain + settings.avatar" class="user-avatar"/>
-        <input ref="userAvatar" type="file" @change="avatarSelected" :disabled="isReadOnly" />
+        <input ref="userAvatar" type="file" accept="image/*" capture="capture" @change="avatarSelected" :disabled="isReadOnly" />
       </label>
     </div>
     <div class="cases section container">
@@ -74,7 +74,8 @@
     },
     created(){
       var self = this;
-      const url = '/users/details/' + self.userId;
+      var userId = self.$route.params.id || self.userId;
+      const url = '/users/details/' + userId;
       
       $.ajax({
         method: 'GET',

@@ -12,7 +12,7 @@
         <router-view></router-view>
       </div>
     </div>
-    <SosControl location="userData.settings.sosControlLocation" 
+    <SosControl :location="userData.settings.sosControlLocation" 
       v-on:sosControlLocationChanged="sosControlLocationChanged">
     </SosControl>
   </div>
@@ -43,9 +43,6 @@ export default {
     return {
       isLoggedIn: false,
       userData: {
-        name: "",
-        avatar: "",
-        id: 0,
         settings: {
           sosControlLocation: {
             left: 50,

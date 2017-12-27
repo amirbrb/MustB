@@ -1,5 +1,5 @@
 <script>
-import axios from 'axios';
+import $ from 'jquery';
 export default {
   data() {
   	return {
@@ -11,13 +11,12 @@ export default {
   },
   methods:{
     userSettingsChanged (settings, userId){
-      var self = this;
-      var url = self.domain + '/users/settings';
+      var url = '/users/preferences';
         var data = {
-          settings: settings,
+          settings: JSON.stringify(settings),
           userId: userId
         };
-        axios.post(url, data);
+        $.post(url, data);
     },
     log(message){
 		  alert(message.message);
