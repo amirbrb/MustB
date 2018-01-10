@@ -11,9 +11,11 @@
       </div>
     </div>
     <div class="case-issuer-wrapper">
-      <img v-if="caseData.userId" :src="imagesDomain + '/avatar/' + caseData.userId"/>
+      <router-link :to="{ path: '/user/' + caseData.userId}">
+        <img v-if="caseData.userId" :src="imagesDomain + '/avatar/' + caseData.userId"/>
+      </router-link>
     </div>
-    <Chabox :caseId="$route.params.id" :isActive="caseData.isActive" ></Chabox>
+    <div id="caseMapContainer"></div>
   </div>
 </template>
 
@@ -21,12 +23,11 @@
 
 import MBBase from '../../MBBase.vue'
 import StateControl from '../misc/StateControl.vue'
-import Chabox from './Chatbox.vue';
 import $ from 'jquery';
+var google = window.google;
 export default {
   extends: MBBase,
   components: {
-    Chabox,
     StateControl
   },
   props: [],
@@ -58,6 +59,16 @@ export default {
           self.caseData = data.data.helpCase;
           self.caseData.messages = data.data.messages;
           self.timeoutId = setTimeout(self.getChatMessages, 1000);
+          var caseLatLng = new google.maps.LatLng(parseFloat(self.caseData.location.lat), parseFloat(self.caseData.location.lng));
+          self.map = new google.maps.Map(document.getElementById('caseMapContainer'), {
+            center: caseLatLng,
+            zoom: 16
+          });
+
+          var caseMarker = new google.maps.Marker({
+            position: caseLatLng
+          });
+          caseMarker.setMap(self.map);
         }
       }).fail(function(e){
         //TBD - show proper error
@@ -97,8 +108,9 @@ export default {
   }
 
   .case-title{
-    margin-top: 10px;
+    margin-top: 60px;
     font-weight: bold; 
+    max-width: 100%;
   }
 
   .case-data-wrraper{
@@ -108,7 +120,6 @@ export default {
   .case-issuer-wrapper{
     width: 19%;
     float: right;
-    height: 80px;
     position: absolute;
     top: -15px;
     right: 20px;
@@ -116,8 +127,8 @@ export default {
   }
 
   .case-issuer-wrapper img{
-    width: 80px;
-    height: 80px;
+    width: 60px;
+    height: 60px;
     border-radius: 80px;
   }
 
@@ -141,6 +152,11 @@ export default {
     margin-top: 10px;
   }
 
+  #caseMapContainer{
+    height: 350px;
+    width: 98%;
+    top: 15px;
+  }
 
   
 </style>

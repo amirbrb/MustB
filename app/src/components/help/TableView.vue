@@ -3,21 +3,16 @@
     <div v-if="cases.length === 0" class="no-cases empty-data">
       nothing to show in your area
     </div>
-    <div v-for="caseData in cases" class="help-issue" @click="caseShowing">
-      <div class="help-issuer">
-        <router-link :to="{ path: '/user/' + caseData.userId}">
-          <img class="img" :src="caseData.image"></img>
-        </router-link>
+    <div v-for="caseData in cases" :class="{'help-issue': true}" @click="caseShowing">
+      <router-link :to="{ path: '/case/' + caseData.id}">
         <div class="help-distance">
-          <label>{{farwaway(caseData.location.lat, caseData.location.lng)}}</label>
+          <label>{{farwaway(caseData.location.lat, caseData.location.lng)}} -- {{stringifyDate(caseData.created)}}</label>
         </div>
-        <router-link :to="{ path: '/case/' + caseData.id}">
-          <div class="help-title">{{caseData.title}}</div>
-        </router-link>
+        <div class="help-title">{{caseData.title}}</div>
         <div class="help-description">
           {{caseData.description.length > maxDescriptionChars ? caseData.description.substring(0, maxDescriptionChars) + '...' : caseData.description}}
         </div>
-      </div>
+      </router-link>
     </div>  
   </div>
 </template>
@@ -33,7 +28,7 @@ export default {
   props: ['cases'],
   data () {
     return {
-      maxDescriptionChars: 100
+      maxDescriptionChars: 90
     }
   },
   methods: {
@@ -78,41 +73,27 @@ export default {
     overflow-x: hidden;
   }
 
-  .help-issuer {
-    width: 100%;
-  }
-  .help-issuer img {
-    width: 80px;
-    height: 80px;
-    border-radius: 80px;
-    margin-right: 10px;
-  }
-
   .help-issue {
-    max-height: 125px;
+    position: relative;
+    width: 100%;
+    border: 4px groove;
+    margin-top: 2px;
+    padding: 10px;
   }
 
   .help-distance{
     font-weight: bolder;
     font-size: 18px;
-    left: 100px;
-    position: relative;
-    top: -75px
   }
 
   .help-title {
     font-weight: bolder;
     font-size: 16px;
-    left: 100px;
-    position: relative;
-    top: -75px;
   }
   .help-description {
+    margin-top: 5px;
     font-size: 15px;
-    left: 100px;
-    position: relative;
-    top: -75px;
-    width: 75%;
+    width: 99%;
   }
   .no-cases{
     width: 100%;

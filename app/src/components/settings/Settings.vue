@@ -2,7 +2,7 @@
   <div class="settings">
       <ul class="nav nav-tabs">
         <li class="active">
-          <a data-toggle="tab" href="#profile" @click="selectedSettingsType = 1">me</a>
+          <a data-toggle="tab" href="#profile" @click="selectedSettingsType = 1"><i class="fa fa-user-circle-o" aria-hidden="true"></i></i></a>
         </li>
       </ul>
       <div class="tab-content">
@@ -59,8 +59,4 @@
 		width: 97%;
     overflow-y:auto;
 	}
-
-  .nav li{
-    font-size: 20px;
-  }
 </style>

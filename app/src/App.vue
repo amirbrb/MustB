@@ -12,9 +12,6 @@
         <router-view></router-view>
       </div>
     </div>
-    <SosControl :location="userData.settings.sosControlLocation" 
-      v-on:sosControlLocationChanged="sosControlLocationChanged">
-    </SosControl>
   </div>
 </template>
 
@@ -26,7 +23,6 @@ import Login from './components/login/Login.vue';
 import Register from './components/login/Register.vue';
 import MainView from './components/misc/MainView.vue';
 import HeaderNavbar from './components/misc/HeaderNavbar.vue';
-import SosControl from './components/misc/SosControl.vue';
 
 export default {
   extends: MBBase,
@@ -35,8 +31,7 @@ export default {
     Login,
     Register,
     MainView,
-    HeaderNavbar,
-    SosControl
+    HeaderNavbar
   },
   props: ['loggedInUserData'],
   data () {
@@ -45,8 +40,8 @@ export default {
       userData: {
         settings: {
           sosControlLocation: {
-            left: 50,
-            top: 50
+            right: 50,
+            bottom: 50
           },
           viewType: ViewType.table,
           mapZoomLevel: 14
@@ -71,11 +66,6 @@ export default {
     self.watchGeolocation();
   },
   methods: {
-    sosControlLocationChanged (location){
-      var self = this;
-      self.userData.settings.sosControlLocation = location;
-      self.userSettingsChanged(self.userData.settings, self.userData.userId);
-    },
     watchGeolocation() {
       var self = this;
       if (navigator.geolocation) {

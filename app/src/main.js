@@ -12,10 +12,12 @@ import ImageView from './components/misc/ImageView';
 import SosForm from './components/misc/SosForm';
 import LoginType from './enums/loginType'
 import $ from 'jquery'
+import moment from 'moment';
 
 Vue.use(VueRouter)
 Vue.use(VeeValidate);
 Vue.config.productionTip = false;
+window.moment = moment;
 
 const routes = [
   { path: '/', component: MainView },

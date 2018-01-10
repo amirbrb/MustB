@@ -2,20 +2,14 @@
   <div>
     <div class="data-view data-container">
       <ul class="nav nav-tabs">
-        <li :class="{'active': userData.settings.viewType === 1}">
-          <a data-toggle="tab" href="#sosTable" @click="selectTableView">table</a>
-        </li>
         <li :class="{'active': userData.settings.viewType === 2}">
-          <a data-toggle="tab" href="#sosMap" @click="selectMapView">map</a>
+          <a data-toggle="tab" href="#sosMap" @click="selectMapView"><i class="fa fa-map-o" aria-hidden="true"></i></i></a>
+        </li>
+        <li :class="{'active': userData.settings.viewType === 1}">
+          <a data-toggle="tab" href="#sosTable" @click="selectTableView"><i class="fa fa-list-ul" aria-hidden="true"></i></i></a>
         </li>
       </ul>
       <div class="tab-content">
-        <div id="sosTable" 
-          :class="{'tab-pane': true, 'fade': true, 'in': userData.settings.viewType === 1, 'active': userData.settings.viewType === 1}">
-          <TableView :cases="cases"
-            :currentLocation="currentLocation"
-            v-show="userData.settings.viewType === 1" v-on:caseShowing="isShowingCase = true"></TableView>
-        </div>
         <div id="sosMap" :class="{'tab-pane': true, 'fade': true, 'in': userData.settings.viewType === 2, 'active': userData.settings.viewType === 2}">
           <MapView :cases="cases"
             v-show="userData.settings.viewType === 2" 
@@ -25,8 +19,20 @@
             v-on:mapZoomChanged="mapZoomChanged">
           </MapView>
         </div>
+        <div id="sosTable" 
+          :class="{'tab-pane': true, 'fade': true, 'in': userData.settings.viewType === 1, 'active': userData.settings.viewType === 1}">
+          <TableView :cases="cases"
+            :currentLocation="currentLocation"
+            v-show="userData.settings.viewType === 1" v-on:caseShowing="isShowingCase = true"></TableView>
+        </div>
       </div>
     </div>
+    <EventControl v-if="$parent.isLoggedIn" :location="userData.settings.sosControlLocation" 
+      v-on:eventControlLocationChanged="eventControlLocationChanged"
+      v-on:contextMenu="eventControlContextMenu">
+    </EventControl>
+    <EventContextMenu v-on:hideContextMenu="eventControlContextMenu" 
+      :location="getEventControlLocation" :class="{'hidden': !isShowingContextMenu}"/>
   </div>
 </template>
 
@@ -39,6 +45,9 @@ import SosForm from './SosForm.vue';
 import TableView from '../help/TableView.vue';
 import MapView from '../help/MapView.vue';
 import HeaderNavbar from './HeaderNavbar.vue';
+import EventControl from './EventControl.vue';
+import EventContextMenu from './EventContextMenu.vue';
+
 export default {
   extends: MBBase,
   components: {
@@ -46,7 +55,9 @@ export default {
     TableView,
     HeaderNavbar,
     MapView,
-    ViewType
+    ViewType,
+    EventControl,
+    EventContextMenu
   },
   data () {
     return {
@@ -54,7 +65,8 @@ export default {
       currentLocation: this.$parent.currentLocation,
       cases: [],
       timeoutId: null,
-      queryDelay: 5000
+      queryDelay: 5000,
+      isShowingContextMenu: false
     }
   },
   props: [],
@@ -97,6 +109,11 @@ export default {
         //TBD: proper error message
       });
     },
+    eventControlLocationChanged (location){
+      var self = this;
+      self.userData.settings.sosControlLocation = location;
+      this.userSettingsChanged(self.userData.settings, self.userData.userId);
+    },
     selectTableView(){
       this.selectedTabChanged(ViewType.table)
     },
@@ -112,6 +129,14 @@ export default {
       var self = this;
       self.userData.settings.mapZoomLevel = zoomLevel;
       self.userSettingsChanged(self.userData.settings, self.userData.userId);
+    },
+    eventControlContextMenu(show){
+      this.isShowingContextMenu = show;
+    }
+  },
+  computed: {
+    getEventControlLocation(){
+      return this.userData.settings.sosControlLocation;
     }
   }
 }
@@ -121,9 +146,5 @@ export default {
 <style scoped>
   .data-view{
     margin: 5px 5px 5px 5px;
-  }
-
-  .nav li{
-    font-size: 20px;
   }
 </style>

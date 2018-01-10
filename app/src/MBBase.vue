@@ -1,5 +1,6 @@
 <script>
 import $ from 'jquery';
+import moment from 'moment';
 export default {
   data() {
   	return {
@@ -20,6 +21,10 @@ export default {
     },
     log(message){
 		  alert(message.message);
+    },
+    stringifyDate(dateObject, format){
+      format = format || 'DD-MMM-YYYY HH:mm:ss';
+      return moment(dateObject).format(format);
     }
   }
 }

@@ -38,12 +38,6 @@ export default {
     width: 100%;
   }
 
-  .close{
-    position: absolute;
-    top: -20px;
-    left: 10px;
-  }
-
   img{
     width: 100%;
     margin-top: 10px
