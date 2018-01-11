@@ -29,6 +29,12 @@ export default {
     var lastPosY = self.location.top;
     var isDragging = false;
     
+    var press = new Hammer.Press({
+      time: 800
+    });
+
+    hammertime.add(press);
+
     hammertime.on('press', function(ev){
       self.$emit('contextMenu', true);
     });
