@@ -1,5 +1,6 @@
 <template>
   <div class="profile">
+    <StateControl v-if="isReadOnly"></StateControl>
     <div class="avatar section container">
       <label class="file-container">
         <img v-if="settings.avatar" ref="avatarPresent" :src="imagesDomain + settings.avatar" class="user-avatar"/>
@@ -7,7 +8,7 @@
       </label>
     </div>
     <div class="cases section container">
-      <router-link :to="'cases/' + userId" class="btn btn-primary btn-md">cases <span class="badge">{{settings.caseCount}}</span></router-link>
+      <router-link :to="'cases/' + settings.userId" class="ok-button" >cases <span class="badge">{{settings.caseCount}}</span></router-link>
     </div>
     <div class="basics section container">
       <form class="form-horizontal">
@@ -40,17 +41,21 @@
       </form>
     </div>
     <div class="save-settings" v-if="!isReadOnly">
-      <a class="btn btn-large btn-warning" @click="saveSettings">save settings</a>
-      <a class="btn btn-large btn-danger" @click="logout">logout</a>
+      <a class="btn btn-sm btn-default" @click="saveSettings">save settings</a>
+      <a class="btn btn-sm btn-default" @click="logout">logout</a>
     </div>
   </div>
 </template>
 
 <script>
   import MBBase from '../../MBBase.vue';
+  import StateControl from '../misc/StateControl';
   import $ from 'jquery'
   export default {
     extends: MBBase,
+    coomponents: {
+      StateControl
+    },
     props: ['userId', 'isReadOnly'],
     data () {
       return {
@@ -74,6 +79,7 @@
     },
     created(){
       var self = this;
+      self.userId = self.userId || self.$route.params.id;
       var userId = self.$route.params.id || self.userId;
       const url = '/users/details/' + userId;
       
@@ -161,6 +167,8 @@
   }
 
   .save-settings{
-    
+    position: fixed;
+    right:5px;
+    bottom: 10px;
   }
 </style>

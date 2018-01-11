@@ -1,17 +1,17 @@
 <template>
   <div class="settings">
-      <ul class="nav nav-tabs">
-        <li class="active">
-          <a data-toggle="tab" href="#profile" @click="selectedSettingsType = 1"><i class="fa fa-user-circle-o" aria-hidden="true"></i></i></a>
-        </li>
-      </ul>
-      <div class="tab-content">
+    <ul class="nav nav-tabs">
+      <li class="active">
+        <a data-toggle="tab" href="#profile" @click="selectedSettingsType = 1"><i class="fa fa-user-circle-o" aria-hidden="true"></i></i></a>
+      </li>
+    </ul>
+    <div class="tab-content">
       <div id="profile" 
-          :class="{'tab-pane' : true, 'fade': true, 'in' : selectedSettingsType === 1, 'active' : selectedSettingsType === 1}" v-if="selectedSettingsType === 1">
-          <Profile :userId="$parent.userData.userId" v-if="selectedSettingsType === 1" v-on:logout="logout"></Profile>
-        </div>
+        :class="{'tab-pane' : true, 'fade': true, 'in' : selectedSettingsType === 1, 'active' : selectedSettingsType === 1}" v-if="selectedSettingsType === 1">
+        <Profile :userId="$parent.userData.userId" v-if="selectedSettingsType === 1" v-on:logout="logout"></Profile>
       </div>
     </div>
+  </div>
 </template>
 
 <script>

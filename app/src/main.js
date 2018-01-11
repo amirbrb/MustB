@@ -10,6 +10,7 @@ import Settings from './components/settings/Settings'
 import Profile from './components/settings/Profile'
 import ImageView from './components/misc/ImageView';
 import SosForm from './components/misc/SosForm';
+import UserCasesView from './components/help/UserCasesView';
 import LoginType from './enums/loginType'
 import $ from 'jquery'
 import moment from 'moment';
@@ -25,7 +26,8 @@ const routes = [
 	{ path: '/case/:id', component: HelpCaseView },
   { path: '/image/:id', component: ImageView },
   { path: '/user/:id', component: Profile, props: { isReadOnly: true } },
-	{ path: '/settings', component: Settings }
+	{ path: '/settings', component: Settings },
+  { path: '/cases/:id', component: UserCasesView }
 ];
 
 const router = new VueRouter({ routes });
