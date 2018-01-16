@@ -1,6 +1,5 @@
 <template>
   <div class="image-view col-xs-12">
-    <StateControl></StateControl>
     <img :src="imagesDomain + this.imageId"/>
   </div>
 </template>

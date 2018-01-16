@@ -1,6 +1,5 @@
 <template>
   <div class="sos-request col-xs-12">
-    <StateControl></StateControl>
     <div class="form-group has-feedback" style="margin-top: 20px;">
       <input name="title" v-model="help.title"
         v-validate="'required'" :class="{'form-control': true, 'error-input': errors.has('title') }" 

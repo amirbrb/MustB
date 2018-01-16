@@ -1,6 +1,5 @@
 <template>
   <div class="case-view col-xs-12">
-    <StateControl></StateControl>
     <h3 class="case-title">{{caseData.title}}</h3>
     <div class="case-data-wrraper">
       <div class="case-description">{{caseData.description}}</div>
@@ -13,6 +12,11 @@
     <div class="case-issuer-wrapper">
       <router-link :to="{ path: '/user/' + caseData.userId}">
         <img v-if="caseData.userId" :src="imagesDomain + '/avatar/' + caseData.userId"/>
+      </router-link>
+    </div>
+    <div class="case-messages-wrapper">
+      <router-link :to="{ path: '/case/chat/' + $route.params.id}">
+        <i v-if="caseData.messages" class="fa fa-comment-o" :counter="caseData.messages.length > 10 ? '10+' : caseData.messages.length" aria-hidden="true"></i>
       </router-link>
     </div>
     <div id="caseMapContainer"></div>
@@ -33,18 +37,14 @@ export default {
   props: [],
   data () {
     return {
-      caseData: {},
-      timeoutId: null
+      caseData: {
+        messages: []
+      },
+      commentCount: 0
     }
   },
   created(){
     this.getData();
-  },
-  destroyed(){
-    var self = this;
-    if(self.timeoutId){
-      clearTimeout(self.timeoutId);
-    }
   },
   methods: {
     getData(){
@@ -57,8 +57,6 @@ export default {
         var data = response;
         if(data.isSuccess){
           self.caseData = data.data.helpCase;
-          self.caseData.messages = data.data.messages;
-          self.timeoutId = setTimeout(self.getChatMessages, 1000);
           var caseLatLng = new google.maps.LatLng(parseFloat(self.caseData.location.lat), parseFloat(self.caseData.location.lng));
           self.map = new google.maps.Map(document.getElementById('caseMapContainer'), {
             center: caseLatLng,
@@ -73,20 +71,6 @@ export default {
       }).fail(function(e){
         //TBD - show proper error
       });
-    },
-    getChatMessages(){
-      var self = this;
-      var now = new Date();
-      var url = '/sos/messages/' + self.$route.params.id + '?q=' + now;
-      $.ajax({
-        url: url,
-        method: 'GET'
-      }).done(function(response){
-        self.caseData.messages = response;
-        self.timeoutId = setTimeout(self.getChatMessages, 1000);
-      }).fail(function(e){
-        //TBD - show proper error
-      })
     }
   }
 }
@@ -118,18 +102,26 @@ export default {
     float: left;
   }
   .case-issuer-wrapper{
-    width: 19%;
-    float: right;
     position: absolute;
     top: -15px;
     right: 20px;
-    text-align: right;
   }
 
   .case-issuer-wrapper img{
     width: 60px;
     height: 60px;
     border-radius: 80px;
+  }
+
+  .case-messages-wrapper{
+    position: absolute;
+    top: -15px;
+    right: 90px;
+  }
+
+  .case-messages-wrapper .fa{
+    font-size: 50px;
+    color:gray;
   }
 
   .case-description{
@@ -140,7 +132,7 @@ export default {
   }
 
   .case-images{
-    max-height: 80px;
+    max-height: 200px;
     overflow: auto;
   }
 
@@ -158,5 +150,21 @@ export default {
     top: 15px;
   }
 
+  .fa-comment-o:after {
+    position: absolute;
+    content:attr(counter);
+    top: 10px;
+    right: 2px;    
+    height: 20px;
+    min-width: 20px;
+    padding-left: 5px;
+    padding-right: 5px;
+    border-radius: 16px;
+    font-size: 15px;    
+    line-height: 20px;
+    text-align: center;
+    background: red;
+    color: white;
+  }
   
 </style>

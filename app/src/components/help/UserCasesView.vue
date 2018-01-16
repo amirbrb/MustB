@@ -1,40 +1,67 @@
 <template>
-  <div class="table-view">
-    <div v-if="cases.length === 0" class="no-cases empty-data">
-      nothing to show in your area
+  <div>
+    <div class="table-view">
+      <div v-if="cases.length === 0" class="no-cases empty-data">
+        nothing to show in your area
+      </div>
+      <div v-for="caseData in cases" :class="{'help-issue': true}">
+        <router-link :to="{ path: '/case/' + caseData.id}">
+          <div class="help-distance">
+            <label>{{farwaway(caseData.location.lat, caseData.location.lng)}} -- {{stringifyDate(caseData.created)}}</label>
+          </div>
+          <div class="help-title">{{caseData.title}}</div>
+          <div class="help-description">
+            {{caseData.description.length > maxDescriptionChars ? caseData.description.substring(0, maxDescriptionChars) + '...' : caseData.description}}
+          </div>
+        </router-link>
+      </div>  
     </div>
-    <div v-for="caseData in cases" :class="{'help-issue': true}" @click="caseShowing">
-      <router-link :to="{ path: '/case/' + caseData.id}">
-        <div class="help-distance">
-          <label>{{farwaway(caseData.location.lat, caseData.location.lng)}} -- {{stringifyDate(caseData.created)}}</label>
-        </div>
-        <div class="help-title">{{caseData.title}}</div>
-        <div class="help-description">
-          {{caseData.description.length > maxDescriptionChars ? caseData.description.substring(0, maxDescriptionChars) + '...' : caseData.description}}
-        </div>
-      </router-link>
-    </div>  
   </div>
 </template>
 
 <script>
 
 import MBBase from '../../MBBase.vue';
+import StateControl from '../misc/StateControl.vue';
+import $ from 'jquery'
 export default {
   extends: MBBase,
-  components: {
-
+  created(){
+    var self = this;
+    var url = '/users/cases/' + self.$route.params.id;
+    $.ajax({
+      url: url,
+      method: 'GET'
+    }).done(function(response){
+      self.cases = response.map(data => {
+        return {
+          image: self.imagesDomain + 'avatar/' + data.userId,
+          title: data.title,
+          description: data.description,
+          id: data.id,
+          location: data.location,
+          userId: data.userId,
+          created: data.created
+        }
+      });
+      clearTimeout(self.timeoutId);
+      self.timeoutId = setTimeout(self.getData, self.queryDelay);
+    }).fail(function(response){
+      console.log(response);
+      //TBD: proper error message
+    });
   },
-  props: ['cases'],
+  components: {
+    StateControl
+  },
+  props: [],
   data () {
     return {
+      cases: [],
       maxDescriptionChars: 90
     }
   },
   methods: {
-    caseShowing(){
-      this.$emit('caseShowing');
-    },
     farwaway(lat, lng){
       var self = this;
       var lat2 = self.currentLocation.lat;
@@ -67,7 +94,9 @@ export default {
 
 <style scoped>
   .table-view {
-    width: 100%;
+    margin-top: 40px;
+    margin-left: 5px;
+    width: 98%;
     height: 100%;
     overflow-y: auto;
     overflow-x: hidden;

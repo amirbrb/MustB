@@ -26,8 +26,8 @@ const routes = [
 	{ path: '/case/:id', component: HelpCaseView },
   { path: '/image/:id', component: ImageView },
   { path: '/user/:id', component: Profile, props: { isReadOnly: true } },
-	{ path: '/settings', component: Settings },
-  { path: '/cases/:id', component: UserCasesView }
+  { path: '/user/cases/:id', component: UserCasesView },
+	{ path: '/settings', component: Settings }
 ];
 
 const router = new VueRouter({ routes });

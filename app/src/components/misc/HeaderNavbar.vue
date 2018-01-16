@@ -19,7 +19,7 @@
     extends: MBBase,
     data() {
       return {
-        navbarIsOpen: this.$route.fullPath.indexOf('settings') > 0
+        
       }
     },
     methods:{
@@ -31,9 +31,12 @@
         else{
           self.$router.replace('/');
         }
-
-        this.navbarIsOpen = !this.navbarIsOpen;
       }
+    },
+    computed: {
+      navbarIsOpen(){
+        return this.$route.fullPath.indexOf('settings') > 0;
+      } 
     }
   }
 </script>

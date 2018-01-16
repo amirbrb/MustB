@@ -9,6 +9,7 @@
     <div class="data-viewer" v-if="isLoggedIn">
       <HeaderNavbar></HeaderNavbar>
       <div class="view-router">
+        <StateControl></StateControl>
         <router-view></router-view>
       </div>
     </div>
@@ -23,6 +24,7 @@ import Login from './components/login/Login.vue';
 import Register from './components/login/Register.vue';
 import MainView from './components/misc/MainView.vue';
 import HeaderNavbar from './components/misc/HeaderNavbar.vue';
+import StateControl from './components/misc/StateControl.vue'
 
 export default {
   extends: MBBase,
@@ -31,7 +33,8 @@ export default {
     Login,
     Register,
     MainView,
-    HeaderNavbar
+    HeaderNavbar,
+    StateControl
   },
   props: ['loggedInUserData'],
   data () {

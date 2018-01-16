@@ -1,6 +1,5 @@
 <template>
   <div class="profile">
-    <StateControl v-if="isReadOnly"></StateControl>
     <div class="avatar section container">
       <label class="file-container">
         <img v-if="settings.avatar" ref="avatarPresent" :src="imagesDomain + settings.avatar" class="user-avatar"/>
@@ -8,20 +7,20 @@
       </label>
     </div>
     <div class="cases section container">
-      <router-link :to="'cases/' + settings.userId" class="ok-button" >cases <span class="badge">{{settings.caseCount}}</span></router-link>
+      <router-link :to="'/user/cases/' + userIdParam" class="ok-button" >cases <span class="badge">{{settings.caseCount}}</span></router-link>
     </div>
     <div class="basics section container">
       <form class="form-horizontal">
         <div class="form-group">
           <label class="control-label col-xs-4 col-sm-3" for="name">name</label>
           <div class="col-xs-8">
-            <input class="form-control" id="name" placeholder="name" v-model="settings.name" :readonly="isReadOnly" name="name">
+            <input class="form-control ok-form-control" id="name" placeholder="name" v-model="settings.name" :readonly="isReadOnly" name="name">
           </div>
         </div>
         <div class="form-group">
           <label class="control-label col-xs-4 col-sm-3" for="phone">phone:</label>
           <div class="col-xs-8">
-            <input type="number" class="form-control" id="phone" placeholder="phone" v-model="settings.phoneNumber" :readonly="isReadOnly" name="phone">
+            <input type="number" class="form-control ok-form-control" id="phone" placeholder="phone" v-model="settings.phoneNumber" :readonly="isReadOnly" name="phone">
           </div>
         </div>
         <div class="form-group">
@@ -53,7 +52,7 @@
   import $ from 'jquery'
   export default {
     extends: MBBase,
-    coomponents: {
+    components: {
       StateControl
     },
     props: ['userId', 'isReadOnly'],
@@ -72,16 +71,19 @@
             onlyFriendsAlert: false
           },
           caseCount: 0,
-          userId: this.userId || this.$route.params.id  
+          userId: this.userIdParam
         }, 
         uploadedAvatar: null
       }
     },
+    computed: {
+      userIdParam(){
+        return this.userId || this.$route.params.id;
+      }
+    },
     created(){
       var self = this;
-      self.userId = self.userId || self.$route.params.id;
-      var userId = self.$route.params.id || self.userId;
-      const url = '/users/details/' + userId;
+      const url = '/users/details/' + self.userIdParam;
       
       $.ajax({
         method: 'GET',
@@ -156,8 +158,8 @@
   }
 
   .user-avatar{
-    width: 150px;
-    height: 150px;
+    width: 100px;
+    height: 100px;
     border-radius: 150px;
   }
 
