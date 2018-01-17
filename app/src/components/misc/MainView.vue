@@ -13,7 +13,6 @@
         <div id="sosMap" :class="{'tab-pane': true, 'fade': true, 'in': userData.settings.viewType === 2, 'active': userData.settings.viewType === 2}">
           <MapView :cases="cases"
             v-show="userData.settings.viewType === 2" 
-            v-on:caseShowing="isShowingCase = true" 
             :mapZoomLevel="userData.settings.mapZoomLevel"
             :currentLocation="currentLocation"
             v-on:mapZoomChanged="mapZoomChanged">
@@ -23,16 +22,10 @@
           :class="{'tab-pane': true, 'fade': true, 'in': userData.settings.viewType === 1, 'active': userData.settings.viewType === 1}">
           <TableView :cases="cases"
             :currentLocation="currentLocation"
-            v-show="userData.settings.viewType === 1" v-on:caseShowing="isShowingCase = true"></TableView>
+            v-show="userData.settings.viewType === 1"></TableView>
         </div>
       </div>
     </div>
-    <EventControl v-if="$parent.isLoggedIn" :location="userData.settings.sosControlLocation" 
-      v-on:eventControlLocationChanged="eventControlLocationChanged"
-      v-on:contextMenu="eventControlContextMenu">
-    </EventControl>
-    <EventContextMenu v-on:hideContextMenu="eventControlContextMenu" 
-      :location="getEventControlLocation" :class="{'hidden': !isShowingContextMenu}"/>
   </div>
 </template>
 
@@ -45,8 +38,6 @@ import SosForm from './SosForm.vue';
 import TableView from '../help/TableView.vue';
 import MapView from '../help/MapView.vue';
 import HeaderNavbar from './HeaderNavbar.vue';
-import EventControl from './EventControl.vue';
-import EventContextMenu from './EventContextMenu.vue';
 
 export default {
   extends: MBBase,
@@ -55,9 +46,7 @@ export default {
     TableView,
     HeaderNavbar,
     MapView,
-    ViewType,
-    EventControl,
-    EventContextMenu
+    ViewType
   },
   data () {
     return {
@@ -65,8 +54,7 @@ export default {
       currentLocation: this.$parent.currentLocation,
       cases: [],
       timeoutId: null,
-      queryDelay: 5000,
-      isShowingContextMenu: false
+      queryDelay: 5000
     }
   },
   props: [],
@@ -109,11 +97,6 @@ export default {
         //TBD: proper error message
       });
     },
-    eventControlLocationChanged (location){
-      var self = this;
-      self.userData.settings.sosControlLocation = location;
-      this.userSettingsChanged(self.userData.settings, self.userData.userId);
-    },
     selectTableView(){
       this.selectedTabChanged(ViewType.table)
     },
@@ -129,14 +112,6 @@ export default {
       var self = this;
       self.userData.settings.mapZoomLevel = zoomLevel;
       self.userSettingsChanged(self.userData.settings, self.userData.userId);
-    },
-    eventControlContextMenu(show){
-      this.isShowingContextMenu = show;
-    }
-  },
-  computed: {
-    getEventControlLocation(){
-      return this.userData.settings.sosControlLocation;
     }
   }
 }

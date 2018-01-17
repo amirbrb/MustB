@@ -5,12 +5,12 @@ import App from './App'
 import VueRouter from 'vue-router'
 import VeeValidate from 'vee-validate';
 import HelpCaseView from './components/help/HelpCaseView'
+import ChatBox from './components/help/ChatBox'
 import MainView from './components/misc/MainView'
 import Settings from './components/settings/Settings'
 import Profile from './components/settings/Profile'
 import ImageView from './components/misc/ImageView';
 import SosForm from './components/misc/SosForm';
-import UserCasesView from './components/help/UserCasesView';
 import LoginType from './enums/loginType'
 import $ from 'jquery'
 import moment from 'moment';
@@ -24,9 +24,9 @@ const routes = [
   { path: '/', component: MainView },
   { path: '/help', component: SosForm },
 	{ path: '/case/:id', component: HelpCaseView },
+  { path: '/case/chat/:id', component: ChatBox },
   { path: '/image/:id', component: ImageView },
   { path: '/user/:id', component: Profile, props: { isReadOnly: true } },
-  { path: '/user/cases/:id', component: UserCasesView },
 	{ path: '/settings', component: Settings }
 ];
 

@@ -15,7 +15,7 @@
       </router-link>
     </div>
     <div class="case-messages-wrapper">
-      <router-link :to="{ path: '/case/chat/' + $route.params.id}">
+      <router-link :to="{ path: '/case/chat/' + $route.params.id + '?isActive=' + caseData.isActive}">
         <i v-if="caseData.messages" class="fa fa-comment-o" :counter="caseData.messages.length > 10 ? '10+' : caseData.messages.length" aria-hidden="true"></i>
       </router-link>
     </div>
@@ -92,7 +92,7 @@ export default {
   }
 
   .case-title{
-    margin-top: 60px;
+    margin-top: 10px;
     font-weight: bold; 
     max-width: 100%;
   }
@@ -145,7 +145,7 @@ export default {
   }
 
   #caseMapContainer{
-    height: 350px;
+    height: 300px;
     width: 98%;
     top: 15px;
   }

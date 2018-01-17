@@ -3,7 +3,7 @@
     <div v-if="cases.length === 0" class="no-cases empty-data">
       nothing to show in your area
     </div>
-    <div v-for="caseData in cases" :class="{'help-issue': true}" @click="caseShowing">
+    <div v-for="caseData in cases" :class="{'help-issue': true}">
       <router-link :to="{ path: '/case/' + caseData.id}">
         <div class="help-distance">
           <label>{{farwaway(caseData.location.lat, caseData.location.lng)}} -- {{stringifyDate(caseData.created)}}</label>
@@ -32,9 +32,6 @@ export default {
     }
   },
   methods: {
-    caseShowing(){
-      this.$emit('caseShowing');
-    },
     farwaway(lat, lng){
       var self = this;
       var lat2 = self.currentLocation.lat;

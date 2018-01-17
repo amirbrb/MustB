@@ -1,6 +1,5 @@
 <template>
 	<div class="chat-box col-xs-12" :disabled="!isActive">
-		<p class="mb_title">messages: </p>
       	<div class="messages-wrapper col-xs-12" ref="messagesContainer">
       		<div v-if="isLoading">Getting messages</div>
 	      	<div v-if="!isLoading" v-for="message in messages" :class="{'wrap-message': true, 'wrap-message-right' : message.senderId === userData.id}">
@@ -11,12 +10,12 @@
 			        <p>{{message.text}}</p>
 		      	</div>
 	      	</div>
-      	</div>
-      	<div class="chat-text col-xs-8 col-xs-offset-4 col-md-4 col-md-offset-8">
-      		<div class="input-group">
-		  		<input type="text" :disabled="!isActive" class="form-control" v-model="newMessage" placeholder="enter message here" aria-describedby="send-addon">
-		  		<span class="input-group-addon" :disabled="!isActive" id="send-addon" @click="sendMessage"><i class="glyphicon glyphicon-send"></i></span>
-			</div>
+	      	<div class="chat-text">
+	      		<div class="input-group">
+			  		<input :disabled="!isActive" class="form-control send-message" v-model="newMessage" placeholder="enter message here" aria-describedby="send-addon">
+			  		<span class="input-group-addon" :disabled="!isActive" id="send-addon" @click="sendMessage"><i class="glyphicon glyphicon-send"></i></span>
+				</div>
+      		</div>
       	</div>
 	</div>
 </template>
@@ -29,7 +28,7 @@
 		extends: MBBase,
 	  	components: {
 	    },
-	  	props: ['caseId', 'isActive'],
+	  	props: [],
 	  	data () {
 		    return {
 	      		messages: [],
@@ -37,8 +36,13 @@
 	      		newMessage: '',
 	      		lastQuery: moment(new Date(-8640000000000000)).format(),
 	      		alive: true,
-	      		isLoading: true
+	      		isLoading: true,
+	      		caseId: this.$route.params.id,
+	      		isActive: this.$route.query.isActive || false
 		    }
+	  	},
+	  	computed: {
+
 	  	},
 	  	created(){
 	    	this.getChatMessages();
@@ -95,14 +99,17 @@
 
 <style scoped>
 	.chat-box{
-
+		margin-top: 40px;
 	}
 	.chat-text{
 		margin-top: 5px;
+		position: absolute;
+		right: 10px;
+		bottom: 5px;
+		width: 40%;
 	}
 	.messages-wrapper{
-		border: 1px solid black;
-		height: 250px;
+		height: 80vh;
 		overflow: auto;
 	}
 	.chat-message{
@@ -142,5 +149,9 @@
 		position: relative;
 		left: -20px;
 		border-radius: 40px
+	}
+
+	.send-message{
+		border: 1px gray solid;
 	}
 </style>

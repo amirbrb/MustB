@@ -6,35 +6,54 @@
         <input ref="userAvatar" type="file" accept="image/*" capture="capture" @change="avatarSelected" :disabled="isReadOnly" />
       </label>
     </div>
-    <div class="cases section container">
-      <router-link :to="'/user/cases/' + userIdParam" class="ok-button" >cases <span class="badge">{{settings.caseCount}}</span></router-link>
-    </div>
     <div class="basics section container">
       <form class="form-horizontal">
         <div class="form-group">
-          <label class="control-label col-xs-4 col-sm-3" for="name">name</label>
-          <div class="col-xs-8">
-            <input class="form-control ok-form-control" id="name" placeholder="name" v-model="settings.name" :readonly="isReadOnly" name="name">
+          <label class="control-label col-xs-4 col-sm-3" for="name">name:</label>
+          <div class="col-xs-8 text-left">
+            <input v-if="!isReadOnly" class="form-control ok-form-control" id="name" placeholder="name" v-model="settings.name" name="name">
+            <label class="data" v-if="isReadOnly">{{settings.name}}</label>
           </div>
         </div>
         <div class="form-group">
           <label class="control-label col-xs-4 col-sm-3" for="phone">phone:</label>
-          <div class="col-xs-8">
-            <input type="number" class="form-control ok-form-control" id="phone" placeholder="phone" v-model="settings.phoneNumber" :readonly="isReadOnly" name="phone">
+          <div class="col-xs-8 text-left">
+            <input v-if="!isReadOnly" type="number" class="form-control ok-form-control" id="phone" placeholder="phone" v-model="settings.phoneNumber" :readonly="isReadOnly" name="phone">
+            <label class="data" v-if="isReadOnly"><a :href="'tel:' + settings.phoneNumber">{{settings.phoneNumber}}</a></label>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="control-label col-xs-4 col-sm-3" for="mail">mail:</label>
+          <div class="col-xs-8 text-left">
+            <input v-if="!isReadOnly" type="mail" class="form-control ok-form-control" id="mail" placeholder="e-mail" v-model="settings.mail" :readonly="isReadOnly" name="mail">
+            <label class="data" v-if="isReadOnly"><a :href="'mailto:' + settings.mail">{{settings.mail}}</a></label>
           </div>
         </div>
         <div class="form-group">
           <label class="control-label col-xs-4 col-sm-3" for="phone">more details:</label>
-          <div class="col-xs-8">
-            <input type="text" v-model="settings.description" :readonly="isReadOnly" class="form-control"></input>
+          <div class="col-xs-8 text-left">
+            <textarea v-if="!isReadOnly" v-model="settings.description" :readonly="isReadOnly" class="form-control"></textarea> 
+            <label class="data" v-if="isReadOnly">{{settings.description}}</label>
           </div>
         </div>
         <div class="form-group">
           <label class="control-label col-xs-4 col-sm-3" for="phone">gender:</label>
           <div class="col-xs-8 text-left">
-            <label class="radio-inline"><input type="radio" name="gender" value="1" :disabled="isReadOnly" v-model="settings.gender">male</label>
-            <label class="radio-inline"><input type="radio" name="gender" value="2" :disabled="isReadOnly" v-model="settings.gender">female</label>
-            <label class="radio-inline"><input type="radio" name="gender" value="3" :disabled="isReadOnly" v-model="settings.gender">other</label>
+            <label>
+              <i :class="{fa:true, 'fa-male': true, selected: settings.gender == 1}"aria-hidden="true">
+                <input v-if="!isReadOnly" class="hidden" type="radio" name="gender" value="1" :disabled="isReadOnly" v-model="settings.gender">
+              </i>
+            </label>
+            <label>
+              <i :class="{fa:true, 'fa-female': true, selected: settings.gender == 2}" aria-hidden="true">
+                <input v-if="!isReadOnly" class="hidden" type="radio" name="gender" value="2" :disabled="isReadOnly" v-model="settings.gender">
+              </i>
+            </label>
+            <label>
+              <i :class="{fa:true, 'fa-question-circle-o': true, selected: settings.gender == 3}"aria-hidden="true">
+                <input v-if="!isReadOnly" class="hidden" type="radio" name="gender" value="3" :disabled="isReadOnly" v-model="settings.gender">
+              </i>
+            </label>
           </div>
         </div>
       </form>
@@ -172,5 +191,13 @@
     position: fixed;
     right:5px;
     bottom: 10px;
+  }
+
+  .section label.data{
+    padding-top:8px;
+  }
+
+  i.fa.selected{
+    font-size: 30px;
   }
 </style>

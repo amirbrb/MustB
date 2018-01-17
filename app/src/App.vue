@@ -10,6 +10,13 @@
       <HeaderNavbar></HeaderNavbar>
       <div class="view-router">
         <StateControl></StateControl>
+        <EventControl v-if="isLoggedIn" :location="userData.settings.sosControlLocation" 
+          v-on:eventControlLocationChanged="eventControlLocationChanged"
+          v-on:contextMenu="eventControlContextMenu">
+        </EventControl>
+        <EventContextMenu v-on:hideContextMenu="eventControlContextMenu" 
+          :location="getEventControlLocation" :class="{'hidden': !isShowingContextMenu}">
+        </EventContextMenu>
         <router-view></router-view>
       </div>
     </div>
@@ -24,7 +31,9 @@ import Login from './components/login/Login.vue';
 import Register from './components/login/Register.vue';
 import MainView from './components/misc/MainView.vue';
 import HeaderNavbar from './components/misc/HeaderNavbar.vue';
-import StateControl from './components/misc/StateControl.vue'
+import StateControl from './components/misc/StateControl.vue';
+import EventControl from './components/misc/EventControl.vue';
+import EventContextMenu from './components/misc/EventContextMenu.vue';
 
 export default {
   extends: MBBase,
@@ -34,7 +43,9 @@ export default {
     Register,
     MainView,
     HeaderNavbar,
-    StateControl
+    StateControl,
+    EventControl,
+    EventContextMenu
   },
   props: ['loggedInUserData'],
   data () {
@@ -54,7 +65,8 @@ export default {
       isLoading: false,
       isLoginForm: true,
       isRegistrationForm: false,
-      isShowingHelp: false
+      isShowingHelp: false,
+      isShowingContextMenu: false
     }
   },
   created () {
@@ -103,6 +115,19 @@ export default {
       var self = this;
       self.isLoginForm = true;
       self.isRegistrationForm = false;
+    },
+    eventControlLocationChanged (location){
+      var self = this;
+      self.userData.settings.sosControlLocation = location;
+      this.userSettingsChanged(self.userData.settings, self.userData.userId);
+    },
+    eventControlContextMenu(show){
+      this.isShowingContextMenu = show;
+    }
+  },
+  computed: {
+    getEventControlLocation(){
+      return this.userData.settings.sosControlLocation;
     }
   }
 };

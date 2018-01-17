@@ -29,7 +29,7 @@
           self.$router.push('/settings');
         }
         else{
-          self.$router.replace('/');
+          self.$router.back();
         }
       }
     },
