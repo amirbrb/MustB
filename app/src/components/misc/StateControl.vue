@@ -30,7 +30,7 @@ export default {
 <style scoped>
   .state-control{
     position: absolute;
-    top: 30px;
+    top: 10px;
     left: 10px;
   }
 </style>

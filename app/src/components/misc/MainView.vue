@@ -10,19 +10,17 @@
         </li>
       </ul>
       <div class="tab-content">
-        <div id="sosMap" :class="{'tab-pane': true, 'fade': true, 'in': userData.settings.viewType === 2, 'active': userData.settings.viewType === 2}">
-          <MapView :cases="cases"
-            v-show="userData.settings.viewType === 2" 
+        <div id="sosMap" ref="sosMapTab" :class="{'tab-pane': true, 'active': userData.settings.viewType === 2}">
+          <MapView :cases="cases" v-if="userData.settings.viewType === 2" 
             :mapZoomLevel="userData.settings.mapZoomLevel"
             :currentLocation="currentLocation"
             v-on:mapZoomChanged="mapZoomChanged">
           </MapView>
         </div>
-        <div id="sosTable" 
-          :class="{'tab-pane': true, 'fade': true, 'in': userData.settings.viewType === 1, 'active': userData.settings.viewType === 1}">
+        <div id="sosTable" ref="sosTableTab"
+          :class="{'tab-pane': true, 'active': userData.settings.viewType === 1}">
           <TableView :cases="cases"
-            :currentLocation="currentLocation"
-            v-show="userData.settings.viewType === 1"></TableView>
+            :currentLocation="currentLocation"></TableView>
         </div>
       </div>
     </div>
@@ -62,6 +60,16 @@ export default {
     var self = this;
     window.ViewType = ViewType
     self.getData();
+  },
+  mounted(){
+    /*
+    var self = this;
+    if(self.userData.settings.viewType === 1){
+      self.$refs.sosTableTab.classList.add('in');
+    }
+    else{
+      self.$refs.sosMapTab.classList.add('in');
+    }*/
   },
   destroyed(){
     var self = this;
@@ -106,6 +114,13 @@ export default {
     selectedTabChanged(viewType){
       var self = this;
       self.userData.settings.viewType = viewType;
+      
+      /*if(self.userData.settings.viewType === 2){
+        self.$refs.sosTableTab.classList.add('in');
+      }
+      else{
+        self.$refs.sosMapTab.classList.add('in');
+      }*/
       self.userSettingsChanged(self.userData.settings, self.userData.userId);
     },
     mapZoomChanged(zoomLevel){

@@ -19,6 +19,11 @@
         <i v-if="caseData.messages" class="fa fa-comment-o" :counter="caseData.messages.length > 10 ? '10+' : caseData.messages.length" aria-hidden="true"></i>
       </router-link>
     </div>
+    <div class="case-actions-wrapper">
+      <a v-if="caseData.user" :href="'tel:' + caseData.user.phoneNumber">
+        <i class="fa fa-phone" aria-hidden="true"></i>        
+      </a>
+    </div>
     <div id="caseMapContainer"></div>
   </div>
 </template>
@@ -117,9 +122,21 @@ export default {
     position: absolute;
     top: -15px;
     right: 90px;
+    margin-right: 15px; 
   }
 
-  .case-messages-wrapper .fa{
+  .case-actions-wrapper{
+    position: absolute;
+    top: -15px;
+    right: 170px;
+    margin-right: 10px;
+  }
+
+  .case-actions-wrapper a{
+    font-size: 50px;
+  }
+
+  .case-messages-wrapper .fa, .case-actions-wrapper .fa{
     font-size: 50px;
     color:gray;
   }

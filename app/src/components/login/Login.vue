@@ -4,7 +4,7 @@
       <div class="row">
         <div class="col-sm-6 col-md-4 col-md-offset-4">
           <div class="account-wall">
-            <img ref="userAvater" class="profile-img" :src="domain + '/images/static/community.png'" alt="">
+            <img ref="userAvater" class="profile-img" :src="'/static/img/icons/icon.png'" alt="">
             <div class="form-signin">
               <div class="form-group has-feedback">
                 <input name="email" v-model="userDetails.mail" type="email" 
@@ -58,8 +58,7 @@ export default {
       }
     }
   },
-  methods: {
-    login: function(){
+  methods: {    login: function(){
       var self = this;
       self.$validator.validateAll({
         email: self.userDetails.mail,
