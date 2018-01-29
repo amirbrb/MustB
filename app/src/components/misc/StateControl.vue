@@ -15,7 +15,13 @@ export default {
   props: [],
   data () {
     return {
-      imageId: ''
+      imageId: '',
+      excludedPaths: ['/settings']
+    }
+  },
+  mounted(){
+    if(this.excludedPaths.indexOf(this.$router.currentRoute.fullPath) >= 0){
+      this.$el.style.display = 'none';
     }
   },
   methods: {

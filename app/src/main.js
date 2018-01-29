@@ -23,8 +23,8 @@ window.moment = moment;
 const routes = [
   { path: '/', component: MainView },
   { path: '/help', component: SosForm },
-	{ path: '/case/:id', component: HelpCaseView },
-  { path: '/case/chat/:id', component: ChatBox },
+	{ path: '/events/:id', component: HelpCaseView },
+  { path: '/events/chat/:id', component: ChatBox },
   { path: '/image/:id', component: ImageView },
   { path: '/user/:id', component: Profile, props: { isReadOnly: true } },
 	{ path: '/settings', component: Settings }
@@ -68,7 +68,7 @@ document.addEventListener('deviceready', function(){
     });
 
     push.on('notification', function(data) {
-      alert(data.title + " Message: " + data.message);
+      window.vm.notifications.push(data);
     });
 
     push.on('error', function(e) {
@@ -124,22 +124,21 @@ function init(){
           };
 
           $.post(url, data, function(response){
-            var data = response;
-            if(data.isSuccess){
-              localStorage.mb_token = data.data.token;
-              createApplication(data.data.userData, currentLocation);
+            if(response.isSuccess){
+              localStorage.mb_token = response.data.token;
+              createApplication(response.data.userData, response.data.notifications, currentLocation);
             }
             else{
-              createApplication(null, currentLocation);
+              createApplication(null, null, currentLocation);
             }
           }).fail(function(e){
             //TBD - log
-            createApplication(null, currentLocation);
+            createApplication(null, null, currentLocation);
           });
         }
       }
       else{
-        createApplication(null, currentLocation);
+        createApplication(null, null, currentLocation);
       }
     };
 
@@ -150,9 +149,9 @@ function init(){
   }
 }
 
-function createApplication(userData, currentLocation){
+function createApplication(userData, notifications, currentLocation){
   /* eslint-disable no-new */
-  new Vue({
+  window.vm = new Vue({
     el: '#app',
     template: '<App />',
     components: { App },
@@ -160,7 +159,8 @@ function createApplication(userData, currentLocation){
       return {
         loggedInUserData: userData,
         isLoading: false,
-        currentLocation: currentLocation
+        currentLocation: currentLocation,
+        notifications: notifications || []
       }
     },
     router: router

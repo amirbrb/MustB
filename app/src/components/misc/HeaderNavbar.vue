@@ -2,12 +2,13 @@
   <nav class="navbar navbar-default navbar-fixed-top">
     <div class="container-fluid">
       <div class="mb-navbar-header">
-        <a id="toggle" @click="toggleSettings" :class="{'on' : navbarIsOpen}"><span></span></a>
-        <img class="mb-navbar-logo" :src="'/static/img/icons/icon.png'"/>
+        <i class="fa fa-square-o" :counter="notifications.length > 10 ? '10+' : notifications.length" aria-hidden="true"></i>
         <label>
           <router-link :to="'/'" class="mb-navbar-brand">Ukholo</router-link>
-           someone to trust
+          <p> someone to trust </p>
         </label>
+        <img class="mb-navbar-logo" :src="'/static/img/icons/icon.png'"/>
+        <a id="toggle" @click="toggleSettings" :class="{'on' : navbarIsOpen}"><span></span></a>
       </div>
     </div>
   </nav>
@@ -22,6 +23,7 @@
         
       }
     },
+    props: ['notifications'],
     methods:{
       toggleSettings() {
         var self = this;
@@ -43,7 +45,7 @@
 <style scoped>
   .navbar{
     height: 80px;
-    line-height: 80px;
+    padding-top: 10px;
   }
 
   .mb-navbar-header{
@@ -54,7 +56,6 @@
   .mb-navbar-logo{
     height: 40px;    
     position: absolute;
-    left: 20px;
     top: 20px;
   }
 
@@ -117,5 +118,28 @@
   #toggle.on + #menu {
     opacity: 1;
     visibility: visible;
+  }
+
+  .fa-square-o{
+    position: absolute;
+    font-size: 40px;
+    left: 20px;
+    top: 22px;
+  }
+  .fa-square-o:after {
+    position: absolute;
+    content:attr(counter);
+    top: 18px;
+    right: -10px;    
+    height: 20px;
+    min-width: 20px;
+    padding-left: 5px;
+    padding-right: 5px;
+    border-radius: 16px;
+    font-size: 15px;    
+    line-height: 20px;
+    text-align: center;
+    background: red;
+    color: white;
   }
 </style>

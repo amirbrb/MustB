@@ -160,6 +160,7 @@
 <style scoped>
 	.profile{
     margin: 0px 5px 5px 5px;
+    text-align: center;
   }
 
   .section{

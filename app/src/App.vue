@@ -7,7 +7,7 @@
       <Register v-on:registered="userAuthenticated" v-on:showLogin="showLogin" v-if="!isLoggedIn && isRegistrationForm"></Register>
     </transition>
     <div class="data-viewer" v-if="isLoggedIn">
-      <HeaderNavbar></HeaderNavbar>
+      <HeaderNavbar :notifications="notifications"></HeaderNavbar>
       <div class="view-router">
         <StateControl></StateControl>
         <EventControl v-if="isLoggedIn" :location="userData.settings.sosControlLocation" 
@@ -61,6 +61,7 @@ export default {
           mapZoomLevel: 14
         }
       },
+      notifications: [],
       currentLocation: null,
       isLoading: false,
       isLoginForm: true,
@@ -75,6 +76,7 @@ export default {
     if(self.$parent.loggedInUserData){
       self.userData = self.$parent.loggedInUserData;
       self.isLoggedIn = true;
+      self.notifications = self.$parent.notifications;
     }
 
     self.currentLocation = self.$parent.currentLocation;

@@ -61,16 +61,6 @@ export default {
     window.ViewType = ViewType
     self.getData();
   },
-  mounted(){
-    /*
-    var self = this;
-    if(self.userData.settings.viewType === 1){
-      self.$refs.sosTableTab.classList.add('in');
-    }
-    else{
-      self.$refs.sosMapTab.classList.add('in');
-    }*/
-  },
   destroyed(){
     var self = this;
     clearTimeout(self.timeoutId);
@@ -87,17 +77,23 @@ export default {
           userId: self.userData.userId
         }
       }).done(function(response){
-        self.cases = response.map(data => {
-          return {
-            image: self.imagesDomain + 'avatar/' + data.userId,
-            title: data.title,
-            description: data.description,
-            id: data.id,
-            location: data.location,
-            userId: data.userId,
-            created: data.created
-          }
-        });
+        if(response.isSuccess){
+          self.cases = response.data.map(data => {
+            return {
+              image: self.imagesDomain + 'avatar/' + data.userId,
+              title: data.title,
+              description: data.description,
+              id: data.id,
+              location: data.location,
+              userId: data.userId,
+              created: data.created
+            }
+          })
+        }
+        else{
+          console.log('failed getting cases');
+          //TBD: proper error message  
+        }
         clearTimeout(self.timeoutId);
         self.timeoutId = setTimeout(self.getData, self.queryDelay);
       }).fail(function(response){

@@ -56,25 +56,30 @@
 	      		var self = this;
 	      		var url = '/sos/messages/' + self.caseId + '?q=' + self.lastQuery;
 	      		$.get(url, function(response){
-      				self.messages.push.apply(self.messages, response.messages);
-	        		if(response.lastTimestamp){
-	        			self.lastQuery = response.lastTimestamp;
-	        		}
+	      			if(response.isSuccess){
+	      				self.messages.push.apply(self.messages, response.data.messages);
+		        		if(response.data.lastTimestamp){
+		        			self.lastQuery = response.data.lastTimestamp;
+		        		}
 
-	        		if(response.messages.length > 0){
-	        			var scroller = $(self.$refs.messagesContainer);
-	        			setTimeout(function(){
-	        				scroller.stop().animate({
-							  scrollTop: scroller[0].scrollHeight
-							}, 400)
-        				}, 200);
-	        		}
+		        		if(response.data.messages.length > 0){
+		        			var scroller = $(self.$refs.messagesContainer);
+		        			setTimeout(function(){
+		        				scroller.stop().animate({
+								  scrollTop: scroller[0].scrollHeight
+								}, 400)
+	        				}, 200);
+		        		}
 
-        			self.isLoading = false;
-
-	        		if(self.alive){
-	        			self.timeoutId = setTimeout(self.getChatMessages, 1000);
-	        		}
+	        			self.isLoading = false;
+		        		if(self.alive){
+		        			self.timeoutId = setTimeout(self.getChatMessages, 1000);
+		        		}
+	      			}
+	      			else{
+	      				console.log('failed getting messages');
+	      				//TBD: proper error
+	      			}
 	      		}).fail(function(response) {
 			        //TBD - show proper error
 		      	});
@@ -90,7 +95,13 @@
 	      			userId: self.userData.userId
 	      		};
       			$.post(url, data, function(response){
-      				self.newMessage = '';
+      				if(response.isSuccess){
+      					self.newMessage = '';
+      				}
+      				else{
+      					console.log('failed posting message');
+      					//TBD: proper error
+      				}
       			});
     		}
 	}

@@ -64,7 +64,7 @@ export default {
 
         $(document).on('click', 'a[data-case-id]', function(link){
           var caseId = link.target.attributes['data-case-id'].value;
-          self.$router.push('/case/' + caseId);
+          self.$router.push('/events/' + caseId);
           self.$emit('caseShowing');
         });
         

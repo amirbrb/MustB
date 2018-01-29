@@ -4,7 +4,7 @@
       nothing to show in your area
     </div>
     <div v-for="caseData in cases" :class="{'help-issue': true}">
-      <router-link :to="{ path: '/case/' + caseData.id}">
+      <router-link :to="{ path: '/events/' + caseData.id}">
         <div class="help-distance">
           <label>{{farwaway(caseData.location.lat, caseData.location.lng)}} -- {{stringifyDate(caseData.created)}}</label>
         </div>

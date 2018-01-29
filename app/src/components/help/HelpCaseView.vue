@@ -59,9 +59,8 @@ export default {
         url: url,
         method: 'GET'
       }).done(function(response){
-        var data = response;
-        if(data.isSuccess){
-          self.caseData = data.data.helpCase;
+        if(response.isSuccess){
+          self.caseData = response.data;
           var caseLatLng = new google.maps.LatLng(parseFloat(self.caseData.location.lat), parseFloat(self.caseData.location.lng));
           self.map = new google.maps.Map(document.getElementById('caseMapContainer'), {
             center: caseLatLng,
@@ -72,6 +71,10 @@ export default {
             position: caseLatLng
           });
           caseMarker.setMap(self.map);
+        }
+        else{
+          console.log('failed getting case data')
+          //TBD - show proper error
         }
       }).fail(function(e){
         //TBD - show proper error
@@ -97,7 +100,7 @@ export default {
   }
 
   .case-title{
-    margin-top: 10px;
+    margin-top: 50px;
     font-weight: bold; 
     max-width: 100%;
   }
