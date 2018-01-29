@@ -1,6 +1,5 @@
 <template>
   <div class="sos-request col-xs-12">
-    <StateControl></StateControl>
     <div class="form-group has-feedback" style="margin-top: 20px;">
       <input name="title" v-model="help.title"
         v-validate="'required'" :class="{'form-control': true, 'error-input': errors.has('title') }" 
@@ -152,7 +151,8 @@ export default {
               self.hide();  
             }
             else{
-              //TBD - show error message if not success  
+              console.log('failed uploading cases') 
+              //TBD: proper error to user 
             }           
           }).fail(function(e){
             //TBD: log error
@@ -196,12 +196,6 @@ export default {
   .sos-request{
     top: 25px;
     margin: 5px 5px 5px 5px;
-  }
-
-  .close{
-    position: absolute;
-    top: -20px;
-    left: 10px;
   }
 
   .help-title{

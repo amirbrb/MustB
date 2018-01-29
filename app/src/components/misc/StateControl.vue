@@ -1,5 +1,5 @@
 <template>
-  <div class="state-control">
+  <div class="state-control" v-if="$route.path !== '/'">
     <span class="close" @click="goBack"><i class="fa-times fa"></i></span>
   </div>
 </template>
@@ -15,7 +15,13 @@ export default {
   props: [],
   data () {
     return {
-      imageId: ''
+      imageId: '',
+      excludedPaths: ['/settings']
+    }
+  },
+  mounted(){
+    if(this.excludedPaths.indexOf(this.$router.currentRoute.fullPath) >= 0){
+      this.$el.style.display = 'none';
     }
   },
   methods: {
@@ -28,11 +34,9 @@ export default {
 </script>
 
 <style scoped>
-  .close{
+  .state-control{
     position: absolute;
-    top: -20px;
+    top: 10px;
     left: 10px;
   }
 </style>
-
-this.$router.back();

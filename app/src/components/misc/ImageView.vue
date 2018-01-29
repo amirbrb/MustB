@@ -1,6 +1,5 @@
 <template>
   <div class="image-view col-xs-12">
-    <StateControl></StateControl>
     <img :src="imagesDomain + this.imageId"/>
   </div>
 </template>
@@ -36,12 +35,6 @@ export default {
   .image-view {
     top: 25px;
     width: 100%;
-  }
-
-  .close{
-    position: absolute;
-    top: -20px;
-    left: 10px;
   }
 
   img{

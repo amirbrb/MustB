@@ -5,22 +5,28 @@ import App from './App'
 import VueRouter from 'vue-router'
 import VeeValidate from 'vee-validate';
 import HelpCaseView from './components/help/HelpCaseView'
+import ChatBox from './components/help/ChatBox'
 import MainView from './components/misc/MainView'
 import Settings from './components/settings/Settings'
+import Profile from './components/settings/Profile'
 import ImageView from './components/misc/ImageView';
 import SosForm from './components/misc/SosForm';
 import LoginType from './enums/loginType'
 import $ from 'jquery'
+import moment from 'moment';
 
 Vue.use(VueRouter)
 Vue.use(VeeValidate);
 Vue.config.productionTip = false;
+window.moment = moment;
 
 const routes = [
   { path: '/', component: MainView },
   { path: '/help', component: SosForm },
-	{ path: '/case/:id', component: HelpCaseView },
+	{ path: '/events/:id', component: HelpCaseView },
+  { path: '/events/chat/:id', component: ChatBox },
   { path: '/image/:id', component: ImageView },
+  { path: '/user/:id', component: Profile, props: { isReadOnly: true } },
 	{ path: '/settings', component: Settings }
 ];
 
@@ -62,7 +68,7 @@ document.addEventListener('deviceready', function(){
     });
 
     push.on('notification', function(data) {
-      alert(data.title + " Message: " + data.message);
+      window.vm.notifications.push(data);
     });
 
     push.on('error', function(e) {
@@ -113,26 +119,26 @@ function init(){
           var data = {
             mail: usernameCookie,
             gcmRegistrationId: window.localStorage.mb_registrationId,
-            currentLocation: currentLocation
+            lat: currentLocation.lat,
+            lng: currentLocation.lng
           };
 
           $.post(url, data, function(response){
-            var data = response;
-            if(data.isSuccess){
-              localStorage.mb_token = data.data.token;
-              createApplication(data.data.userData, currentLocation);
+            if(response.isSuccess){
+              localStorage.mb_token = response.data.token;
+              createApplication(response.data.userData, response.data.notifications, currentLocation);
             }
             else{
-              createApplication(null, currentLocation);
+              createApplication(null, null, currentLocation);
             }
           }).fail(function(e){
             //TBD - log
-            createApplication(null, currentLocation);
+            createApplication(null, null, currentLocation);
           });
         }
       }
       else{
-        createApplication(null, currentLocation);
+        createApplication(null, null, currentLocation);
       }
     };
 
@@ -143,9 +149,9 @@ function init(){
   }
 }
 
-function createApplication(userData, currentLocation){
+function createApplication(userData, notifications, currentLocation){
   /* eslint-disable no-new */
-  new Vue({
+  window.vm = new Vue({
     el: '#app',
     template: '<App />',
     components: { App },
@@ -153,7 +159,8 @@ function createApplication(userData, currentLocation){
       return {
         loggedInUserData: userData,
         isLoading: false,
-        currentLocation: currentLocation
+        currentLocation: currentLocation,
+        notifications: notifications || []
       }
     },
     router: router

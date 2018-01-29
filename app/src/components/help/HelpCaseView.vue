@@ -1,6 +1,5 @@
 <template>
   <div class="case-view col-xs-12">
-    <StateControl></StateControl>
     <h3 class="case-title">{{caseData.title}}</h3>
     <div class="case-data-wrraper">
       <div class="case-description">{{caseData.description}}</div>
@@ -11,9 +10,21 @@
       </div>
     </div>
     <div class="case-issuer-wrapper">
-      <img v-if="caseData.userId" :src="imagesDomain + '/avatar/' + caseData.userId"/>
+      <router-link :to="{ path: '/user/' + caseData.userId}">
+        <img v-if="caseData.userId" :src="imagesDomain + '/avatar/' + caseData.userId"/>
+      </router-link>
     </div>
-    <Chabox :caseId="$route.params.id" :isActive="caseData.isActive" ></Chabox>
+    <div class="case-messages-wrapper">
+      <router-link :to="{ path: '/case/chat/' + $route.params.id + '?isActive=' + caseData.isActive}">
+        <i v-if="caseData.messages" class="fa fa-comment-o" :counter="caseData.messages.length > 10 ? '10+' : caseData.messages.length" aria-hidden="true"></i>
+      </router-link>
+    </div>
+    <div class="case-actions-wrapper">
+      <a v-if="caseData.user" :href="'tel:' + caseData.user.phoneNumber">
+        <i class="fa fa-phone" aria-hidden="true"></i>        
+      </a>
+    </div>
+    <div id="caseMapContainer"></div>
   </div>
 </template>
 
@@ -21,29 +32,24 @@
 
 import MBBase from '../../MBBase.vue'
 import StateControl from '../misc/StateControl.vue'
-import Chabox from './Chatbox.vue';
 import $ from 'jquery';
+var google = window.google;
 export default {
   extends: MBBase,
   components: {
-    Chabox,
     StateControl
   },
   props: [],
   data () {
     return {
-      caseData: {},
-      timeoutId: null
+      caseData: {
+        messages: []
+      },
+      commentCount: 0
     }
   },
   created(){
     this.getData();
-  },
-  destroyed(){
-    var self = this;
-    if(self.timeoutId){
-      clearTimeout(self.timeoutId);
-    }
   },
   methods: {
     getData(){
@@ -53,30 +59,26 @@ export default {
         url: url,
         method: 'GET'
       }).done(function(response){
-        var data = response;
-        if(data.isSuccess){
-          debugger;
-          self.caseData = data.data.helpCase;
-          self.caseData.messages = data.data.messages;
-          self.timeoutId = setTimeout(self.getChatMessages, 1000);
+        if(response.isSuccess){
+          self.caseData = response.data;
+          var caseLatLng = new google.maps.LatLng(parseFloat(self.caseData.location.lat), parseFloat(self.caseData.location.lng));
+          self.map = new google.maps.Map(document.getElementById('caseMapContainer'), {
+            center: caseLatLng,
+            zoom: 16
+          });
+
+          var caseMarker = new google.maps.Marker({
+            position: caseLatLng
+          });
+          caseMarker.setMap(self.map);
+        }
+        else{
+          console.log('failed getting case data')
+          //TBD - show proper error
         }
       }).fail(function(e){
         //TBD - show proper error
       });
-    },
-    getChatMessages(){
-      var self = this;
-      var now = new Date();
-      var url = '/sos/messages/' + self.$route.params.id + '?q=' + now;
-      $.ajax({
-        url: url,
-        method: 'GET'
-      }).done(function(response){
-        self.caseData.messages = response;
-        self.timeoutId = setTimeout(self.getChatMessages, 1000);
-      }).fail(function(e){
-        //TBD - show proper error
-      })
     }
   }
 }
@@ -98,8 +100,9 @@ export default {
   }
 
   .case-title{
-    margin-top: 10px;
+    margin-top: 50px;
     font-weight: bold; 
+    max-width: 100%;
   }
 
   .case-data-wrraper{
@@ -107,19 +110,38 @@ export default {
     float: left;
   }
   .case-issuer-wrapper{
-    width: 19%;
-    float: right;
-    height: 80px;
     position: absolute;
-    top: -30px;
-    right: 10px;
-    text-align: right;
+    top: -15px;
+    right: 20px;
   }
 
   .case-issuer-wrapper img{
-    width: 80px;
-    height: 80px;
+    width: 60px;
+    height: 60px;
     border-radius: 80px;
+  }
+
+  .case-messages-wrapper{
+    position: absolute;
+    top: -15px;
+    right: 90px;
+    margin-right: 15px; 
+  }
+
+  .case-actions-wrapper{
+    position: absolute;
+    top: -15px;
+    right: 170px;
+    margin-right: 10px;
+  }
+
+  .case-actions-wrapper a{
+    font-size: 50px;
+  }
+
+  .case-messages-wrapper .fa, .case-actions-wrapper .fa{
+    font-size: 50px;
+    color:gray;
   }
 
   .case-description{
@@ -130,7 +152,7 @@ export default {
   }
 
   .case-images{
-    max-height: 80px;
+    max-height: 200px;
     overflow: auto;
   }
 
@@ -142,6 +164,27 @@ export default {
     margin-top: 10px;
   }
 
+  #caseMapContainer{
+    height: 300px;
+    width: 98%;
+    top: 15px;
+  }
 
+  .fa-comment-o:after {
+    position: absolute;
+    content:attr(counter);
+    top: 10px;
+    right: 2px;    
+    height: 20px;
+    min-width: 20px;
+    padding-left: 5px;
+    padding-right: 5px;
+    border-radius: 16px;
+    font-size: 15px;    
+    line-height: 20px;
+    text-align: center;
+    background: red;
+    color: white;
+  }
   
 </style>

@@ -2,28 +2,25 @@
   <div>
     <div class="data-view data-container">
       <ul class="nav nav-tabs">
-        <li :class="{'active': userData.settings.viewType === 1}">
-          <a data-toggle="tab" href="#sosTable" @click="selectTableView">table</a>
-        </li>
         <li :class="{'active': userData.settings.viewType === 2}">
-          <a data-toggle="tab" href="#sosMap" @click="selectMapView">map</a>
+          <a data-toggle="tab" href="#sosMap" @click="selectMapView"><i class="fa fa-map-o" aria-hidden="true"></i></i></a>
+        </li>
+        <li :class="{'active': userData.settings.viewType === 1}">
+          <a data-toggle="tab" href="#sosTable" @click="selectTableView"><i class="fa fa-list-ul" aria-hidden="true"></i></i></a>
         </li>
       </ul>
       <div class="tab-content">
-        <div id="sosTable" 
-          :class="{'tab-pane': true, 'fade': true, 'in': userData.settings.viewType === 1, 'active': userData.settings.viewType === 1}">
-          <TableView :cases="cases"
-            :currentLocation="currentLocation"
-            v-show="userData.settings.viewType === 1" v-on:caseShowing="isShowingCase = true"></TableView>
-        </div>
-        <div id="sosMap" :class="{'tab-pane': true, 'fade': true, 'in': userData.settings.viewType === 2, 'active': userData.settings.viewType === 2}">
-          <MapView :cases="cases"
-            v-show="userData.settings.viewType === 2" 
-            v-on:caseShowing="isShowingCase = true" 
+        <div id="sosMap" ref="sosMapTab" :class="{'tab-pane': true, 'active': userData.settings.viewType === 2}">
+          <MapView :cases="cases" v-if="userData.settings.viewType === 2" 
             :mapZoomLevel="userData.settings.mapZoomLevel"
             :currentLocation="currentLocation"
             v-on:mapZoomChanged="mapZoomChanged">
           </MapView>
+        </div>
+        <div id="sosTable" ref="sosTableTab"
+          :class="{'tab-pane': true, 'active': userData.settings.viewType === 1}">
+          <TableView :cases="cases"
+            :currentLocation="currentLocation"></TableView>
         </div>
       </div>
     </div>
@@ -39,6 +36,7 @@ import SosForm from './SosForm.vue';
 import TableView from '../help/TableView.vue';
 import MapView from '../help/MapView.vue';
 import HeaderNavbar from './HeaderNavbar.vue';
+
 export default {
   extends: MBBase,
   components: {
@@ -79,15 +77,23 @@ export default {
           userId: self.userData.userId
         }
       }).done(function(response){
-        self.cases = response.map(data => {
-          return {
-            image: self.imagesDomain + data.userImage,
-            title: data.title,
-            description: data.description,
-            id: data.id,
-            location: data.location
-          }
-        });
+        if(response.isSuccess){
+          self.cases = response.data.map(data => {
+            return {
+              image: self.imagesDomain + 'avatar/' + data.userId,
+              title: data.title,
+              description: data.description,
+              id: data.id,
+              location: data.location,
+              userId: data.userId,
+              created: data.created
+            }
+          })
+        }
+        else{
+          console.log('failed getting cases');
+          //TBD: proper error message  
+        }
         clearTimeout(self.timeoutId);
         self.timeoutId = setTimeout(self.getData, self.queryDelay);
       }).fail(function(response){
@@ -104,6 +110,13 @@ export default {
     selectedTabChanged(viewType){
       var self = this;
       self.userData.settings.viewType = viewType;
+      
+      /*if(self.userData.settings.viewType === 2){
+        self.$refs.sosTableTab.classList.add('in');
+      }
+      else{
+        self.$refs.sosMapTab.classList.add('in');
+      }*/
       self.userSettingsChanged(self.userData.settings, self.userData.userId);
     },
     mapZoomChanged(zoomLevel){
@@ -119,9 +132,5 @@ export default {
 <style scoped>
   .data-view{
     margin: 5px 5px 5px 5px;
-  }
-
-  .nav li{
-    font-size: 20px;
   }
 </style>

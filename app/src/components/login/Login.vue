@@ -4,7 +4,7 @@
       <div class="row">
         <div class="col-sm-6 col-md-4 col-md-offset-4">
           <div class="account-wall">
-            <img ref="userAvater" class="profile-img" :src="domain + '/images/community.png'" alt="">
+            <img ref="userAvater" class="profile-img" :src="'/static/img/icons/icon.png'" alt="">
             <div class="form-signin">
               <div class="form-group has-feedback">
                 <input name="email" v-model="userDetails.mail" type="email" 
@@ -58,8 +58,7 @@ export default {
       }
     }
   },
-  methods: {
-    login: function(){
+  methods: {    login: function(){
       var self = this;
       self.$validator.validateAll({
         email: self.userDetails.mail,
@@ -71,7 +70,8 @@ export default {
             mail: self.userDetails.mail,
             password: self.userDetails.password,
             gcmRegistrationId: window.localStorage.mb_registrationId,
-            currentLocation: self.currentLocation
+            lat: self.currentLocation.lat,
+            lng: self.currentLocation.lng
           };
 
           $.post(url, data, function(response){
@@ -86,6 +86,7 @@ export default {
                 window.localStorage.mb_loginType = LoginType.mail;
               }
               self.$refs.userAvater.src = self.imagesDomain + data.data.userData.avatar;
+              localStorage.mb_token = data.data.token;
               setTimeout(function(){
                 self.$emit('loggedIn', data.data.userData, data.data.token);
               }, 200)

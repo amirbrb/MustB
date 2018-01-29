@@ -53,9 +53,7 @@ export default {
         };
         var icon = {
           url: data.image,
-          scaledSize: new google.maps.Size(40, 40), 
-          origin: new google.maps.Point(0,0), 
-          anchor: new google.maps.Point(0, 0)
+          scaledSize: new google.maps.Size(40, 40)
         };
 
         var markerString = "<a data-case-id='" + data.id + "'><h3 data-case-id='" + data.id + "'>" + data.title + "</h3></a>";
@@ -66,7 +64,7 @@ export default {
 
         $(document).on('click', 'a[data-case-id]', function(link){
           var caseId = link.target.attributes['data-case-id'].value;
-          self.$router.push('/case/' + caseId);
+          self.$router.push('/events/' + caseId);
           self.$emit('caseShowing');
         });
         
@@ -75,7 +73,7 @@ export default {
           map: self.map,
           title: data.title,
           icon: icon,
-          optimized:false
+          optimized: false
         });
 
         marker.addListener('click', function() {
@@ -90,7 +88,7 @@ export default {
 
 </script>
 
-<style scoped>
+<style>
   .map-view {
     width: 100%;
     overflow-y: auto;
@@ -100,5 +98,10 @@ export default {
 
   #map{
     height: 100%;
+  }
+
+  .gmnoprint img {
+    border-radius:15px;
+    border:1px solid #000 !important;
   }
 </style>

@@ -2,61 +2,85 @@
   <div class="profile">
     <div class="avatar section container">
       <label class="file-container">
-        <img ref="avatarPresent" :src="imagesDomain + userData.avatar" class="user-avatar"/>
-        <input ref="userAvatar" type="file" @change="avatarSelected"/>
+        <img v-if="settings.avatar" ref="avatarPresent" :src="imagesDomain + settings.avatar" class="user-avatar"/>
+        <input ref="userAvatar" type="file" accept="image/*" capture="capture" @change="avatarSelected" :disabled="isReadOnly" />
       </label>
-    </div>
-    <div class="cases section container">
-      <router-link :to="'cases/' + userData.userId" class="btn btn-primary btn-md">my cases <span class="badge">7</span></router-link>
     </div>
     <div class="basics section container">
       <form class="form-horizontal">
         <div class="form-group">
-          <label class="control-label col-xs-4 col-sm-3" for="name">name</label>
-          <div class="col-xs-8">
-            <input class="form-control" id="name" placeholder="name" :value="userData.name" v-model="userProfile.name" name="name">
+          <label class="control-label col-xs-4 col-sm-3" for="name">name:</label>
+          <div class="col-xs-8 text-left">
+            <input v-if="!isReadOnly" class="form-control ok-form-control" id="name" placeholder="name" v-model="settings.name" name="name">
+            <label class="data" v-if="isReadOnly">{{settings.name}}</label>
           </div>
         </div>
         <div class="form-group">
           <label class="control-label col-xs-4 col-sm-3" for="phone">phone:</label>
-          <div class="col-xs-8">
-            <input type="number" class="form-control" id="phone" placeholder="phone" v-model="userProfile.phone" name="phone">
+          <div class="col-xs-8 text-left">
+            <input v-if="!isReadOnly" type="number" class="form-control ok-form-control" id="phone" placeholder="phone" v-model="settings.phoneNumber" :readonly="isReadOnly" name="phone">
+            <label class="data" v-if="isReadOnly"><a :href="'tel:' + settings.phoneNumber">{{settings.phoneNumber}}</a></label>
           </div>
         </div>
         <div class="form-group">
-          <label class="control-label col-xs-4 col-sm-3" for="phone">about you:</label>
-          <div class="col-xs-8">
-            <input type="text" v-model="userProfile.description" class="form-control"></input>
+          <label class="control-label col-xs-4 col-sm-3" for="mail">mail:</label>
+          <div class="col-xs-8 text-left">
+            <input v-if="!isReadOnly" type="mail" class="form-control ok-form-control" id="mail" placeholder="e-mail" v-model="settings.mail" :readonly="isReadOnly" name="mail">
+            <label class="data" v-if="isReadOnly"><a :href="'mailto:' + settings.mail">{{settings.mail}}</a></label>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="control-label col-xs-4 col-sm-3" for="phone">more details:</label>
+          <div class="col-xs-8 text-left">
+            <textarea v-if="!isReadOnly" v-model="settings.description" :readonly="isReadOnly" class="form-control"></textarea> 
+            <label class="data" v-if="isReadOnly">{{settings.description}}</label>
           </div>
         </div>
         <div class="form-group">
           <label class="control-label col-xs-4 col-sm-3" for="phone">gender:</label>
-          <div class="col-xs-8">
-            <label class="radio-inline"><input type="radio" name="gender" value="1" v-model="userProfile.gender">male</label>
-            <label class="radio-inline"><input type="radio" name="gender" value="2" v-model="userProfile.gender">female</label>
-            <label class="radio-inline"><input type="radio" name="gender" value="3" v-model="userProfile.gender">other</label>
+          <div class="col-xs-8 text-left">
+            <label>
+              <i :class="{fa:true, 'fa-male': true, selected: settings.gender == 1}"aria-hidden="true">
+                <input v-if="!isReadOnly" class="hidden" type="radio" name="gender" value="1" :disabled="isReadOnly" v-model="settings.gender">
+              </i>
+            </label>
+            <label>
+              <i :class="{fa:true, 'fa-female': true, selected: settings.gender == 2}" aria-hidden="true">
+                <input v-if="!isReadOnly" class="hidden" type="radio" name="gender" value="2" :disabled="isReadOnly" v-model="settings.gender">
+              </i>
+            </label>
+            <label>
+              <i :class="{fa:true, 'fa-question-circle-o': true, selected: settings.gender == 3}"aria-hidden="true">
+                <input v-if="!isReadOnly" class="hidden" type="radio" name="gender" value="3" :disabled="isReadOnly" v-model="settings.gender">
+              </i>
+            </label>
           </div>
         </div>
       </form>
     </div>
-    <div class="save-settings">
-      <a class="btn btn-large btn-warning" @click="saveSettings">save settings</a>
-      <a class="btn btn-large btn-danger" @click="logout">logout</a>
+    <div class="save-settings" v-if="!isReadOnly">
+      <a class="btn btn-sm btn-default" @click="saveSettings">save settings</a>
+      <a class="btn btn-sm btn-default" @click="logout">logout</a>
     </div>
   </div>
 </template>
 
 <script>
   import MBBase from '../../MBBase.vue';
+  import StateControl from '../misc/StateControl';
   import $ from 'jquery'
   export default {
     extends: MBBase,
+    components: {
+      StateControl
+    },
+    props: ['userId', 'isReadOnly'],
     data () {
       return {
-        userProfile: {
+        settings: {
           avatar: null,
           name: '',
-          phone: '',
+          phoneNumber: '',
           description: '',
           gender: 3,
           goodAt: [],
@@ -64,20 +88,27 @@
             alertDistance: 5,
             showMeOnMap: false,
             onlyFriendsAlert: false
-          }  
-        }
+          },
+          caseCount: 0,
+          userId: this.userIdParam
+        }, 
+        uploadedAvatar: null
+      }
+    },
+    computed: {
+      userIdParam(){
+        return this.userId || this.$route.params.id;
       }
     },
     created(){
       var self = this;
-      const url = '/users/details/' + self.userData.userId;
+      const url = '/users/details/' + self.userIdParam;
       
       $.ajax({
         method: 'GET',
         url: url
       }).done(function(response){
-        self.userProfile.name = response.name;
-        self.userProfile.phone = response.phoneNumber;
+        self.settings = response;
       }).fail(function(e) {
         //TBD: handke error
       });
@@ -94,11 +125,30 @@
         };
 
         var image = imageInput.files[0];
-        self.userProfile.avatar = image;
+        self.uploadedAvatar = image;
         reader.readAsDataURL(image);
       },
       saveSettings(){
+        var self = this;
+        const url = '/users/settings';
+        
+        const formData = new FormData();
+        formData.append('userId', self.userId);  
+        formData.append('settings', JSON.stringify(self.settings));  
 
+        if(self.uploadedAvatar){
+          formData.append('avatar', self.uploadedAvatar);  
+        }
+
+        $.ajax({
+          url: url, 
+          data: formData, 
+          processData: false,
+          contentType: false
+        }).done(function(response){
+        }).fail(function(e) {
+          //TBD: handke error
+        });
       },
       logout(){
         var self = this;
@@ -110,6 +160,7 @@
 <style scoped>
 	.profile{
     margin: 0px 5px 5px 5px;
+    text-align: center;
   }
 
   .section{
@@ -127,8 +178,8 @@
   }
 
   .user-avatar{
-    width: 150px;
-    height: 150px;
+    width: 100px;
+    height: 100px;
     border-radius: 150px;
   }
 
@@ -138,6 +189,16 @@
   }
 
   .save-settings{
-    
+    position: fixed;
+    right:5px;
+    bottom: 10px;
+  }
+
+  .section label.data{
+    padding-top:8px;
+  }
+
+  i.fa.selected{
+    font-size: 30px;
   }
 </style>

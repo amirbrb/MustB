@@ -1,36 +1,34 @@
 <template>
 	<div class="chat-box col-xs-12" :disabled="!isActive">
-		<p class="mb_title">messages: </p>
       	<div class="messages-wrapper col-xs-12" ref="messagesContainer">
       		<div v-if="isLoading">Getting messages</div>
 	      	<div v-if="!isLoading" v-for="message in messages" :class="{'wrap-message': true, 'wrap-message-right' : message.senderId === userData.id}">
 		      	<div class="chat-message">
 			        <div class="message-sender">
-			        	<img :src="domain + '/users/avatar/' + message.senderId"/>
+			        	<img :src="domain + '/images/avatar/' + message.senderId"/>
 			        </div>
 			        <p>{{message.text}}</p>
 		      	</div>
 	      	</div>
-      	</div>
-      	<div class="chat-text col-xs-8 col-xs-offset-4 col-md-4 col-md-offset-8">
-      		<div class="input-group">
-		  		<input type="text" :disabled="!isActive" class="form-control" v-model="newMessage" placeholder="enter message here" aria-describedby="send-addon">
-		  		<span class="input-group-addon" :disabled="!isActive" id="send-addon" @click="sendMessage"><i class="glyphicon glyphicon-send"></i></span>
-			</div>
+	      	<div class="chat-text">
+	      		<div class="input-group">
+			  		<input :disabled="!isActive" class="form-control send-message" v-model="newMessage" placeholder="enter message here" aria-describedby="send-addon">
+			  		<span class="input-group-addon" :disabled="!isActive" id="send-addon" @click="sendMessage"><i class="glyphicon glyphicon-send"></i></span>
+				</div>
+      		</div>
       	</div>
 	</div>
 </template>
 
 <script>
 	import MBBase from '../../MBBase.vue'
-	import {HTTP} from '../../services/httpService';
 	import moment from 'moment';
 	import $ from 'jquery'
 	export default{
 		extends: MBBase,
 	  	components: {
 	    },
-	  	props: ['caseId', 'isActive'],
+	  	props: [],
 	  	data () {
 		    return {
 	      		messages: [],
@@ -38,8 +36,13 @@
 	      		newMessage: '',
 	      		lastQuery: moment(new Date(-8640000000000000)).format(),
 	      		alive: true,
-	      		isLoading: true
+	      		isLoading: true,
+	      		caseId: this.$route.params.id,
+	      		isActive: this.$route.query.isActive || false
 		    }
+	  	},
+	  	computed: {
+
 	  	},
 	  	created(){
 	    	this.getChatMessages();
@@ -52,29 +55,32 @@
 	    	getChatMessages(){
 	      		var self = this;
 	      		var url = '/sos/messages/' + self.caseId + '?q=' + self.lastQuery;
-	      		HTTP.get(url)
-      			.then(response => {
-	        		self.messages.push.apply(self.messages, response.data.messages);
-	        		if(response.data.lastTimestamp){
-	        			self.lastQuery = response.data.lastTimestamp;
-	        		}
+	      		$.get(url, function(response){
+	      			if(response.isSuccess){
+	      				self.messages.push.apply(self.messages, response.data.messages);
+		        		if(response.data.lastTimestamp){
+		        			self.lastQuery = response.data.lastTimestamp;
+		        		}
 
-	        		if(response.data.messages.length > 0){
-	        			var scroller = $(self.$refs.messagesContainer);
-	        			setTimeout(function(){
-	        				scroller.stop().animate({
-							  scrollTop: scroller[0].scrollHeight
-							}, 400)
-        				}, 200);
-	        		}
+		        		if(response.data.messages.length > 0){
+		        			var scroller = $(self.$refs.messagesContainer);
+		        			setTimeout(function(){
+		        				scroller.stop().animate({
+								  scrollTop: scroller[0].scrollHeight
+								}, 400)
+	        				}, 200);
+		        		}
 
-        			self.isLoading = false;
-
-	        		if(self.alive){
-	        			self.timeoutId = setTimeout(self.getChatMessages, 1000);
-	        		}
-	      		})
-	      		.catch(response => {
+	        			self.isLoading = false;
+		        		if(self.alive){
+		        			self.timeoutId = setTimeout(self.getChatMessages, 1000);
+		        		}
+	      			}
+	      			else{
+	      				console.log('failed getting messages');
+	      				//TBD: proper error
+	      			}
+	      		}).fail(function(response) {
 			        //TBD - show proper error
 		      	});
 	    	},
@@ -88,8 +94,14 @@
 	      			text: self.newMessage,
 	      			userId: self.userData.userId
 	      		};
-      			HTTP.post(url, data).then(response => {
-      				self.newMessage = '';
+      			$.post(url, data, function(response){
+      				if(response.isSuccess){
+      					self.newMessage = '';
+      				}
+      				else{
+      					console.log('failed posting message');
+      					//TBD: proper error
+      				}
       			});
     		}
 	}
@@ -98,14 +110,17 @@
 
 <style scoped>
 	.chat-box{
-
+		margin-top: 40px;
 	}
 	.chat-text{
 		margin-top: 5px;
+		position: absolute;
+		right: 10px;
+		bottom: 5px;
+		width: 40%;
 	}
 	.messages-wrapper{
-		border: 1px solid black;
-		height: 250px;
+		height: 80vh;
 		overflow: auto;
 	}
 	.chat-message{
@@ -145,5 +160,9 @@
 		position: relative;
 		left: -20px;
 		border-radius: 40px
+	}
+
+	.send-message{
+		border: 1px gray solid;
 	}
 </style>

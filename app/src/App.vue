@@ -7,16 +7,19 @@
       <Register v-on:registered="userAuthenticated" v-on:showLogin="showLogin" v-if="!isLoggedIn && isRegistrationForm"></Register>
     </transition>
     <div class="data-viewer" v-if="isLoggedIn">
-      <HeaderNavbar></HeaderNavbar>
+      <HeaderNavbar :notifications="notifications"></HeaderNavbar>
       <div class="view-router">
+        <StateControl></StateControl>
+        <EventControl v-if="isLoggedIn" :location="userData.settings.sosControlLocation" 
+          v-on:eventControlLocationChanged="eventControlLocationChanged"
+          v-on:contextMenu="eventControlContextMenu">
+        </EventControl>
+        <EventContextMenu v-on:hideContextMenu="eventControlContextMenu" 
+          :location="getEventControlLocation" :class="{'hidden': !isShowingContextMenu}">
+        </EventContextMenu>
         <router-view></router-view>
       </div>
     </div>
-    <transition name="fade-short">
-      <SosControl v-if="isLoggedIn" :location="userData.settings.sosControlLocation" 
-        v-on:sosControlLocationChanged="sosControlLocationChanged">
-      </SosControl>
-    </transition>
   </div>
 </template>
 
@@ -28,7 +31,9 @@ import Login from './components/login/Login.vue';
 import Register from './components/login/Register.vue';
 import MainView from './components/misc/MainView.vue';
 import HeaderNavbar from './components/misc/HeaderNavbar.vue';
-import SosControl from './components/misc/SosControl.vue';
+import StateControl from './components/misc/StateControl.vue';
+import EventControl from './components/misc/EventControl.vue';
+import EventContextMenu from './components/misc/EventContextMenu.vue';
 
 export default {
   extends: MBBase,
@@ -38,30 +43,31 @@ export default {
     Register,
     MainView,
     HeaderNavbar,
-    SosControl
+    StateControl,
+    EventControl,
+    EventContextMenu
   },
   props: ['loggedInUserData'],
   data () {
     return {
       isLoggedIn: false,
       userData: {
-        name: "",
-        avatar: "",
-        id: 0,
         settings: {
           sosControlLocation: {
-            left: 50,
-            top: 50
+            right: 50,
+            bottom: 50
           },
           viewType: ViewType.table,
           mapZoomLevel: 14
         }
       },
+      notifications: [],
       currentLocation: null,
       isLoading: false,
       isLoginForm: true,
       isRegistrationForm: false,
-      isShowingHelp: false
+      isShowingHelp: false,
+      isShowingContextMenu: false
     }
   },
   created () {
@@ -70,17 +76,13 @@ export default {
     if(self.$parent.loggedInUserData){
       self.userData = self.$parent.loggedInUserData;
       self.isLoggedIn = true;
+      self.notifications = self.$parent.notifications;
     }
 
     self.currentLocation = self.$parent.currentLocation;
     self.watchGeolocation();
   },
   methods: {
-    sosControlLocationChanged (location){
-      var self = this;
-      self.userData.settings.sosControlLocation = location;
-      self.userSettingsChanged(self.userData.settings, self.userData.userId);
-    },
     watchGeolocation() {
       var self = this;
       if (navigator.geolocation) {
@@ -115,6 +117,19 @@ export default {
       var self = this;
       self.isLoginForm = true;
       self.isRegistrationForm = false;
+    },
+    eventControlLocationChanged (location){
+      var self = this;
+      self.userData.settings.sosControlLocation = location;
+      this.userSettingsChanged(self.userData.settings, self.userData.userId);
+    },
+    eventControlContextMenu(show){
+      this.isShowingContextMenu = show;
+    }
+  },
+  computed: {
+    getEventControlLocation(){
+      return this.userData.settings.sosControlLocation;
     }
   }
 };

@@ -4,7 +4,7 @@
       <div class="row">
         <div class="col-sm-6 col-md-4 col-md-offset-4">
           <div class="account-wall">
-            <img ref="userAvater" class="profile-img" :src="domain + '/images/community.png'" alt="">
+            <img ref="userAvater" class="profile-img" :src="'/static/img/icons/icon.png'" alt="">
             <div class="registration-form" v-bind:style="{ display: step == 1 ? null : 'none'}">
               <div class="form-group has-feedback">
                 <input name="email" v-model="userDetails.mail" type="email" 
@@ -119,7 +119,8 @@ export default {
           formData.append('phoneNumber', self.userDetails.phone);
           formData.append('gcmRegistrationId', window.localStorage.mb_registrationId);
           formData.append('avatar', self.userDetails.avatar);
-          formData.append('currentLocation', JSON.stringify(self.currentLocation));
+          formData.append('lat', self.currentLocation.lat);
+          formData.append('lng', self.currentLocation.lng);
           
           $.ajax({
               url: url, 
@@ -127,7 +128,6 @@ export default {
               processData: false,
               contentType: false
             }).done(function(response){
-              debugger;
               var data = response;
               self.hasErrors = !data.isSuccess;
               if(!data.isSuccess){
@@ -135,6 +135,7 @@ export default {
               }
               else{
                 self.$refs.userAvater.src = self.imagesDomain + data.data.userData.avatar;
+                localStorage.mb_token = data.data.token;
                 setTimeout(function(){
                   self.$emit('registered', data.data.userData, data.data.token)
                 }, 200)
