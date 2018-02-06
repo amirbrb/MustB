@@ -24,6 +24,7 @@ const routes = [
   { path: '/', component: MainView },
   { path: '/help', component: SosForm },
 	{ path: '/events/:id', component: HelpCaseView },
+  { path: '/events/edit/:id', component: HelpCaseView },
   { path: '/events/chat/:id', component: ChatBox },
   { path: '/image/:id', component: ImageView },
   { path: '/user/:id', component: Profile, props: { isReadOnly: true } },
@@ -37,11 +38,7 @@ window.onerror = function(message, file, line, column, error) {
 }
 
 window.addEventListener('native.keyboardshow', function(e){
-  //var height = e.keyboardHeight;
-  //alert(height);
-  setTimeout(function() {
-      window.scrollTo(document.body.scrollLeft, document.body.scrollTop);
-  }, 0);
+  
 });
 
 document.addEventListener('deviceready', function(){

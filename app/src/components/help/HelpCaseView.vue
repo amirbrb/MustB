@@ -15,7 +15,7 @@
       </router-link>
     </div>
     <div class="case-messages-wrapper">
-      <router-link :to="{ path: '/case/chat/' + $route.params.id + '?isActive=' + caseData.isActive}">
+      <router-link :to="{ path: '/events/chat/' + $route.params.id + '?isActive=' + caseData.isActive}">
         <i v-if="caseData.messages" class="fa fa-comment-o" :counter="caseData.messages.length > 10 ? '10+' : caseData.messages.length" aria-hidden="true"></i>
       </router-link>
     </div>
@@ -124,23 +124,22 @@ export default {
   .case-messages-wrapper{
     position: absolute;
     top: -15px;
-    right: 90px;
+    right: 80px;
     margin-right: 15px; 
   }
 
   .case-actions-wrapper{
     position: absolute;
     top: -15px;
-    right: 170px;
-    margin-right: 10px;
+    right: 150px;
   }
 
   .case-actions-wrapper a{
-    font-size: 50px;
+    font-size: 40px;
   }
 
   .case-messages-wrapper .fa, .case-actions-wrapper .fa{
-    font-size: 50px;
+    font-size: 40px;
     color:gray;
   }
 
@@ -175,13 +174,13 @@ export default {
     content:attr(counter);
     top: 10px;
     right: 2px;    
-    height: 20px;
-    min-width: 20px;
-    padding-left: 5px;
-    padding-right: 5px;
-    border-radius: 16px;
-    font-size: 15px;    
-    line-height: 20px;
+    height: 15px;
+    min-width: 15px;
+    padding-left: 2px;
+    padding-right: 2px;
+    border-radius: 12px;
+    font-size: 10px;    
+    line-height: 12px;
     text-align: center;
     background: red;
     color: white;
