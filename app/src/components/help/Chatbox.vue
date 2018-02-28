@@ -2,7 +2,7 @@
 	<div class="chat-box col-xs-12" :disabled="!isActive">
       	<div class="messages-wrapper col-xs-12" ref="messagesContainer">
       		<div v-if="isLoading">Getting messages</div>
-	      	<div v-if="!isLoading" v-for="message in messages" :class="{'wrap-message': true, 'wrap-message-right' : message.senderId === userData.id}">
+	      	<div v-if="!isLoading" v-for="message in messages" :class="{'wrap-message': true, 'wrap-message-right' : message.senderId === userData.userId}">
 		      	<div class="chat-message">
 			        <div class="message-sender">
 			        	<img :src="domain + '/images/avatar/' + message.senderId"/>
@@ -61,7 +61,6 @@
 		        		if(response.data.lastTimestamp){
 		        			self.lastQuery = response.data.lastTimestamp;
 		        		}
-
 		        		if(response.data.messages.length > 0){
 		        			var scroller = $(self.$refs.messagesContainer);
 		        			setTimeout(function(){
@@ -116,11 +115,11 @@
 		margin-top: 5px;
 		position: fixed;
 		right: 10px;
-		bottom: 5px;
+		bottom: 10px;
 		width: 40%;
 	}
 	.messages-wrapper{
-		height: 80vh;
+		height: 70vh;
 		overflow: auto;
 	}
 	.chat-message{

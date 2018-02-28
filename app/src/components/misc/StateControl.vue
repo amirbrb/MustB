@@ -1,5 +1,5 @@
 <template>
-  <div class="state-control" v-if="$route.path !== '/'">
+  <div class="state-control" v-if="$route.path !== '/' && $route.path !== '/settings'">
     <span class="close" @click="goBack"><i class="fa-times fa"></i></span>
   </div>
 </template>
@@ -17,11 +17,6 @@ export default {
     return {
       imageId: '',
       excludedPaths: ['/settings']
-    }
-  },
-  mounted(){
-    if(this.excludedPaths.indexOf(this.$router.currentRoute.fullPath) >= 0){
-      this.$el.style.display = 'none';
     }
   },
   methods: {

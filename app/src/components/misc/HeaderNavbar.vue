@@ -2,7 +2,7 @@
   <nav class="navbar navbar-default navbar-fixed-top">
     <div class="container-fluid">
       <div class="mb-navbar-header">
-        <i class="fa fa-square-o" :counter="notifications.length > 10 ? '10+' : notifications.length" aria-hidden="true"></i>
+        <i class="fa fa-bell-o" :counter="notifications.length > 10 ? '10+' : notifications.length" aria-hidden="true"></i>
         <label>
           <router-link :to="'/'" class="mb-navbar-brand">Ukholo</router-link>
           <p> someone to trust </p>
@@ -120,17 +120,17 @@
     visibility: visible;
   }
 
-  .fa-square-o{
+  .fa-bell-o{
     position: absolute;
     font-size: 40px;
     left: 20px;
     top: 22px;
   }
-  .fa-square-o:after {
+  .fa-bell-o:after {
     position: absolute;
     content:attr(counter);
     top: 18px;
-    right: -10px;    
+    right: 3px;    
     height: 20px;
     min-width: 20px;
     padding-left: 5px;

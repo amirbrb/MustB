@@ -2,8 +2,8 @@
   <div class="event-context-menu" v-bind:style="{ top: location.top - 110 + 'px', left: location.left - 35 + 'px'  }">
     <span class="close" @click="hideContextMenu"><i class="fa-times fa"></i></span>
     <ul class="context-menu">
-      <li><router-link :to="'/help'">Sos</router-link></li>
-      <li><router-link :to="'/event'">Event</router-link></li>
+      <li><router-link :to="'/help/sos'">Now</router-link></li>
+      <li><router-link :to="'/help/event'">Help</router-link></li>
     </ul>
   </div>
 </template>

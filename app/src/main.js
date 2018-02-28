@@ -10,10 +10,11 @@ import MainView from './components/misc/MainView'
 import Settings from './components/settings/Settings'
 import Profile from './components/settings/Profile'
 import ImageView from './components/misc/ImageView';
-import SosForm from './components/misc/SosForm';
+import EventForm from './components/misc/EventForm';
 import LoginType from './enums/loginType'
 import $ from 'jquery'
 import moment from 'moment';
+import config from '.config';
 
 Vue.use(VueRouter)
 Vue.use(VeeValidate);
@@ -22,9 +23,8 @@ window.moment = moment;
 
 const routes = [
   { path: '/', component: MainView },
-  { path: '/help', component: SosForm },
+  { path: '/help/event', component: EventForm },
 	{ path: '/events/:id', component: HelpCaseView },
-  { path: '/events/edit/:id', component: HelpCaseView },
   { path: '/events/chat/:id', component: ChatBox },
   { path: '/image/:id', component: ImageView },
   { path: '/user/:id', component: Profile, props: { isReadOnly: true } },
@@ -83,7 +83,7 @@ window.setTimeout(function() {
 }, 100);
 
 function init(){  
-  const baseUrl = 'https://mustb-amirbrb.c9users.io';
+  const baseUrl = config.domain;
   $.ajaxSetup({
       beforeSend: function(xhr, options) {
         options.url = baseUrl + options.url;

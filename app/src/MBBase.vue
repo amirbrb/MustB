@@ -1,11 +1,13 @@
 <script>
 import $ from 'jquery';
 import moment from 'moment';
+import config from '.config';
+
 export default {
   data() {
   	return {
-		  domain: 'https://mustb-amirbrb.c9users.io',
-      imagesDomain: 'https://mustb-amirbrb.c9users.io/images/',
+		  domain: config.domain,
+      imagesDomain: config.imagesDomain,
       userData: this.$parent.userData,
       currentLocation: this.$parent.currentLocation
   	}

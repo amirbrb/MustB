@@ -130,7 +130,7 @@
       },
       saveSettings(){
         var self = this;
-        const url = '/users/settings';
+        const url = '/users/settings/profile';
         
         const formData = new FormData();
         formData.append('userId', self.userId);  

@@ -32,15 +32,15 @@
 import $ from 'jquery';
 import MBBase from '../../MBBase.vue';
 import ViewType from '../../enums/viewType'
-import SosForm from './SosForm.vue';
-import TableView from '../help/TableView.vue';
-import MapView from '../help/MapView.vue';
-import HeaderNavbar from './HeaderNavbar.vue';
+import EventForm from './EventForm';
+import TableView from '../help/TableView';
+import MapView from '../help/MapView';
+import HeaderNavbar from './HeaderNavbar';
 
 export default {
   extends: MBBase,
   components: {
-    SosForm,
+    EventForm,
     TableView,
     HeaderNavbar,
     MapView,

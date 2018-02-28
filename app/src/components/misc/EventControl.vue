@@ -40,7 +40,7 @@ export default {
     });
 
     hammertime.on('tap', function(ev) {
-      self.$router.push('/help');
+      self.$router.push('/help/event');
     });
 
     hammertime.on('pan', function(ev) {
