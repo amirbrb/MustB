@@ -114,7 +114,7 @@
 	}
 	.chat-text{
 		margin-top: 5px;
-		position: absolute;
+		position: fixed;
 		right: 10px;
 		bottom: 5px;
 		width: 40%;
