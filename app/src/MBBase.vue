@@ -1,11 +1,13 @@
 <script>
 import $ from 'jquery';
 import moment from 'moment';
+import ApplicationConfiguration from './config/applicationConfiguration.js'
+
 export default {
   data() {
   	return {
-		  domain: 'https://mustb-amirbrb.c9users.io',
-      imagesDomain: 'https://mustb-amirbrb.c9users.io/images/',
+		  domain: ApplicationConfiguration.baseDomain,
+      imagesDomain: ApplicationConfiguration.imagesDomain,
       userData: this.$parent.userData,
       currentLocation: this.$parent.currentLocation
   	}
