@@ -14,7 +14,7 @@ import EventForm from './components/misc/EventForm';
 import LoginType from './enums/loginType'
 import $ from 'jquery'
 import moment from 'moment';
-import config from '.config';
+import ApplicationConfiguration from './config/applicationConfiguration'
 
 Vue.use(VueRouter)
 Vue.use(VeeValidate);
@@ -83,7 +83,7 @@ window.setTimeout(function() {
 }, 100);
 
 function init(){  
-  const baseUrl = config.domain;
+  const baseUrl = ApplicationConfiguration.baseDomain;
   $.ajaxSetup({
       beforeSend: function(xhr, options) {
         options.url = baseUrl + options.url;

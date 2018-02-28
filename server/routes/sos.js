@@ -3,13 +3,12 @@ const router = express.Router()
 const multer = require('multer')
 const Guid = require('guid')
 const moment = require('moment')
+const app = express();
+const jwt = require('jsonwebtoken');
 const jsonSuccess = require('../models/jsonSuccess');
 const jsonFailure = require('../models/jsonFailure');
 const helpDataService = require('../dataServices/helpDataService');
-const app = express();
-const jwt = require('jsonwebtoken');
-const config = require('../config.dev');
-const imageServices = require('../dataServices/imagesService');
+const imageServices = require('../services/imagesService');
 
 var storage = multer.diskStorage({
     destination: function(req, file, callback) {
@@ -27,7 +26,7 @@ var upload = multer({ storage: storage }).any();
 var validateToken = function(req, res, next) {
     var token = req.query.mb_token || req.body.mb_token || req.headers.mb_token;
     if (token) {
-        jwt.verify(token, config.tokenSecret, function(err, decoded) {
+        jwt.verify(token, app.get('tokenSecret'), function(err, decoded) {
             if (err) {
                 return res.json({ success: false, message: 'Failed to authenticate token.' });
             }

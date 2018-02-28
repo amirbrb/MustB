@@ -1,13 +1,13 @@
 <script>
 import $ from 'jquery';
 import moment from 'moment';
-import config from '.config';
+import ApplicationConfiguration from './config/applicationConfiguration.js'
 
 export default {
   data() {
   	return {
-		  domain: config.domain,
-      imagesDomain: config.imagesDomain,
+		  domain: ApplicationConfiguration.baseDomain,
+      imagesDomain: ApplicationConfiguration.imagesDomain,
       userData: this.$parent.userData,
       currentLocation: this.$parent.currentLocation
   	}

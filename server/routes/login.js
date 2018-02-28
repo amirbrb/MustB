@@ -1,18 +1,13 @@
 const express = require('express')
 const router = express.Router()
 const multer = require('multer')
+const Guid = require('guid')
+const jwt = require('jsonwebtoken');
 const usersDataService = require('../dataServices/usersDataService');
-const imageServices = require('../dataServices/imagesService');
+const imageServices = require('../services/imagesService');
 const startupData = require('../models/startupData');
 const jsonSuccess = require('../models/jsonSuccess');
 const jsonFailure = require('../models/jsonFailure');
-const Guid = require('guid')
-const config = require('../config.dev');
-const jwt = require('jsonwebtoken');
-
-router.use(function(req, res, next) {
-    next();
-});
 
 var storage = multer.diskStorage({
     destination: function(req, file, callback) {
@@ -28,7 +23,7 @@ var storage = multer.diskStorage({
 var upload = multer({ storage: storage }).any();
 
 var signUser = function(userData) {
-    var token = jwt.sign(userData, config.tokenSecret, { expiresIn: '24h' });
+    var token = jwt.sign(userData, app.get('tokenSecret'), { expiresIn: '24h' });
     return token;
 }
 
@@ -40,14 +35,13 @@ router.post('/register', function(req, res) {
     req.registrationKey = Guid.create();
     upload(req, res, function(err) {
         var userAvatar = req.files.map(img => {
-            imageServices.uploadImage(img,
-                function(response) {
-
-                },
-                function(error) {
-
-                });
-            return img.filename;
+            imageServices.uploadImage(img)
+            .then(result => {
+                return img.filename;
+            })
+            .catch(err=> {
+                throw err;
+            });
         })[0];
 
         var mail = req.body.mail;
@@ -60,23 +54,25 @@ router.post('/register', function(req, res) {
             lng: req.body.lng
         }
 
-        usersDataService.register(mail,
-            password,
-            name,
-            phoneNumber,
-            userAvatar,
-            function(registrationResponse) {
+        usersDataService.register(mail, password, name, phoneNumber, userAvatar)
+            .then(registrationResponse=> {
                 if (registrationResponse.isSuccess) {
-                    usersDataService.setUserLoginData(registrationResponse.registrationData.userId, location, registrationId, function() {
-                        var token = signUser(registrationResponse.registrationData);
-                        res.send(jsonSuccess(startupData(registrationResponse.registrationData, token)));
-                    });
-                }
-                else {
-                    res.send(jsonFailure(registrationResponse.registrationError));
-                }
-            }
-        );
+                        usersDataService.setUserLoginData(registrationResponse.registrationData.userId, location, registrationId)
+                        .then(()=> {
+                            var token = signUser(registrationResponse.registrationData);
+                            res.send(jsonSuccess(startupData(registrationResponse.registrationData, token)));
+                        }).
+                        catch(err=>{
+
+                        });
+                    }
+                    else {
+                        res.send(jsonFailure(registrationResponse.registrationError));
+                    }
+                })
+            .catch(err=> {
+                throw err;
+            });
     });
 });
 
