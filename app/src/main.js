@@ -89,6 +89,9 @@ function init(){
         options.url = baseUrl + options.url;
         xhr.setRequestHeader("mb_token", localStorage.mb_token);
       },
+      complete: function(a, b, c){
+        console.log(a.responseJSON)
+      },
       data: {
         mb_token: localStorage.mb_token
       },
@@ -109,12 +112,14 @@ function init(){
       };
 
       var usernameCookie = window.localStorage.mb_usercookie;
-      if(usernameCookie){
+      var passwordCookie = window.localStorage.mb_passcookie;
+      if(usernameCookie && passwordCookie){
         var loginTypeEnum = window.localStorage.mb_loginType;
         if(loginTypeEnum == LoginType.mail){
           var url = '/login/relogin';
           var data = {
             mail: usernameCookie,
+            password: passwordCookie,
             gcmRegistrationId: window.localStorage.mb_registrationId,
             lat: currentLocation.lat,
             lng: currentLocation.lng

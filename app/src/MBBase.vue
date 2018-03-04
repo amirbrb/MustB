@@ -14,16 +14,15 @@ export default {
   },
   methods:{
     userSettingsChanged (settings, userId){
-      var url = '/users/preferences';
-        var data = {
-          settings: JSON.stringify(settings),
-          userId: userId
-        };
-        $.post(url, data);
+      var url = '/users/' + userId + '/preferences/';
+      var data = {
+        preferences: JSON.stringify(settings)
+      };
+      $.post(url, data);
     },
     log(message){
 		  alert(message.message);
-    },
+    },  
     stringifyDate(dateObject, format){
       format = format || 'DD-MMM-YYYY HH:mm:ss';
       return moment(dateObject).format(format);

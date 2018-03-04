@@ -35,7 +35,7 @@ export default {
   methods: {
     getData(){
       var self = this;
-      var url = '/users/events/' + this.userId;
+      var url = '/users/' + this.userId + '/cases/';
       $.ajax({
         url: url,
         method: 'GET'

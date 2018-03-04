@@ -38,10 +38,7 @@
   import UserEvents from './UserEvents'
   import UserTools from './UserTools'
   import MBBase from '../../MBBase';
-  const SettingsType = {
-    profile: 1,
-    activity: 2
-  }
+  import SettingsType from '../../enums/SettingsType.js'
   window.SettingsType = SettingsType
   export default {
     extends: MBBase,
@@ -55,6 +52,7 @@
     methods: {
       logout(){
         window.localStorage.removeItem('mb_usercookie');
+        window.localStorage.removeItem('mb_passwordcookie');
         window.localStorage.removeItem('mb_loginType');
         window.localStorage.removeItem('mb_registrationId');
         window.localStorage.removeItem('mb_token');
