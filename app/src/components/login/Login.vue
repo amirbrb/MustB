@@ -83,7 +83,7 @@ export default {
             else{
               if(self.$refs.letMeStay.checked){
                 window.localStorage.mb_usercookie = self.userDetails.mail;
-                window.localStorage.mb_password = self.userDetails.password;
+                window.localStorage.mb_passcookie = self.userDetails.password;
                 window.localStorage.mb_loginType = LoginType.mail;
               }
               self.$refs.userAvater.src = self.imagesDomain + data.data.userData.avatar;

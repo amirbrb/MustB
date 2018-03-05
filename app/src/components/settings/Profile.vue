@@ -109,7 +109,7 @@
         url: url
       }).done(function(response){
         if(response.isSuccess){
-          self.settings = response.data;
+          self.settings = response.data;  
         }
       }).fail(function(e) {
         //TBD: handke error
@@ -132,8 +132,7 @@
       },
       saveSettings(){
         var self = this;
-        const url = '/users/' +  self.userId + '/settings/profile';
-        
+        const url = '/users/' + self.userId + '/settings/profile';
         const formData = new FormData();
         formData.append('settings', JSON.stringify(self.settings));  
 

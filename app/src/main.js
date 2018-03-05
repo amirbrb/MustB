@@ -10,7 +10,7 @@ import MainView from './components/misc/MainView'
 import Settings from './components/settings/Settings'
 import Profile from './components/settings/Profile'
 import ImageView from './components/misc/ImageView';
-import SosForm from './components/misc/SosForm';
+import EventForm from './components/misc/EventForm';
 import LoginType from './enums/loginType'
 import $ from 'jquery'
 import moment from 'moment';
@@ -23,9 +23,8 @@ window.moment = moment;
 
 const routes = [
   { path: '/', component: MainView },
-  { path: '/help', component: SosForm },
+  { path: '/help/event', component: EventForm },
 	{ path: '/events/:id', component: HelpCaseView },
-  { path: '/events/edit/:id', component: HelpCaseView },
   { path: '/events/chat/:id', component: ChatBox },
   { path: '/image/:id', component: ImageView },
   { path: '/user/:id', component: Profile, props: { isReadOnly: true } },
@@ -90,6 +89,9 @@ function init(){
         options.url = baseUrl + options.url;
         xhr.setRequestHeader("mb_token", localStorage.mb_token);
       },
+      complete: function(a, b, c){
+        console.log(a.responseJSON)
+      },
       data: {
         mb_token: localStorage.mb_token
       },
@@ -112,12 +114,14 @@ function init(){
       var usernameCookie = window.localStorage.mb_usercookie;
       var password = window.localStorage.mb_password;
       if(usernameCookie){
+      var passwordCookie = window.localStorage.mb_passcookie;
+      if(usernameCookie && passwordCookie){
         var loginTypeEnum = window.localStorage.mb_loginType;
         if(loginTypeEnum == LoginType.mail){
           var url = '/login/relogin';
           var data = {
             mail: usernameCookie,
-            password: password,
+            password: passwordCookie,
             gcmRegistrationId: window.localStorage.mb_registrationId,
             lat: currentLocation.lat,
             lng: currentLocation.lng

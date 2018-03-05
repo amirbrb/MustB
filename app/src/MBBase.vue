@@ -23,7 +23,7 @@ export default {
     },
     log(message){
 		  alert(message.message);
-    },
+    },  
     stringifyDate(dateObject, format){
       format = format || 'DD-MMM-YYYY HH:mm:ss';
       return moment(dateObject).format(format);

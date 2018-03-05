@@ -2,23 +2,23 @@
   <div>
     <div class="data-view data-container">
       <ul class="nav nav-tabs">
-        <li :class="{'active': userData.settings.viewType === 2}">
+        <li :class="{'active': userData.preferences.viewType === 2}">
           <a data-toggle="tab" href="#sosMap" @click="selectMapView"><i class="fa fa-map-o" aria-hidden="true"></i></i></a>
         </li>
-        <li :class="{'active': userData.settings.viewType === 1}">
+        <li :class="{'active': userData.preferences.viewType === 1}">
           <a data-toggle="tab" href="#sosTable" @click="selectTableView"><i class="fa fa-list-ul" aria-hidden="true"></i></i></a>
         </li>
       </ul>
       <div class="tab-content">
-        <div id="sosMap" ref="sosMapTab" :class="{'tab-pane': true, 'active': userData.settings.viewType === 2}">
-          <MapView :cases="cases" v-if="userData.settings.viewType === 2" 
-            :mapZoomLevel="userData.settings.mapZoomLevel"
+        <div id="sosMap" ref="sosMapTab" :class="{'tab-pane': true, 'active': userData.preferences.viewType === 2}">
+          <MapView :cases="cases" v-if="userData.preferences.viewType === 2" 
+            :mapZoomLevel="userData.preferences.mapZoomLevel"
             :currentLocation="currentLocation"
             v-on:mapZoomChanged="mapZoomChanged">
           </MapView>
         </div>
         <div id="sosTable" ref="sosTableTab"
-          :class="{'tab-pane': true, 'active': userData.settings.viewType === 1}">
+          :class="{'tab-pane': true, 'active': userData.preferences.viewType === 1}">
           <TableView :cases="cases"
             :currentLocation="currentLocation"></TableView>
         </div>
@@ -32,15 +32,15 @@
 import $ from 'jquery';
 import MBBase from '../../MBBase.vue';
 import ViewType from '../../enums/viewType'
-import SosForm from './SosForm.vue';
-import TableView from '../help/TableView.vue';
-import MapView from '../help/MapView.vue';
-import HeaderNavbar from './HeaderNavbar.vue';
+import EventForm from './EventForm';
+import TableView from '../help/TableView';
+import MapView from '../help/MapView';
+import HeaderNavbar from './HeaderNavbar';
 
 export default {
   extends: MBBase,
   components: {
-    SosForm,
+    EventForm,
     TableView,
     HeaderNavbar,
     MapView,
@@ -68,7 +68,8 @@ export default {
   methods: {
     getData(){
       var self = this;
-      var url = '/sos';
+      var url = '/sos/';
+      debugger;
       $.ajax({
         url: url,
         method: 'GET',
@@ -109,20 +110,13 @@ export default {
     },
     selectedTabChanged(viewType){
       var self = this;
-      self.userData.settings.viewType = viewType;
-      
-      /*if(self.userData.settings.viewType === 2){
-        self.$refs.sosTableTab.classList.add('in');
-      }
-      else{
-        self.$refs.sosMapTab.classList.add('in');
-      }*/
-      self.userSettingsChanged(self.userData.settings, self.userData.userId);
+      self.userData.preferences.viewType = viewType;
+      self.userSettingsChanged(self.userData.preferences, self.userData.userId);
     },
     mapZoomChanged(zoomLevel){
       var self = this;
-      self.userData.settings.mapZoomLevel = zoomLevel;
-      self.userSettingsChanged(self.userData.settings, self.userData.userId);
+      self.userData.preferences.mapZoomLevel = zoomLevel;
+      self.userSettingsChanged(self.userData.preferences, self.userData.userId);
     }
   }
 }
