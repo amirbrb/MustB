@@ -13,10 +13,10 @@ export default {
   	}
   },
   methods:{
-    userSettingsChanged (settings, userId){
-      var url = '/users/preferences';
+    userSettingsChanged (preferences, userId){
+      var url = '/users/' + userId + '/preferences';
         var data = {
-          settings: JSON.stringify(settings),
+          preferences: JSON.stringify(preferences),
           userId: userId
         };
         $.post(url, data);

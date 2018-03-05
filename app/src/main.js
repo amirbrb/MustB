@@ -84,7 +84,6 @@ window.setTimeout(function() {
 }, 100);
 
 function init(){  
-  debugger;
   const baseUrl = ApplicationConfiguration.baseDomain;
   $.ajaxSetup({
       beforeSend: function(xhr, options) {
@@ -111,12 +110,14 @@ function init(){
       };
 
       var usernameCookie = window.localStorage.mb_usercookie;
+      var password = window.localStorage.mb_password;
       if(usernameCookie){
         var loginTypeEnum = window.localStorage.mb_loginType;
         if(loginTypeEnum == LoginType.mail){
           var url = '/login/relogin';
           var data = {
             mail: usernameCookie,
+            password: password,
             gcmRegistrationId: window.localStorage.mb_registrationId,
             lat: currentLocation.lat,
             lng: currentLocation.lng

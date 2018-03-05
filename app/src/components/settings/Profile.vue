@@ -102,13 +102,15 @@
     },
     created(){
       var self = this;
-      const url = '/users/details/' + self.userIdParam;
+      const url = '/users/' + self.userIdParam + '/details/';
       
       $.ajax({
         method: 'GET',
         url: url
       }).done(function(response){
-        self.settings = response;
+        if(response.isSuccess){
+          self.settings = response.data;
+        }
       }).fail(function(e) {
         //TBD: handke error
       });
@@ -130,10 +132,9 @@
       },
       saveSettings(){
         var self = this;
-        const url = '/users/settings';
+        const url = '/users/' +  self.userId + '/settings/profile';
         
         const formData = new FormData();
-        formData.append('userId', self.userId);  
         formData.append('settings', JSON.stringify(self.settings));  
 
         if(self.uploadedAvatar){

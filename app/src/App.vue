@@ -10,7 +10,7 @@
       <HeaderNavbar :notifications="notifications"></HeaderNavbar>
       <div class="view-router">
         <StateControl></StateControl>
-        <EventControl v-if="isLoggedIn" :location="userData.settings.sosControlLocation" 
+        <EventControl v-if="isLoggedIn" :location="userData.preferences.sosControlLocation" 
           v-on:eventControlLocationChanged="eventControlLocationChanged"
           v-on:contextMenu="eventControlContextMenu">
         </EventControl>
@@ -52,7 +52,7 @@ export default {
     return {
       isLoggedIn: false,
       userData: {
-        settings: {
+        preferences: {
           sosControlLocation: {
             right: 50,
             bottom: 50
@@ -120,8 +120,8 @@ export default {
     },
     eventControlLocationChanged (location){
       var self = this;
-      self.userData.settings.sosControlLocation = location;
-      this.userSettingsChanged(self.userData.settings, self.userData.userId);
+      self.userData.preferences.sosControlLocation = location;
+      this.userSettingsChanged(self.userData.preferences, self.userData.userId);
     },
     eventControlContextMenu(show){
       this.isShowingContextMenu = show;
@@ -129,7 +129,7 @@ export default {
   },
   computed: {
     getEventControlLocation(){
-      return this.userData.settings.sosControlLocation;
+      return this.userData.preferences.sosControlLocation;
     }
   }
 };

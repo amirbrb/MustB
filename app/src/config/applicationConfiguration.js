@@ -1,4 +1,4 @@
 module.exports = {
-	baseDomain: 'http://localhost:3000',
-	imagesDomain: 'http://localhost:3000/images'
+	baseDomain: 'https://mustb-amirbrb.c9users.io',
+	imagesDomain: 'https://mustb-amirbrb.c9users.io/images/'
 }
