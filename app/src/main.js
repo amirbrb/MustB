@@ -92,9 +92,6 @@ function init(){
       complete: function(a, b, c){
         console.log(a.responseJSON)
       },
-      data: {
-        mb_token: localStorage.mb_token
-      },
       global: false,
       type: "POST"
   });
@@ -112,8 +109,6 @@ function init(){
       };
 
       var usernameCookie = window.localStorage.mb_usercookie;
-      var password = window.localStorage.mb_password;
-      if(usernameCookie){
       var passwordCookie = window.localStorage.mb_passcookie;
       if(usernameCookie && passwordCookie){
         var loginTypeEnum = window.localStorage.mb_loginType;
@@ -170,4 +165,3 @@ function createApplication(userData, notifications, currentLocation){
     router: router
   })
 }
-

@@ -69,7 +69,6 @@ export default {
     getData(){
       var self = this;
       var url = '/sos/';
-      debugger;
       $.ajax({
         url: url,
         method: 'GET',
