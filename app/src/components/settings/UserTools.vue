@@ -5,7 +5,7 @@
       <p>tell us what you can do</p>      
     </div>
     <div class="tools-container col-xs-12">
-      <div :class="{'user-tool': true,  'col-xs-5': true, 'selected': userTool.selected}" v-for="userTool in userTools" @click="userToolSelectionChanged" :data-id="userTool.id">
+      <div v-for="userTool in userTools" :class="{'user-tool': true,  'col-xs-5': true, 'selected': userTool.selected}" @click="userToolSelectionChanged" :data-id="userTool.id">
         <div class="tool-title">{{userTool.title}}</div>
         <div :class="'tool-image fa fa-' + userTool.class"></div>
       </div>
@@ -20,7 +20,7 @@
 
 import $ from 'jquery'
 export default {
-  props: [],
+  props: ['userId', 'selectedTools'],
   data () {
     return {
       userTools: [
@@ -50,23 +50,30 @@ export default {
       }]
     }
   },
+  created(){
+    var self = this;
+    self.userTools.forEach(function(tool){
+      tool.selected = self.selectedTools.indexOf(tool.id) > -1;
+    })
+  },
   mounted (){
     //var self = this;
   },
   methods: {
     saveSettings(){
       var self = this;
-      debugger;
       var selectedTools = $.grep(self.userTools, function(tool){
         return tool.selected;
       }).map(function(tool){
-        return tool.id;
+        return tool.id
       });
       
-      const url = '/users/settings/tools';
+      const url = '/users/' + self.userId + '/settings/tools';
       $.ajax({
         url: url, 
-        data: selectedTools
+        data: {
+          'selectedTools':  JSON.stringify(selectedTools)
+        }
       }).done(function(response){
       }).fail(function(e) {
         //TBD: handke error
@@ -75,7 +82,6 @@ export default {
     userToolSelectionChanged(event){
       var self = this;
       var el = $(event.currentTarget);
-      debugger;
       var toolId = parseInt(el.attr('data-id'));
       el.toggleClass('selected');
 
@@ -106,6 +112,7 @@ export default {
     line-height: 30px;
     margin-left: 20px;
     margin-top: 20px;
+    cursor: pointer;
   }
 
   .user-tool.selected{

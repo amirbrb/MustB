@@ -54,7 +54,7 @@
 	  	methods: {
 	    	getChatMessages(){
 	      		var self = this;
-	      		var url = '/sos/messages/' + self.caseId + '?q=' + self.lastQuery;
+	      		var url = '/events/' + self.caseId + '/messages/?q=' + self.lastQuery;
 	      		$.get(url, function(response){
 	      			if(response.isSuccess){
 	      				self.messages.push.apply(self.messages, response.data.messages);
@@ -87,7 +87,7 @@
     			var self = this;
     			if(!self.isActive) return;
 
-	      		var url = '/sos/message/';
+	      		var url = '/events/' + self.caseId + '/message/';
 	      		var data = {
 	      			caseId: self.caseId,
 	      			text: self.newMessage,

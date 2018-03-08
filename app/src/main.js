@@ -25,6 +25,7 @@ const routes = [
   { path: '/', component: MainView },
   { path: '/help/event', component: EventForm },
 	{ path: '/events/:id', component: HelpCaseView },
+  { path: '/events/edit/:id', component: HelpCaseView },
   { path: '/events/chat/:id', component: ChatBox },
   { path: '/image/:id', component: ImageView },
   { path: '/user/:id', component: Profile, props: { isReadOnly: true } },
@@ -91,9 +92,6 @@ function init(){
       },
       complete: function(a, b, c){
         console.log(a.responseJSON)
-      },
-      data: {
-        mb_token: localStorage.mb_token
       },
       global: false,
       type: "POST"

@@ -10,8 +10,8 @@
       </div>
     </div>
     <div class="case-issuer-wrapper">
-      <router-link :to="{ path: '/user/' + caseData.userId}">
-        <img v-if="caseData.userId" :src="imagesDomain + '/avatar/' + caseData.userId"/>
+      <router-link v-if="caseData.user" :to="{ path: imagesDomain + 'avatar/' + caseData.userId}">
+        <img v-if="caseData.user" :src="imagesDomain + 'avatar/' + caseData.userId"/>
       </router-link>
     </div>
     <div class="case-messages-wrapper">
@@ -54,7 +54,7 @@ export default {
   methods: {
     getData(){
       var self = this;
-      var url = '/sos/' + self.$route.params.id;
+      var url = '/events/' + self.$route.params.id;
       $.ajax({
         url: url,
         method: 'GET'

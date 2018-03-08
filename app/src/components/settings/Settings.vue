@@ -20,7 +20,7 @@
     <div class="tab-content">
       <div id="userTools" 
         :class="{'tab-pane' : true, 'fade': true, 'in' : selectedSettingsType === 2, 'active' : selectedSettingsType === 2}" v-if="selectedSettingsType === 2">
-        <UserTools :userId="$parent.userData.userId"></UserTools>
+        <UserTools :userId="$parent.userData.userId" :selectedTools="$parent.userData.tools"></UserTools>
       </div>
     </div>
     <div class="tab-content">

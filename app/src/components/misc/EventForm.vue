@@ -128,7 +128,7 @@ export default {
         title: self.help.title || self.help.selectedType
       }).then((result) => {
         if(result){
-          const url = '/sos/text';
+          const url = '/events/help';
           const formData = new FormData();
           formData.append('userId', self.userData.userId);  
           formData.append('title', self.help.title || self.help.selectedType);  
