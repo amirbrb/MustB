@@ -53,7 +53,7 @@ export default {
     return {
       hasErrors: false,
       userDetails: {
-        mail: "",
+        mail: window.localStorage.mb_usercookie,
         password: ""
       }
     }

@@ -13,12 +13,13 @@ export default {
   	}
   },
   methods:{
-    userSettingsChanged (settings, userId){
-      var url = '/users/' + userId + '/preferences/';
-      var data = {
-        preferences: JSON.stringify(settings)
-      };
-      $.post(url, data);
+    userSettingsChanged (preferences, userId){
+      var url = '/users/' + userId + '/preferences';
+        var data = {
+          preferences: JSON.stringify(preferences),
+          userId: userId
+        };
+        $.post(url, data);
     },
     log(message){
 		  alert(message.message);

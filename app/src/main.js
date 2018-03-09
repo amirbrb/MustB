@@ -166,4 +166,3 @@ function createApplication(userData, notifications, currentLocation){
     router: router
   })
 }
-
